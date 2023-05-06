@@ -1,27 +1,23 @@
-import React from 'react'
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Adminlogin from './Pages/Admin/Adminlogin';
-import Doctorsignup from './Pages/Doctor/Doctorsignup';
-import Doctorlogin from './Pages/Doctor/Doctorlogin';
-import Adminhome from './Pages/Admin/Adminhome';
-import Doctorotp from './Pages/Doctor/Doctorotp';
-import Doctorinfo from './Pages/Doctor/Doctorinfo';
+import AdminRouter from "./Router/AdminRouter";
+
+import UserRouter from "./Router/UserRouter";
+
+import DoctorRouter from "./Router/DoctorRouter";
+import DoctorLogin from "./Component/Auth/DoctorLogin";
 
 function App() {
   return (
     <BrowserRouter>
-    <Routes>
-      <Route exact path="/" element={<Adminlogin />} />
-      <Route exact path="/DoctorSignup" element={<Doctorsignup/>} />
-      <Route exact path="/Doctor" element={<Doctorlogin/>} />
-      <Route exact path="/adminHome" element={<Adminhome/>} />
-      <Route exact path="/DoctorOtp" element={<Doctorotp/>} />
-      <Route exact path="/DoctorInfo" element={<Doctorinfo/>} />
+      <Routes>
+        <Route exact path="/*" element={<UserRouter />} />
+        <Route exact path="/admin/*" element={<AdminRouter />} />
 
-    </Routes>
-  </BrowserRouter>
-  )
+        <Route exact path="/doctor/*" element={<DoctorRouter />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
-
+export default App;

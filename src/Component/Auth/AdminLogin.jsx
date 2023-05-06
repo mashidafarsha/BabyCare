@@ -4,7 +4,8 @@ import axios from "axios";
 import Swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setAdminDetails } from "../../features/adminSlice";
+import { setAdminDetails } from "../../redux/features/adminSlice";
+import { adminLogin } from "../../sevices/adminApi";
 
 function AdminLogin() {
   const [values, setValues] = useState({
@@ -14,7 +15,7 @@ function AdminLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const admin=useSelector((state)=>state.admin)
+ 
 
   const generateError = (err) => {
     Swal(err);
@@ -24,10 +25,7 @@ function AdminLogin() {
     e.preventDefault();
     console.log(values, "values");
     try {
-      let { data } = await axios.post(
-        "http://localhost:4000/admin/adminLogin",
-        { ...values }
-      );
+      let { data } = await adminLogin(values)
       console.log(data, "data");
       if (data) {
         if (data.errors) {
@@ -41,9 +39,11 @@ function AdminLogin() {
               email: data.admin.email,
               name: data.admin.name,
               token: data.token,
+              isAdmin:null
+              
             })
           );
-          navigate("/adminHome");
+          navigate("/admin/adminHome");
         }
       
       }
@@ -53,8 +53,8 @@ function AdminLogin() {
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-white overflow-hidden">
-      <div className="flex md:flex-row flex-col ">
+    <div className="flex items-center justify-center w-screen h-screen overflow-hidden bg-white">
+      <div className="flex flex-col md:flex-row ">
         <div className="w-auto">
           <img
             className="w-80 h-96"
@@ -62,7 +62,7 @@ function AdminLogin() {
             alt=""
           />
         </div>
-        <div className="w-80 h-96   bg-blue-400 ">
+        <div className="bg-blue-400 w-80 h-96 ">
           <h1 className="mt-5 text-2xl font-semibold text-center text-gray-700">
             BABY CARE
           </h1>

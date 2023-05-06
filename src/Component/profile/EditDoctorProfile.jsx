@@ -1,0 +1,218 @@
+import React from "react";
+import { useState, useEffect } from "react";
+import { editDoctor, getCategory } from "../../sevices/doctorApi";
+import { setDoctorDetails } from "../../redux/features/doctorSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert";
+
+function EditDoctorProfile({ doctorData }) {
+  const [allDepartment, setAllDepartment] = useState([]);
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [qualification, setQualification] = useState("");
+  const [department, setDepartment] = useState("");
+  const [image, setImage] = useState("");
+  const [uploadedImage, setUploadedImage] = useState("");
+  const [message, setMessage] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setId(doctorData?.id);
+    setName(doctorData?.name);
+    setEmail(doctorData?.email);
+    setPhone(doctorData?.phone);
+    setQualification(doctorData?.qualification);
+    setDepartment(doctorData?.department);
+    setImage(doctorData?.image);
+
+    getAllDepartment();
+  }, [doctorData]);
+
+  const handleFileChange = (event) => {
+    setImage(null);
+    const selectedFile = event.target.files[0];
+    console.log(selectedFile);
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (selectedFile && allowedTypes.includes(selectedFile.type)) {
+      setUploadedImage(selectedFile);
+      setMessage(null);
+    } else {
+      setUploadedImage(null);
+      setMessage("Please select a JPEG or PNG image.");
+    }
+  };
+  const getAllDepartment = async () => {
+    try {
+      let { data } = await getCategory();
+      console.log(data);
+      if (data) {
+        setAllDepartment(data.departmentData);
+      }
+    } catch {}
+  };
+console.log(department,"iiiiii");
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("Id", id);
+      formData.append("Image", uploadedImage);
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("qualification", qualification);
+      formData.append("department", department);
+
+      let { data } = await editDoctor(formData);
+      console.log(data);
+      if (data.success) {
+        dispatch(
+          setDoctorDetails({
+            id: data.editedData._id,
+            name: data.editedData.name,
+            email: data.editedData.email,
+            phone: data.editedData.phone,
+            qualification: data.editedData.qualification,
+            department: data.editedData.department,
+            experience: data.editedData.experience,
+            consultationFee: data.editedData.consultationFee,
+            status: data.editedData.status,
+            image: data.editedData.image,
+            token: data.token,
+          })
+        );
+       
+        
+      }else{
+        Swal("Not Updated Your Profile")
+      }
+    } catch {}
+  };
+  return (
+    <div>
+      <input type="checkbox" id="doctor_profile" className="modal-toggle" />
+      <label htmlFor="doctor_profile" className="cursor-pointer modal ">
+        <label className="relative modal-box w-96  overflow-y-auto scrollbar-none scrollbar-thumb-gray-400 scrollbar-track-transparent	 " htmlFor="doctor_profile">
+          <div className=" w-96">
+            <div className="flex-shrink-0 w-full max-w-sm shadow-2xl  card bg-base-100 ">
+             
+              <h1 className=" font-bold uppercase text-center ">
+              EDIT {doctorData?.name} PROFILE
+              
+            </h1>
+             
+            
+              <form onSubmit={handleEdit} className="">
+             
+                <div className="card-body">
+                  <div className="avatar">
+                    <div className="w-24 rounded-xl">
+                      <img
+                        src={
+                          image
+                            ? `http://localhost:4000/${image}`
+                            : uploadedImage &&
+                              URL.createObjectURL(uploadedImage)
+                        }
+                      />
+                    </div>
+                  </div>
+                  <input
+                    type="file"
+                    className="w-full max-w-xs file-input file-input-bordered file-input-success"
+                    onChange={handleFileChange}
+                  />
+
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Name</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="Name"
+                      placeholder="Name"
+                      className="input input-bordered"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Email</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="email"
+                      className="input input-bordered"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Phone</span>
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="Phone"
+                      className="input input-bordered"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-control">
+                    <select
+                      value={department
+                      }
+                        onChange={(e) => setDepartment(e.target.value)}
+                  
+                      className="w-full max-w-xs select"
+                    >
+                     
+                      {allDepartment.map((department, index) => {
+                        return (
+                          <option>
+                            {department.categoryName}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Qualification</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="password"
+                      className="input input-bordered"
+                      value={qualification}
+                      onChange={(e) => setQualification(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="form-control modal-action bg-black">
+                    <button
+                      type="submit"
+                      className="btn btn-outline btn-secondary w-52"
+                      htmlFor="doctor_profile"
+                    >
+                      SUBMIT
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </label>
+      </label>
+    </div>
+  );
+}
+
+export default EditDoctorProfile;

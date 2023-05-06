@@ -1,11 +1,11 @@
 import React from 'react'
-import AdminHeader from '../../Component/admin/AdminHeader'
+
 import AdminBody from '../../Component/admin/AdminBody'
 
 function Adminhome() {
   return (
-    <div>
-       <AdminHeader/>
+    <div >
+ 
     <AdminBody/>
     </div>
    
