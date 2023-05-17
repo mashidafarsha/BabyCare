@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { userSignup } from "../../sevices/userApi";
 import UserOtp from "./UserOtp";
+import { Link } from "react-router-dom";
 function UserSignup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,19 +15,22 @@ function UserSignup() {
     let { data } = await userSignup(name, email, phone, password, cPassword);
     console.log(data,"hhhhhhh");
     if(data.data.status==="pending"){
-      let userSignup=document.getElementById("user_signup")
+      // let userSignup=document.getElementById("user_signup")
       let userOtp=document.getElementById("user_otp")
-      userSignup.checked=false
+      // userSignup.checked=false
       userOtp.checked=true
     }
   };
   return (
     <div>
-      <input type="checkbox" id="user_signup" className="modal-toggle" />
+        <div className="flex items-center justify-center w-screen h-screen overflow-hidden bg-white">
+      {/* <input type="checkbox" id="user_signup" className="modal-toggle" />
       <div className="modal">
-        <div className="modal-box">
-          <div className="min-h-screen hero bg-base-200">
-            <div className="flex-shrink-0 w-full max-w-sm shadow-2xl card bg-base-100">
+        <div className="modal-box"> */}
+          {/* <div className="min-h-screen hero bg-base-200"> */}
+            
+            <div className="h-auto w-4/12 bg-blue-200">
+            <h1 className=" text-center mt-4 font-bold">PLEASE REGISTER</h1>
               <form onSubmit={handleSubmit} className="mt-6">
                 <div className="card-body">
                   <div className="form-control">
@@ -83,11 +87,12 @@ function UserSignup() {
                       className="input input-bordered"
                       onChange={(e) => setCpassword(e.target.value)}
                     />
-                    <label className="label">
-                      <a href="#" className="label-text-alt link link-hover">
+                    <button className="label">
+                      <Link to={'/'}> <p className="label-text-alt link link-hover">
                         do you have already account?
-                      </a>
-                    </label>
+                      </p></Link>
+                     
+                    </button>
                   </div>
                   <div className="mt-6 form-control modal-action">
                     <button type="submit">
@@ -100,9 +105,9 @@ function UserSignup() {
                 </div>
               </form>
             </div>
-          </div>
-        </div>
-      </div>
+          {/* </div> */}
+        {/* </div> */}
+       </div>
       <UserOtp/>
     </div>
   );

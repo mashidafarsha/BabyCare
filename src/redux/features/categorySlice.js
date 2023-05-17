@@ -1,23 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-   
-    id:"",
-    categoryName:"",
-    description:"",
+  department:null
     
    
    
   
 }
 const categorySlice = createSlice({
-    name: "category",
+    name: "department",
     initialState,
     reducers: {
         setCategoryDetails: (state, action) => {
-            state.id=action.payload.id;
-            state.categoryName = action.payload.categoryName;
-            state.description = action.payload.description;
+            state.department = action.payload.department
            
         },
        

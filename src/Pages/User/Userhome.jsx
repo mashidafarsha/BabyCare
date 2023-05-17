@@ -4,6 +4,7 @@ import UserNavbar from '../../Component/user/UserNavbar'
 import SubBanner from '../../Component/user/SubBanner'
 import PlanBanner from '../../Component/heromodal/PlanBanner'
 import DepartmentBanner from '../../Component/user/DepartmentBanner'
+import Footer from '../../Component/userFooter/Footer'
 function Userhome() {
   return (
     <div>
@@ -13,6 +14,7 @@ function Userhome() {
         
          <PlanBanner/>
          <SubBanner/>
+         <Footer/>
     </div>
   )
 }

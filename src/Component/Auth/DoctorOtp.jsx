@@ -21,6 +21,7 @@ function DoctorOtp() {
     const {data}=await sendOtp(otp)
    console.log(data,"nnnnnnnn");
     if(data.created){
+     
       navigate('/doctor/info')
     }else{
       generateError(data.message)
@@ -29,7 +30,7 @@ function DoctorOtp() {
   return (
     <>
       <input type="checkbox" id="sent_otp" className="modal-toggle" />
-      <label htmlFor="sentotp" className="cursor-pointer modal">
+      <label htmlFor="sent_otp" className="cursor-pointer modal">
         <label className="relative modal-box bg-gradient-to-r from-pink-50 to-indigo-600" htmlFor="sent_otp">
           <div className="h-64 w-96 ">
             <h1 className="mb-10 font-bold">Enter Your OTP</h1>
@@ -53,7 +54,7 @@ function DoctorOtp() {
               <div className="modal-action">
                 <button
                   className="btn btn-outline bg-gradient-to-r from-violet-900 to-indigo-600 text-white"
-                  htmlFor="sentotp"
+                  htmlFor="sent_otp"
                 >
                   SUBMIT
                 </button>

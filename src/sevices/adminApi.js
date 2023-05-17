@@ -8,8 +8,10 @@ const authAdmin = () => {
   return adminAxiosInstance("adminToken").get("/auth");
 };
 
-const addCategory = (values) => {
-  return adminAxiosInstance("adminToken").post("/addCategory", { ...values });
+const addCategory = (formData) => {
+  return adminAxiosInstance("adminToken").post("/addCategory", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 };
 
 const getCategory = () => {
@@ -20,11 +22,14 @@ const deletedepartment = (categoryId) => {
   return adminAxiosInstance("adminToken").put(`/deleteCategory/${categoryId}`);
 };
 
-const editDepartment = (id, depname, depdescr) => {
+const editDepartment = (id, depname, depdescr,image) => {
   return adminAxiosInstance("adminToken").post("/editCategory", {
     id: id,
     categoryName: depname,
     description: depdescr,
+    image:image
+  },{
+    headers: { "Content-Type": "multipart/form-data" },
   });
 };
 const getRegisterDoctor = () => {
@@ -45,6 +50,7 @@ const getBanner = () => {
 };
 
 const addBannerData = (formData) => {
+  
   return adminAxiosInstance("adminToken").post("/addBanner", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
@@ -83,6 +89,17 @@ const editOurPlan=(formData)=>{
     headers: { "Content-Type": "multipart/form-data" },
   });
 }
+const deletePlans = (planId) => {
+  return adminAxiosInstance("adminToken").put(`/deletePlan/${planId}`);
+};
+const deleteDoctor = (doctorId) => {
+  return adminAxiosInstance("adminToken").put(`/blockDoctor/${doctorId}`);
+};
+
+const getAllBookingData = () => {
+  return adminAxiosInstance("adminToken").get("/getAllBookingData");
+};
+
 
 export {
  authAdmin,
@@ -101,5 +118,8 @@ export {
   bannerDelete,
   addOurPlan,
   getPlans,
-  editOurPlan
+  editOurPlan,
+  deletePlans,
+  deleteDoctor,
+  getAllBookingData
 };

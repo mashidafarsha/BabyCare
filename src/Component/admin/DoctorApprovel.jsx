@@ -86,7 +86,7 @@ function DoctorApprovel() {
 
                     <td>
                       <Link to={`http://localhost:4000/${doc.document}`}>
-                        link
+                        Certificate
                       </Link>
                     </td>
                     <div>

@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { scheduledDoctorSlot } from "../../sevices/doctorApi";
+import { scheduledDoctorSlot,cancelDoctorSchedule,getUserBookedSlot } from "../../sevices/doctorApi";
+import Swal from 'sweetalert2';
 import moment from "moment";
 function DoctorSelectedSlots() {
+  const [load, setLoad] = useState(false);
   const today = moment().startOf("day");
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState([]);
   const [slots, setSlots] = useState([]);
-  const [slo, setSlo] = useState([]);
+  const [bookedSlot, setBookedSlot] = useState([]);
 
   useEffect(() => {
     getSheduledSlot();
-  }, []);
+    getBookedSlot()
+  }, [load]);
+
+  const handleLoad = () => {
+    setLoad(!load);
+  };
 
   const dates = [];
   for (let i = 1; i < 11; i++) {
@@ -37,6 +44,38 @@ function DoctorSelectedSlots() {
     }
   };
 
+  const getBookedSlot=async()=>{
+    let {data}= await getUserBookedSlot()
+    if(data.success){
+      setBookedSlot(data.bookedSlots)
+    }
+  }
+
+
+  const cancelSchedule=async(startTime)=>{
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete the time slot'
+    }).then(async(result) => {
+      if (result.isConfirmed) {
+        let {data}=await cancelDoctorSchedule(startTime)
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+        handleLoad()
+      }
+    })
+   
+
+  }
+
 
   const getSheduledSlot = async () => {
     let { data } = await scheduledDoctorSlot();
@@ -45,9 +84,9 @@ function DoctorSelectedSlots() {
    
   };
   return (
-    <div className=" h-screen bg-emerald-100 ">
-      <div className="flex items-start justify-center  ">
-        <div className="mt-5 w-8/12 p-4 shadow-xl max-w- carousel carousel-center bg-[#7493a863] rounded-box bg-[#7493a863] rounded-box bg-gradient-to-r from-teal-400">
+    <div className="h-screen bg-emerald-100">
+      <div className="flex items-start justify-center ">
+        <div className="mt-5 w-8/12 p-4 shadow-xl max-w- carousel carousel-center  bg-[#7493a863] rounded-box bg-gradient-to-r from-teal-400">
           {dates?.map((date, index) => {
             return (
               <div>
@@ -65,6 +104,15 @@ function DoctorSelectedSlots() {
           })}
         </div>
       </div>
+      <div className="flex items-start justify-center mt-4">
+    
+      <div className="avatar placeholder">
+        <h1 className="font-bold">Booked</h1>
+  <div className="w-8 ml-3 bg-blue-700 rounded-full text-neutral-content">
+    <span className="text-xs"></span>
+  </div>
+</div>
+      </div>
 
       {selectedDate && (
         <div className="flex items-start justify-center ">
@@ -72,7 +120,16 @@ function DoctorSelectedSlots() {
             {getTimeSlot().map(({ startTime, endTime }) => {
               return (
                 slots.includes(startTime.format("MMMM Do YYYY, h:mm:ss a")) && (
-                  <button className="m-5 btn btn-success">
+                  <button onClick={()=>cancelSchedule(startTime.format("MMMM Do YYYY, h:mm:ss a"))} 
+                  className={`${
+                    bookedSlot.some(
+                      (slot) =>
+                        slot.bookingTime === startTime.format("MMMM Do YYYY, h:mm:ss a")
+                    )
+                      ? "bg-blue-700 text-white"
+                      : "btn-success"
+                  } m-5 btn`}
+                >
                     <b className="p-3">{`${startTime.format(
                       "hh:mm A"
                     )} - ${endTime.format("hh:mm A")}`}</b>

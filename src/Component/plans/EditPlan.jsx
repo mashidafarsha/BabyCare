@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { editOurPlan } from "../../sevices/adminApi";
-function EditPlan({ plan }) {
+import Swal from "sweetalert2";
+function EditPlan({ plan,handleLoad }) {
     const [id,setId]=useState("")
   const [planname, setPlanname] = useState("");
   const [description, setDescription] = useState("");
@@ -34,6 +35,16 @@ function EditPlan({ plan }) {
     }
   };
 
+  const generateError = (err) => {
+    Swal.fire(err);
+  };
+  
+  const generateSuccess = (err) => {
+    Swal.fire(err);
+  };
+
+
+  
   const handleSubmit=async(e)=>{
     e.preventDefault()
 
@@ -51,6 +62,8 @@ function EditPlan({ plan }) {
             }else{
                 let {data}=await editOurPlan(formData)
                 console.log(data);
+                generateSuccess(data.message);
+                handleLoad();
             }
         }catch{
             
@@ -63,7 +76,7 @@ function EditPlan({ plan }) {
     <>
       <input type="checkbox" id="edit-plan" className="modal-toggle" />
       <label htmlFor="edit-plan" className="cursor-pointer modal">
-        <label className="relative modal-box" htmlFor="">
+        <label className="relative overflow-y-auto modal-box scrollbar-none scrollbar-thumb-gray-400 scrollbar-track-transparent" htmlFor="">
           <div className="h-full w-96">
             <h1 className="mb-10 font-bold uppercase">
               EDIT PLAN OF {plan?.planname}
@@ -141,7 +154,7 @@ function EditPlan({ plan }) {
               <div className="modal-action">
                 <button
                   type="submit"
-                  className="btn btn-outline btn-secondary"
+                  className="text-white btn btn-outline bg-sky-900"
                   htmlFor="edit-plan"
                 >
                   SUBMIT

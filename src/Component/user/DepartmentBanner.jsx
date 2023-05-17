@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getDepartmentData } from "../../sevices/userApi";
+import { Link } from "react-router-dom";
 function DepartmentBanner() {
   const [department, setDepartment] = useState([]);
 
   useEffect(() => {
     getAllDepartment();
   }, []);
-  console.log(department,"ooooooooo");
+  console.log(department, "ooooooooo");
   const getAllDepartment = async () => {
     try {
       let { data } = await getDepartmentData();
@@ -18,7 +19,7 @@ function DepartmentBanner() {
   };
   return (
     <>
-      <div className="flex items-start justify-center mx-auto overflow-hidden">
+      <div className="flex items-start justify-center mx-auto overflow-hidden ">
         <div className="flex items-start justify-between w-8/12">
           <div>
             <h1 className="text-4xl font-extrabold text-blue-800 ">
@@ -29,26 +30,30 @@ function DepartmentBanner() {
             </h1>
           </div>
           <div>
-            <button class=" bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded">
-              See All Specialities
+            <button class=" bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+             <Link to={"/department"}>  See All Specialities </Link>
             </button>
           </div>
         </div>
       </div>
-      <div className="flex items-start justify-center mx-auto overflow-hidden">
-        <div className="max-w-md p-4 space-x-4 shadow-2xl carousel carousel-center bg-slate-200 rounded-box">
+      <div className="flex items-start justify-center w-10/12 mx-auto overflow-hidden border border-stone-400">
+        <div className="w-screen p-4 space-x-4 shadow-2xl carousel carousel-center bg-slate-200 rounded-box">
           {department.map((department, index) => {
             return (
-              <div className="shadow-xl card w-96 bg-base-100">
+              <div className="shadow-xl w-60 card bg-base-100">
                 <figure className="h-40">
-                  <img src="" className="w-full" />
+                  <img  src={
+                      department.image
+                        ? `http://localhost:4000/${department.image}`
+                        : ""
+                    } className="w-full h-32 rounded-full " />
                 </figure>
-                <div className="h-40 card-body">
+                <div className="h-20 mb-5 card-body">
                   <h2 className="card-title">{department.categoryName}</h2>
-                  {/* <p>{department.description}</p> */}
-                  <div className="justify-end card-actions">
-                    <button className="btn btn-primary">Buy Now</button>
-                  </div>
+                </div>
+                <div className="justify-center mb-7 card-actions">
+                 
+                  <button className="font-bold text-blue-800"> <Link to={'/department'}>Consult Now</Link></button>
                 </div>
               </div>
             );

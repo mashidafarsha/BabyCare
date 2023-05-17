@@ -5,6 +5,7 @@ import AdminHeader from '../../Component/admin/AdminHeader'
 function Addcategory() {
   return (
     <div>
+      
         <AdminHeader/>
         <AddCategory/>
     </div>

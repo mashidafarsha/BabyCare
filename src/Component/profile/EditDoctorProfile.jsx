@@ -4,9 +4,11 @@ import { editDoctor, getCategory } from "../../sevices/doctorApi";
 import { setDoctorDetails } from "../../redux/features/doctorSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert";
 
-function EditDoctorProfile({ doctorData }) {
+
+import Swal from "sweetalert2";
+
+function EditDoctorProfile({ doctorData,handleLoad }) {
   const [allDepartment, setAllDepartment] = useState([]);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
@@ -18,8 +20,8 @@ function EditDoctorProfile({ doctorData }) {
   const [uploadedImage, setUploadedImage] = useState("");
   const [message, setMessage] = useState("");
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+
+
 
   useEffect(() => {
     setId(doctorData?.id);
@@ -69,25 +71,13 @@ console.log(department,"iiiiii");
       formData.append("department", department);
 
       let { data } = await editDoctor(formData);
-      console.log(data);
+      console.log(data)
       if (data.success) {
-        dispatch(
-          setDoctorDetails({
-            id: data.editedData._id,
-            name: data.editedData.name,
-            email: data.editedData.email,
-            phone: data.editedData.phone,
-            qualification: data.editedData.qualification,
-            department: data.editedData.department,
-            experience: data.editedData.experience,
-            consultationFee: data.editedData.consultationFee,
-            status: data.editedData.status,
-            image: data.editedData.image,
-            token: data.token,
-          })
-        );
+        console.log("suuuccc");
+        Swal.fire("Successfuly Updated User Profile")
+        handleLoad()
        
-        
+       
       }else{
         Swal("Not Updated Your Profile")
       }
@@ -97,12 +87,12 @@ console.log(department,"iiiiii");
     <div>
       <input type="checkbox" id="doctor_profile" className="modal-toggle" />
       <label htmlFor="doctor_profile" className="cursor-pointer modal ">
-        <label className="relative modal-box w-96  overflow-y-auto scrollbar-none scrollbar-thumb-gray-400 scrollbar-track-transparent	 " htmlFor="doctor_profile">
-          <div className=" w-96">
-            <div className="flex-shrink-0 w-full max-w-sm shadow-2xl  card bg-base-100 ">
+        <label className="relative overflow-y-auto modal-box w-96 scrollbar-none scrollbar-thumb-gray-400 scrollbar-track-transparent " htmlFor="doctor_profile">
+        <div className="w-full">
+            <div className="flex-shrink-0 w-full card bg-base-100 ">
              
-              <h1 className=" font-bold uppercase text-center ">
-              EDIT {doctorData?.name} PROFILE
+              <h1 className="font-bold text-center uppercase ">
+              EDIT {doctorData?.name} 
               
             </h1>
              
@@ -166,6 +156,9 @@ console.log(department,"iiiiii");
                     />
                   </div>
                   <div className="form-control">
+                  <label className="label">
+                      <span className="label-text">Department</span>
+                    </label>
                     <select
                       value={department
                       }
@@ -196,10 +189,10 @@ console.log(department,"iiiiii");
                     />
                   </div>
 
-                  <div className="form-control modal-action bg-black">
+                  <div className="bg-black form-control modal-action">
                     <button
                       type="submit"
-                      className="btn btn-outline btn-secondary w-52"
+                      className="btn btn-outline btn-secondary "
                       htmlFor="doctor_profile"
                     >
                       SUBMIT

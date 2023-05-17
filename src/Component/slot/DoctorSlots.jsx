@@ -2,14 +2,24 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 
 import moment from "moment";
-import { doctorSelectSlot } from "../../sevices/doctorApi";
+import { doctorSelectSlot,displayScheduledTime } from "../../sevices/doctorApi";
 import Swal from "sweetalert";
 function DoctorSlots() {
+  const [load, setLoad] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState([]);
+  const [bookedSlots,setBookedSlots]=useState([])
   const today = moment().startOf("day");
   const dates = [];
-  let times = [];
+
+  useEffect(() => {
+  
+
+    getScheduledTimes()
+  }, [load])
+  const handleLoad = () => {
+    setLoad(!load);
+  };
   
   for (let i = 1; i < 11; i++) {
     let date = today.clone().add(i, "days");
@@ -22,15 +32,24 @@ function DoctorSlots() {
   };
 
   const handleTimeSelect = (startTime) => {
+    
     if (selectedTime.includes(startTime)) {
       setSelectedTime(selectedTime.filter((val) => val !== startTime));
     } else {
       setSelectedTime([...selectedTime, startTime])
-    }
-   
+
+  }
  
   };
-  console.log(selectedTime,"selected");
+
+  const getScheduledTimes=async()=>{
+    let {data}=await  displayScheduledTime()
+    if(data.success){
+      setBookedSlots(data.slots)
+    
+    }
+   
+  }
  
 
 
@@ -56,6 +75,7 @@ function DoctorSlots() {
       let { data } = await doctorSelectSlot(selectedTime);
       if(data.success){
         Swal("Successfully Added your Slot");
+        handleLoad()
       }else{
         Swal("Not Added your Slot");
       }
@@ -64,8 +84,8 @@ function DoctorSlots() {
 
 
   return (
-    <div className=" h-screen bg-emerald-100 ">
-      <div className="flex items-start justify-center  ">
+    <div className="h-screen bg-emerald-100">
+      <div className="flex items-start justify-center ">
         <div className="mt-5 w-8/12 p-4 shadow-xl max-w- carousel carousel-center bg-[#7493a863] rounded-box bg-gradient-to-r from-teal-400">
           {dates?.map((date, index) => {
             return (
@@ -84,14 +104,33 @@ function DoctorSlots() {
           })}
         </div>
       </div>
+      <div className="w-full text-center">
+      <h1 className="text-lg font-bold mt-7">Choose multiple slots</h1>
+      </div>
+      
       {selectedDate && (
         <div className="flex items-start justify-center ">
           <div className="w-7/12 m-16 ">
             {getTimeSlot().map(({startTime,endTime}) => {
               return (
+                
                 <button
                   onClick={() => handleTimeSelect(startTime.format("MMMM Do YYYY, h:mm:ss a"))}
-                  className="m-5 btn bg-teal-500"
+                 
+                  className={`${
+                    selectedTime.includes(
+                      startTime.format("MMMM Do YYYY, h:mm:ss a")
+                    )
+                      ? " bg-blue-500 text-black "
+                      : " bg-teal-500"
+                  }${
+                    bookedSlots.includes(
+                      startTime.format("MMMM Do YYYY, h:mm:ss a")
+                    )
+                      ? " bg-indigo-900 text-white rounded focus:outline-none opacity-100 cursor-not-allowed"
+                      : " bg-teal-500"
+                  } btn border-none w-44  bg-teal-500 m-5 `}
+                  disabled={bookedSlots.includes(startTime.format("MMMM Do YYYY, h:mm:ss a"))}
                 >{`${startTime.format("LT")} - ${endTime.format(
                   "LT"
                 )}`}</button>

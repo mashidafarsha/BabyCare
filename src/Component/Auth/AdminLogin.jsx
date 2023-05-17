@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert";
@@ -15,7 +15,11 @@ function AdminLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
- 
+  useEffect(() => {
+    if(localStorage.getItem("adminToken")){
+      navigate('/admin/adminHome')
+    }
+  }, []) 
 
   const generateError = (err) => {
     Swal(err);
@@ -35,13 +39,11 @@ function AdminLogin() {
         } else {
           localStorage.setItem("adminToken", data.token);
           dispatch(
-            setAdminDetails({
-              email: data.admin.email,
-              name: data.admin.name,
-              token: data.token,
-              isAdmin:null
-              
-            })
+            setAdminDetails(
+              {admin:data.admin}
+            
+      
+            )
           );
           navigate("/admin/adminHome");
         }

@@ -18,7 +18,7 @@ function Banner() {
   };
 
   return (
-    <div className="m-4 mx-auto shadow-2xl ">
+    <div className="m-6 mx-auto mt-5 shadow-2xl">
       <div className="carousel rounded-2xl">
         {bannerImage.map((banner, index) => {
           return (

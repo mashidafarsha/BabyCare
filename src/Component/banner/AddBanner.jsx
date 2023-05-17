@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
-
+import Swal from 'sweetalert';
 import { addBannerData } from '../../sevices/adminApi';
 
-function AddBanner() {
+function AddBanner({handleLoad}) {
     const [bannerName,setBannerName]=useState("")
     const [description,setDescription]=useState("")
     const [image, setImage] = useState(null);
     const [message,setMessage]=useState("")
 
- 
+    const generateError = (err) => {
+      Swal(err);
+    };
+    
+    const generateSuccess = (err) => {
+      Swal(err);
+    };
     
       const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -37,10 +43,18 @@ function AddBanner() {
         let { data } = await addBannerData(formData)
       
           if (data.success) {
-            generateSuccess(data.message);
-            navigate("/admin/banner",{state:{data}});
-          } else {
-            generateError(data.message);
+           
+            generateSuccess(data.message)
+            setBannerName("")
+            setDescription("")
+            setImage('')
+            document.getElementById("file-input").value = "";
+            handleLoad()  
+            // navigate("/admin/banner",{state:{data}});
+          } else if(data.errors) {
+            console.log(data.errors,"oooo");
+            if (data.errors.message) generateError(data.errors.message);
+          
           }
       }
 
@@ -51,8 +65,8 @@ function AddBanner() {
   return (
     <>
     <input type="checkbox" id="add-banner" className="modal-toggle" />
-    <label htmlFor="add-banner" className="cursor-pointer modal">
-      <label className="relative modal-box" htmlFor="">
+    <label htmlFor="add-banner" className="cursor-pointer modal ">
+      <label className="relative modal-box text-sky-900 " htmlFor="">
         <div className="h-full w-96">
           <h1 className="mb-10 font-bold">ADD BANNER</h1>
           <form onSubmit={handleSubmit}   className="flex flex-col gap-4"encType='multipart/form-data'>
@@ -61,9 +75,10 @@ function AddBanner() {
                 <label htmlFor="category">BnnerName</label>
               </div>
               <input
-                className="w-60 outline-slate-400 outline"
+               className="input input-bordered"
                 id="categoryName"
                 type="text"
+                value={bannerName}
                 required={true}
                 onChange={(e) =>
                   setBannerName(e.target.value )
@@ -76,9 +91,10 @@ function AddBanner() {
                 <label htmlFor="description">Description</label>
               </div>
               <input
-                className="w-60 outline-slate-400 outline"
+                className="input input-bordered"
                 id="description"
                 type="text"
+                value={description}
                 required={true}
                 onChange={(e) =>
                   setDescription( e.target.value )
@@ -89,6 +105,7 @@ function AddBanner() {
               <label>Upload Image</label>
 
               <input
+                id='file-input'
                 type="file"
                 className="w-full max-w-xs ml-4 file-input"
                 name="file"
@@ -99,7 +116,7 @@ function AddBanner() {
             <div className="modal-action">
               <button
               type='submit'
-                className="btn btn-outline btn-secondary"
+              className="text-white btn btn-outline bg-sky-900"
                 htmlFor="add-banner"
                 
               >

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BaseUrl } from "../../constants/constants";
+import Swal from "sweetalert2";
 import { editBannerData } from "../../sevices/adminApi";
 function EditBanner({ editBanner, handleLoad }) {
   const [image, setImage] = useState("");
@@ -30,13 +30,25 @@ function EditBanner({ editBanner, handleLoad }) {
     }
   };
 
+
+  const generateError = (err) => {
+    Swal.fire(err);
+  };
+  
+  const generatesuccess = (err) => {
+    Swal.fire(err);
+  };
+
+
   const editHandleBanner = async (e) => {
     e.preventDefault();
     if (bannerName === "" || description === "") {
       Swal("Please enter all details");
     } else {
-      let { data } = await editBannerData(id, bannerName, description, image);
-
+      let { data } = await editBannerData(id, bannerName, description, image)
+      console.log(data);
+      generatesuccess(data.message);
+      handleLoad();
       console.log(data);
     }
   };
@@ -45,11 +57,11 @@ function EditBanner({ editBanner, handleLoad }) {
     <>
       <input type="checkbox" id="editBanner" className="modal-toggle" />
       <label htmlFor="editBanner" className="cursor-pointer modal">
-        <label className="relative modal-box" htmlFor="">
+        <label className="relative overflow-y-auto modal-box text-sky-900 scrollbar-none scrollbar-thumb-gray-400 scrollbar-track-transparent" htmlFor="">
           <div className="h-full w-96">
             <h1 className="mb-10 font-bold uppercase">
-              EDIT BANNER OF
-              {editBanner?.bannerName}
+              EDIT BANNER OF {editBanner?.bannerName}
+              
             </h1>
             <form
               onSubmit={editHandleBanner}
@@ -60,7 +72,7 @@ function EditBanner({ editBanner, handleLoad }) {
                   <label htmlFor="category">CategoryName</label>
                 </div>
                 <input
-                  className="w-60 outline-slate-400 outline"
+                 className="text-black input input-bordered"
                   id="categoryName"
                   type="text"
                   value={bannerName}
@@ -72,7 +84,7 @@ function EditBanner({ editBanner, handleLoad }) {
                   <label htmlFor="description">Description</label>
                 </div>
                 <input
-                  className="w-60 outline-slate-400 outline"
+                  className="text-black input input-bordered"
                   id="description"
                   type="text"
                   value={description}
@@ -102,7 +114,7 @@ function EditBanner({ editBanner, handleLoad }) {
               <div className="modal-action">
                 <button
                   type="submit"
-                  className="btn btn-outline btn-secondary"
+                  className="text-white btn btn-outline bg-sky-900"
                   htmlFor="editBanner"
                 >
                   SUBMIT

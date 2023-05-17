@@ -5,7 +5,7 @@ import AdminRouter from "./Router/AdminRouter";
 import UserRouter from "./Router/UserRouter";
 
 import DoctorRouter from "./Router/DoctorRouter";
-import DoctorLogin from "./Component/Auth/DoctorLogin";
+
 
 function App() {
   return (

@@ -4,10 +4,11 @@ import Swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setDoctorDetails } from "../../redux/features/doctorSlice";
+import { Link } from "react-router-dom";
 import DoctorSignup from "./DoctorSignup";
 
 function DoctorLogin() {
-  const [load, setLoad] = useState(false);
+  // const [load, setLoad] = useState(false);
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -16,19 +17,17 @@ function DoctorLogin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (localStorage.getItem("doctorWaitingToken")) {
+      navigate("/doctor/waiting");
+    } else if (localStorage.getItem("doctorToken")) {
+      navigate("/doctor/doctorHome");
+    }
+  }, []);
 
-useEffect(() => {
-  if(localStorage.getItem("doctorWaitingToken")){
-    navigate('/doctor/waiting')
-  }else if(localStorage.getItem("doctorToken")){
-    navigate('/doctor/doctorHome')
-  }
-
-}, [])
-
-  const handleLoad = () => {
-    setLoad(!load);
-  };
+  // const handleLoad = () => {
+  //   setLoad(!load);
+  // };
   const generateError = (err) => {
     Swal(err);
   };
@@ -37,34 +36,16 @@ useEffect(() => {
     e.preventDefault();
 
     try {
-      let { data } = await doctorLogin(values) 
-    
-     
+      let { data } = await doctorLogin(values);
+
       console.log(data, "data");
       if (data.errors) {
         if (data.errors.email) generateError(data.errors.email);
         else if (data.errors.password) generateError(data.errors.password);
       } else if (data.doctor.status === "Active") {
-       
         localStorage.setItem("doctorToken", data.token);
-        console.log(data.doctor,"oooo");
-        dispatch(
-          setDoctorDetails(
-            {doctor:data.doctor}
-            // id:data.doctor._id,
-            // name: data.doctor.name,
-            // email: data.doctor.email,
-            // phone: data.doctor.phone,
-            // qualification: data.doctor.qualification,
-            // department: data.doctor.department,
-            // experience: data.doctor.experience,
-            // consultationFee: data.doctor.consultationFee,
-            // status: data.doctor.status,
-            // image: data.doctor.image,
-            // token: data.token,
-
-          )
-        );
+        console.log(data.doctor, "oooo");
+        dispatch(setDoctorDetails({ doctor: data.doctor }));
         console.log("kkkk");
         navigate("/doctor/doctorHome");
       } else {
@@ -124,12 +105,14 @@ useEffect(() => {
                 LOGIN
               </button>
             </div>
-            <label htmlFor="doctorSignup">
-              <p>You have no account?</p>
-            </label>
+            <button>
+              <Link to={"/doctor/signup"}>
+                {" "}
+                <p>You have no account?</p>
+              </Link>
+            </button>
           </form>
         </div>
-        <DoctorSignup handleLoad={handleLoad} load={load} />
       </div>
     </div>
   );

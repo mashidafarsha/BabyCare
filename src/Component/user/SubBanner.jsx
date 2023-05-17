@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getDoctorsData } from "../../sevices/userApi";
+import { setDoctorData } from "../../redux/features/doctorDetailsSlice";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 function SubBanner() {
   const [doctorImage, setDoctorImage] = useState([]);
+  const dispatch=useDispatch()
   useEffect(() => {
     getAllDoctors();
   }, []);
@@ -28,17 +32,17 @@ function SubBanner() {
             </h1>
           </div>
           <div>
-            <button class=" bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded">
+            <button class=" bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
               See All Doctors
             </button>
           </div>
         </div>
       </div>
       <div className="flex items-start justify-center mx-auto overflow-hidden">
-        <div className="max-w-md p-4 space-x-4 shadow-2xl carousel carousel-center bg-slate-200 rounded-box">
+        <div className="w-screen p-4 space-x-4 shadow-2xl carousel carousel-center bg-slate-200 rounded-box">
           {doctorImage.map((doctor, index) => {
             return (
-              <div className="shadow-xl card w-96 bg-base-100">
+              <div className="w-56 shadow-xl card bg-base-100">
                 <figure className="h-40">
                   <img
                     src={
@@ -49,14 +53,25 @@ function SubBanner() {
                     className="w-full"
                   />
                 </figure>
-                <div className="h-40 card-body">
-                  <h2 className="card-title">{doctor.name}</h2>
-                  <p>{doctor.department}</p>
-                  <div className="justify-end card-actions">
-                    <button className="btn btn-primary">Buy Now</button>
+                <div className="mb-5 h-28 card-body">
+                  <h2 className="uppercase card-title">Dr.{doctor.name}</h2>
+                  <p className="">{doctor.department}</p>
+                  <p>{doctor.experience}</p>
+                  <p>Rs. {doctor.consultationFee}</p>
+                  </div>
+                  <div className="justify-center card-actions">
+                  <button
+                  onClick={() =>
+                    dispatch(setDoctorData({ doctorData: doctor }))
+                  }
+                  className="font-bold text-blue-800"
+                >
+                  {" "}
+                  <Link to="/doctorDetails">View</Link>
+                </button>
                   </div>
                 </div>
-              </div>
+              
           
             );
           })}

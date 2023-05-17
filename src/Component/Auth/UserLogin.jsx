@@ -1,18 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserSignup from "./UserSignup";
 import { userLogin } from "../../sevices/userApi";
 import { useNavigate } from "react-router-dom";
+import { setUserDetails } from "../../redux/features/userSlice";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 function UserLogin() {
   const [email,setEmail]=useState("")
   const [passord,setPassword]=useState("")
 const navigate=useNavigate()
+const dispatch=useDispatch()
+useEffect(() => {
+  if(localStorage.getItem("userToken")){
+    navigate('/home')
+  }
+}, [])
+
   const handleSubmit=async(e)=>{
    e.preventDefault()
    let {data}=await userLogin(email,passord)
    console.log(data);
    if(data.success){
     localStorage.setItem("userToken", data.token);
+    dispatch(
+      setUserDetails(
+        {user:data.user}
+      
+
+      )
+    );
     navigate("/home")
    }else{
     
@@ -56,11 +73,12 @@ const navigate=useNavigate()
                         Forgot password?
                       </a>
                     </label>
-                    <label htmlFor="user_signup" className="ml-20 label">
-                      <a className="label-text-alt link link-hover">
+                    <button className="ml-20 label">
+                      <Link to={'/signup'}> <p className="label-text-alt link link-hover">
                         Register Your Account!
-                      </a>
-                    </label>
+                      </p></Link>
+                     
+                    </button>
                   </div>
                 </div>
                 <div className="mt-6 form-control">
@@ -71,7 +89,7 @@ const navigate=useNavigate()
           </div>
         </div>
       </div>
-      <UserSignup />
+      {/* <UserSignup /> */}
     </div>
   );
 }

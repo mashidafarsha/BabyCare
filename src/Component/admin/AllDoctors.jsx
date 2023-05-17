@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
-import { getApprovedDoctor } from '../../sevices/adminApi';
+import { getApprovedDoctor,deleteDoctor} from '../../sevices/adminApi';
+import Swal from 'sweetalert2';
 function AllDoctors() {
     const [docDetail,setDocDetail]=useState('')
     const [doctor, setDoctor] = useState([]);
@@ -20,7 +21,33 @@ function AllDoctors() {
           
         }
         
-      };
+      }
+      const blockDoctor=(doctorId)=>{
+        console.log("kkk");
+        try {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure you want to Block this department?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          }).then(async(willdelete) => {
+            if (willdelete) {
+    
+              let{data}=await deleteDoctor(doctorId) 
+              console.log(data)
+              if (data.success) {
+                getAllDoctor();
+                  } else {
+                    Swal.fire("The doctor  not deleted.");
+                  }
+             
+            } else {
+              Swal.fire("The doctor not deleted.");
+            }
+          });
+        } catch {}
+      }
   return (
     <div>
         <div className="overflow-x-auto">
@@ -56,7 +83,7 @@ function AllDoctors() {
                       <td>
                        
                        
-                        <button onClick={()=>setDocDetail(doc)} className="btn btn-error">Block</button>
+                        <button onClick={()=>blockDoctor(doc._id)} className="btn btn-error">Block</button>
                       </td>
                     </div>
                   </tr>

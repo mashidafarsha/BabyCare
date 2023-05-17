@@ -14,7 +14,7 @@ function Banner() {
   useEffect(() => {
     console.log("llll");
     getAllBanner();
-  }, []);
+  }, [load]);
 
   const getAllBanner = async () => {
     try {
@@ -54,9 +54,13 @@ console.log(data.BannerData);
     <>
       <div className="">
         <AddBanner handleLoad={handleLoad} load={load} />
-        <label htmlFor="add-banner" className="btn">
+        <div className="inline-block w-full ">
+        <label htmlFor="add-banner" className="float-right ml-10 btn bg-sky-700">
           Add Banner
         </label>
+          
+        </div>
+        
 
         <div className="m-12 overflow-x-auto">
           <table className="table w-full table-zebra">
@@ -78,12 +82,12 @@ console.log(data.BannerData);
                       <td>{banner.bannerName}</td>
                       <td>{banner.description}</td>
                     
-                         <td><img className="w-24 h-20" src={`http://localhost:4000/${banner.image}`} alt="" /></td>
+                         <td><img className="h-20 w-28" src={`http://localhost:4000/${banner.image}`} alt="" /></td>
             
                        
                      
 
-                      <div>
+                   
                         <td>
                           <label
                             htmlFor="editBanner"
@@ -101,7 +105,7 @@ console.log(data.BannerData);
                             DELETE
                           </button>
                         </td>
-                      </div>
+                   
                     </tr>
                   );
                 })}

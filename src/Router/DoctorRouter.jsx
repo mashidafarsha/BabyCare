@@ -9,6 +9,8 @@ import Doctorprofile from "../Pages/Doctor/Doctorprofile";
 import DoctorSlotBook from "../Pages/Doctor/DoctorSlotBook";
 import DoctorselectedSlot from "../Pages/Doctor/DoctorselectedSlot";
 import DoctorLayout from "../layout/DoctorLayout";
+import Doctorsignup from "../Pages/Doctor/Doctorsignup";
+import Bookinguserdetails from "../Pages/Doctor/Bookinguserdetails";
 function DoctorRouter() {
   return (
     <>
@@ -18,11 +20,13 @@ function DoctorRouter() {
             <Route path="/doctorHome" element={<Doctorprofile />} />
             <Route path="/doctorSlot" element={<DoctorSlotBook />} />
             <Route path="/doctorSchedules" element={<DoctorselectedSlot />} />
+            <Route path="/bookingDetails" element={<Bookinguserdetails/>} />
           </Route>
         </Route>
 
 
         <Route path="/" element={<DoctorLogin />} />
+        <Route path="/signup" element={<Doctorsignup />} />
         <Route path="/info" element={<DoctorInfo />} />
         <Route path="/waiting" element={<Waitingapprovel />} />
       </Routes>

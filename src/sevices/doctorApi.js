@@ -41,6 +41,9 @@ const doctorSelectSlot = (selectedTime) => {
     selectedTime,
   });
 };
+const displayScheduledTime = () => {
+  return doctorAxiosInstance("doctorToken").get("/displayScheduledSlot");
+};
 
 const scheduledDoctorSlot = () => {
   console.log("uuuu");
@@ -49,6 +52,19 @@ const scheduledDoctorSlot = () => {
 const getNavProfile = () => {
   return doctorAxiosInstance("doctorToken").post("/getDoctorNav");
 };
+
+const cancelDoctorSchedule = (startTime) => {
+  return doctorAxiosInstance("doctorToken").post("/cancelTimeSchedule", {
+    startTime,
+  });
+};
+
+const getUserBookedSlot = () => {
+  return doctorAxiosInstance("doctorToken").get("/getUserBookedSlot");
+};
+const getDoctorActiveBooking=()=>{
+  return doctorAxiosInstance("doctorToken").get("/getActiveBooking");
+}
 export {
   authDoctor,
   doctorLogin,
@@ -60,5 +76,9 @@ export {
   getCategory,
   doctorSelectSlot,
   scheduledDoctorSlot,
-  getNavProfile
+  getNavProfile,
+  displayScheduledTime,
+  cancelDoctorSchedule,
+  getUserBookedSlot,
+  getDoctorActiveBooking
 };

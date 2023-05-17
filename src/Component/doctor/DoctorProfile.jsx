@@ -1,17 +1,28 @@
-import React, { useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { getNavProfile } from "../../sevices/doctorApi";
 import EditDoctorProfile from "../profile/EditDoctorProfile";
 function DoctorProfile() {
-  const [doctorData,setDoctorData]=useState("")
-  let {doctor}=useSelector((state)=>state.doctor)
-  console.log(doctor,"ooooooo");
-  const dispatch = useDispatch();
+  const [load, setLoad] = useState(false);
+  const [doctor, setDoctor] = useState("");
+  useEffect(() => {
+    getDoctorData();
+  }, [load]);
 
+  const getDoctorData = async () => {
+    let { data } = await getNavProfile();
+    console.log(data);
+    setDoctor(data.doctorProfile);
+  };
+ 
+  const handleLoad = () => {
+    setLoad(!load);
+  };
+ 
  
   return (
-    <div className="h-screen overflow-hidden bg-emerald-100  ">
+    <div className="h-screen overflow-hidden bg-emerald-100 ">
       <div className="flex items-start justify-center w-full h-32">
-        <div className="shadow stats mt-8">
+        <div className="mt-8 shadow stats">
           <div className="stat">
             <div className="stat-figure text-secondary">
               <svg
@@ -89,7 +100,7 @@ function DoctorProfile() {
             <h2 className="card-title">{doctor.name}</h2>
             <p>{doctor.qualification}</p>
             <div className="card-actions">
-               <label htmlFor="doctor_profile" className="btn" onClick={()=>setDoctorData(doctor)}>
+               <label htmlFor="doctor_profile" className="btn" >
                         View your profile
                       </label>
               
@@ -97,7 +108,7 @@ function DoctorProfile() {
           </div>
         </div>
       </div>
-      <EditDoctorProfile doctorData={doctorData}/>
+      <EditDoctorProfile doctorData={doctor} handleLoad={handleLoad}/>
     </div>
   );
 }

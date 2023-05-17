@@ -26,7 +26,7 @@ function Category() {
   const getAllDepartment = async () => {
     try {
       let { data } = await getCategory();
-      console.log(data);
+      console.log(data,"llll");
       if (data){
         setDepartment(data.department);
       } 
@@ -60,11 +60,14 @@ function Category() {
   };
 
   return (
-    <div className="">
+    <div>
       <AddCategory handleLoad={handleLoad} load={load} />
-      <label htmlFor="add-category" className="btn">
+      <div className="inline-block w-full">
+      <label htmlFor="add-category" className="float-right ml-10 btn bg-sky-700">
         Add Department
       </label>
+      </div>
+      
 
       <div className="m-12 overflow-x-auto">
         <table className="table w-full table-zebra">
@@ -73,6 +76,7 @@ function Category() {
               <th className="pl-8">NO</th>
               <th>CATEGORY NAME</th>
               <th>DESCRIPTION</th>
+              <th>Image</th>
               <th>ACTIONS</th>
             </tr>
           </thead>
@@ -82,9 +86,11 @@ function Category() {
                 return (
                   <tr>
                     <th className="pl-8">{index + 1}</th>
-                    <td>{dep.categoryName}</td>
+                    <td>{dep.categoryName
+}</td>
                     <td>{dep.description}</td>
-                    <div>
+                    <td><img className="h-20 w-28" src={`http://localhost:4000/${dep.image}`} alt="" /></td>
+                
                       <td>
                         <label
                           htmlFor="editCategory"
@@ -102,7 +108,7 @@ function Category() {
                           DELETE
                         </button>
                       </td>
-                    </div>
+                 
                   </tr>
                 );
               })}

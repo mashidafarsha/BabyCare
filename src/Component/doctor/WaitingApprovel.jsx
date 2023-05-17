@@ -23,10 +23,11 @@ function WaitingApprovel() {
 
     let {data} = await getApprovelreason()
    console.log(data);
-   if(data.reasonData.status != "Blocked"){
+   if(data.reasonData.status === "Active"){
     localStorage.removeItem('doctorWaitingToken');
     navigate('/doctor')
    }else{
+    console.log("rejected");
     setReason(data.reasonData.rejectReason);
     setStatus(data.reasonData.status)
    }
@@ -40,7 +41,7 @@ function WaitingApprovel() {
           <h1 className="card-title">PRO PLUS</h1>
           {reason ? null :<Spinner/> }
           
-          <p>{reason}</p>
+          <p>{reason} :try again after 1 hour</p>
           <div className="justify-end card-actions">
           
               <button className="btn">dd</button>

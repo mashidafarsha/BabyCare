@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Swal from 'sweetalert'
 import { addOurPlan } from '../../sevices/adminApi'
-function AddPlans() {
+function AddPlans({handleLoad}) {
 const [planname,setPlanname]=useState("")
 const [description,setDescription]=useState("")
 const [amount,setAmount]=useState("")
@@ -23,6 +23,16 @@ const handleFileChange = (event) => {
     }
   };
 
+  
+  const generateError = (err) => {
+    Swal(err);
+  };
+  
+  const generateSuccess = (err) => {
+    Swal(err);
+  };
+
+  
 const handleSubmit=async(e)=>{
     e.preventDefault()
 
@@ -38,6 +48,21 @@ const handleSubmit=async(e)=>{
                 Swal("Please enter all details");
             }else{
                 let {data}=await addOurPlan(formData)
+                console.log(data);
+                if (data.success) {
+                  generateSuccess(data.message);
+                  setPlanname("")
+                  setDescription("")
+                  setAmount("")
+                  setOffferAmount("")
+                  setImage('')
+                  document.getElementById("file-input").value = "";
+                  handleLoad()  
+                }else if(data.errors) {
+                  console.log(data.errors,"oooo");
+                  if (data.errors.message) generateError(data.errors.message);
+                
+                }
             }
         }catch{
             
@@ -49,14 +74,15 @@ const handleSubmit=async(e)=>{
     <div>
     <input type="checkbox" id="add-plan" className="modal-toggle" />
     <label htmlFor="add-plan" className="cursor-pointer modal">
-      <label className="relative modal-box" htmlFor="">
-        <div className="h-64 w-96">
+      <label className="relative overflow-y-auto w-96 modal-box scrollbar-none scrollbar-thumb-gray-400 scrollbar-track-transparent" htmlFor="">
+        <div className="h-auto ">
           <div className="flex-shrink-0 w-full max-w-sm shadow-2xl card bg-base-100">
             <form onSubmit={handleSubmit} className="mt-6">
               <div className="card-body">
                 <div className="avatar">
                   <div className="w-24 rounded-xl">
-                    <img src=''
+                    <img src={ image &&
+                              URL.createObjectURL(image)} 
                     
                     />
                   </div>
@@ -72,8 +98,9 @@ const handleSubmit=async(e)=>{
                     <span className="label-text">Plan Name</span>
                   </label>
                   <input
+                  value={planname}
                     type="text"
-                    id="Name"
+                    id='file-input'
                     placeholder="Plan Name"
                     className="input input-bordered"
                     onChange={(e)=>setPlanname(e.target.value)}
@@ -84,6 +111,7 @@ const handleSubmit=async(e)=>{
                     <span className="label-text">Description</span>
                   </label>
                   <input
+                  value={description}
                     type="text"
                     placeholder="Description"
                     className="input input-bordered"
@@ -95,6 +123,7 @@ const handleSubmit=async(e)=>{
                     <span className="label-text">Amount</span>
                   </label>
                   <input
+                  value={amount}
                     type="number"
                     placeholder="Amount"
                     className="input input-bordered"
@@ -107,6 +136,7 @@ const handleSubmit=async(e)=>{
                     <span className="label-text">Offer Amount</span>
                   </label>
                   <input
+                  value={offerAmount}
                     type="text"
                     placeholder="OfferAmount"
                     className="input input-bordered"
@@ -117,7 +147,7 @@ const handleSubmit=async(e)=>{
                 <div className="mt-6 form-control modal-action">
                   <button
                     type="submit"
-                    className="btn btn-outline btn-secondary"
+                    className="text-white btn btn-outline bg-sky-900"
                     htmlFor="add-plan"
                   >
                     SUBMIT

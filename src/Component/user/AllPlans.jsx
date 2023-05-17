@@ -1,11 +1,16 @@
 import React , { useState, useEffect }  from 'react'
 import { getPlans } from "../../sevices/userApi";
+import PlanDetails from '../planDetails/PlanDetails';
 function AllPlans() {
+
     const [plansData, setPlansData] = useState([]);
+    const [viewPlan, setViewPlan] = useState("");
     
     useEffect(() => {
         getAllPlans();
       }, []);
+
+     
     
     const getAllPlans = async () => {
       
@@ -19,32 +24,38 @@ function AllPlans() {
       };
   return (
     <div>
+        <PlanDetails plan={viewPlan}  />
       <h1 className="text-xl font-bold">SPECIAL PLANS</h1>
-      <div className="grid w-9/12 grid-cols-3 gap-6 bg-slate-500 h-6/6">
+      <div className="w-9/12 h-auto">
       {plansData.map((plan,index) => {
           return (
-            <div className="shadow-xl m-7 card bg-base-100">
+            <div className="float-left shadow-xl m-7 card bg-base-100 w-52 ">
               <figure className="px-10 pt-10">
                 <img
                   src={
                 plan.image ? `http://localhost:4000/${plan.image}` : ""
                   }
                   alt="Shoes"
-                  className="w-40 h-40 rounded-xl"
+                  className="w-32 h-32 rounded-xl"
                 />
               </figure>
-              <div className="items-center text-center card-body">
-                <h1 className="text-xl font-extrabold card-title">{plan.planname}</h1>
+              
+              <div className="items-center text-center card-body h-28">
+              <h1 className="text-xl font-extrabold uppercase card-title">{plan.planname}</h1>
+              </div>
+              <div className="justify-center mb-7 card-actions">
                   <h2 className='font-bold'>{plan.amount}</h2>
                   <p>{plan.description}</p>
                 <div className="card-actions">
-                  <button className="btn btn-primary">Buy Now</button>
+                <label htmlFor="plan-modal" onClick={()=>setViewPlan(plan)} className="btn">view Details</label>
                 </div>
               </div>
-            </div>
+             </div>
           );
         })}
+        
       </div>
+    
     </div>
   )
 }
