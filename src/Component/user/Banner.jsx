@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getBanner } from "../../sevices/adminApi";
+import { BaseUrl } from "../../constants/constants";
 function Banner() {
   const [bannerImage, setBannerImage] = useState([]);
 
@@ -29,7 +30,7 @@ function Banner() {
             >
               <img
                 src={
-                  banner.image ? `http://localhost:4000/${banner.image}` : ""
+                  banner.image ? `${BaseUrl}/${banner.image}` : ""
                 }
                 className="w-full h-96"
                 alt="image"

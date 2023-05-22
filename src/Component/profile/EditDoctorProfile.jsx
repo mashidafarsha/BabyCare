@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { editDoctor, getCategory } from "../../sevices/doctorApi";
-import { setDoctorDetails } from "../../redux/features/doctorSlice";
+import { BaseUrl } from "../../constants/constants";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -105,7 +105,7 @@ console.log(department,"iiiiii");
                       <img
                         src={
                           image
-                            ? `http://localhost:4000/${image}`
+                            ? `${BaseUrl}/${image}`
                             : uploadedImage &&
                               URL.createObjectURL(uploadedImage)
                         }

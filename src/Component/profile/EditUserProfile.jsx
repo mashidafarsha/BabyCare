@@ -56,7 +56,7 @@ useEffect(() => {
       <input type="checkbox" id="user_profile" className="modal-toggle" />
       <label htmlFor="user_profile" className="w-full cursor-pointer modal">
         <label
-          className="relative w-full overflow-y-auto modal-box w-96 scrollbar-none scrollbar-thumb-gray-400 scrollbar-track-transparent "
+          className="relative w-full overflow-y-auto modal-box scrollbar-none scrollbar-thumb-gray-400 scrollbar-track-transparent "
           htmlFor="user_profile"
         >
           <div className="w-full">
@@ -72,7 +72,7 @@ useEffect(() => {
                       <img
                         src={
                           image
-                            ? `http://localhost:4000/${image}`
+                            ? `${BaseUrl}/${image}`
                             : uploadedImage &&
                               URL.createObjectURL(uploadedImage)
                         }

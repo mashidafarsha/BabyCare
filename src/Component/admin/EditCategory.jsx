@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Swal from "sweetalert";
 import { editDepartment } from "../../sevices/adminApi";
 import { useState } from "react";
-
+import { BaseUrl } from "../../constants/constants";
 function EditCategory({ category, handleLoad }) {
   const [depname, setDepname] = useState("");
   const [depdescr, setDepdescr] = useState("");
@@ -55,7 +55,7 @@ function EditCategory({ category, handleLoad }) {
     <>
       <input type="checkbox" id="editCategory" className="modal-toggle" />
       <label htmlFor="editCategory" className="cursor-pointer modal">
-        <label className="relative modal-box  text-sky-900 " htmlFor="">
+        <label className="relative modal-box text-sky-900 " htmlFor="">
           <div className="h-full w-96">
             <h1 className="mb-10 font-bold">
               EDIT DEPARTMENT OF {category?.categoryName.toUpperCase()}
@@ -69,7 +69,7 @@ function EditCategory({ category, handleLoad }) {
                   <label htmlFor="category">CategoryName</label>
                 </div>
                 <input
-                  className="input input-bordered text-black"
+                  className="text-black input input-bordered"
                   id="categoryName"
                   type="text"
                   // required={true}
@@ -82,7 +82,7 @@ function EditCategory({ category, handleLoad }) {
                   <label htmlFor="description">Description</label>
                 </div>
                 <input
-                className="input input-bordered text-black"
+                className="text-black input input-bordered"
                   id="description"
                   type="text"
                   // required={true}
@@ -96,7 +96,7 @@ function EditCategory({ category, handleLoad }) {
                   className="w-16"
                   src={
                     uploadedImage
-                      ? `http://localhost:4000/${uploadedImage}`
+                      ? `${BaseUrl}/${uploadedImage}`
                       : image && URL.createObjectURL(image)
                   }
                   alt=""
@@ -113,7 +113,7 @@ function EditCategory({ category, handleLoad }) {
               <div className="modal-action">
                 <button
                   type="submit"
-                  className="btn btn-outline text-white bg-sky-900"
+                  className="text-white btn btn-outline bg-sky-900"
                   htmlFor="editCategory"
                 >
                   SUBMIT

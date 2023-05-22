@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { categoryDoctors } from "../../sevices/userApi";
-import { setDoctorData } from "../../redux/features/doctorDetailsSlice";
+import { BaseUrl } from "../../constants/constants";
 import { Link } from "react-router-dom";
 function CategoryDoctor() {
   const [doctros, setDoctors] = useState([]);
@@ -39,7 +39,7 @@ function CategoryDoctor() {
               <figure className="px-10 pt-10">
                 <img
                   src={
-                    doctor.image ? `http://localhost:4000/${doctor.image}` : ""
+                    doctor.image ? `${BaseUrl}/${doctor.image}` : ""
                   }
                   alt="Shoes"
                   className="rounded-xl"

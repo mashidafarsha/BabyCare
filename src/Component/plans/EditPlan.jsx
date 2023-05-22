@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { editOurPlan } from "../../sevices/adminApi";
 import Swal from "sweetalert2";
+import { BaseUrl } from "../../constants/constants";
 function EditPlan({ plan,handleLoad }) {
     const [id,setId]=useState("")
   const [planname, setPlanname] = useState("");
@@ -137,7 +138,7 @@ function EditPlan({ plan,handleLoad }) {
                   className="w-16"
                   src={
                     uploadedImage
-                      ? `http://localhost:4000/${uploadedImage}`
+                      ? `${BaseUrl}/${uploadedImage}`
                       : image && URL.createObjectURL(image)
                   }
                   alt=""

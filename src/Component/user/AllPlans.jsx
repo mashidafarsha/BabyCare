@@ -1,6 +1,7 @@
 import React , { useState, useEffect }  from 'react'
 import { getPlans } from "../../sevices/userApi";
 import PlanDetails from '../planDetails/PlanDetails';
+import { BaseUrl } from "../../constants/constants";
 function AllPlans() {
 
     const [plansData, setPlansData] = useState([]);
@@ -33,7 +34,7 @@ function AllPlans() {
               <figure className="px-10 pt-10">
                 <img
                   src={
-                plan.image ? `http://localhost:4000/${plan.image}` : ""
+                plan.image ? `${BaseUrl}/${plan.image}`: ""
                   }
                   alt="Shoes"
                   className="w-32 h-32 rounded-xl"

@@ -4,7 +4,7 @@ import { getDepartmentData } from "../../sevices/userApi";
 import { useDispatch } from "react-redux";
 import { setCategoryDetails } from "../../redux/features/categorySlice";
 import { Link } from "react-router-dom";
-import CategoryDoctor from "./CategoryDoctor";
+import { BaseUrl } from "../../constants/constants";
 function AllSpecialiteisUser() {
   const [department, setDepartment] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
@@ -42,7 +42,7 @@ function AllSpecialiteisUser() {
                 <img
                   src={
                     department.image
-                      ? `http://localhost:4000/${department.image}`
+                      ? `${BaseUrl}/${department.image}`
                       : ""
                   }
                   alt="Shoes"

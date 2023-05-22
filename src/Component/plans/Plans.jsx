@@ -3,6 +3,7 @@ import AddPlans from "./AddPlans";
 import EditPlan from "./EditPlan";
 import { getPlans, deletePlans } from "../../sevices/adminApi";
 import Swal from "sweetalert2";
+import { BaseUrl } from "../../constants/constants";
 function Plans() {
   const [load, setLoad] = useState(false);
   const [plansData, setPlansData] = useState([]);
@@ -83,7 +84,7 @@ function Plans() {
                       <td>
                         <img
                           className="w-24 h-20"
-                          src={`http://localhost:4000/${plan.image}`}
+                          src={`${BaseUrl}/${plan.image}`}
                           alt=""
                         />
                       </td>

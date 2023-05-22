@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { BaseUrl } from "../../constants/constants";
 import { getUserProfile } from "../../sevices/userApi";
 import EditUserProfile from "./EditUserProfile";
 function UserProfile() {
@@ -27,7 +27,7 @@ function UserProfile() {
           <figure className="px-10 pt-10">
             <div className="avatar">
               <div className="w-40 rounded-xl">
-                <img className=""  src={`http://localhost:4000/${user.image}`} />
+                <img className=""  src={`${BaseUrl}/${user.image}`} />
               </div>
             </div>
           </figure>

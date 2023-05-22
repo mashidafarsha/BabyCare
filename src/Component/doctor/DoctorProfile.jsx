@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getNavProfile } from "../../sevices/doctorApi";
 import EditDoctorProfile from "../profile/EditDoctorProfile";
+import { BaseUrl } from "../../constants/constants";
 function DoctorProfile() {
   const [load, setLoad] = useState(false);
   const [doctor, setDoctor] = useState("");
@@ -92,7 +93,7 @@ function DoctorProfile() {
           <figure className="px-10 pt-10">
             <div className="avatar">
               <div className="w-40 rounded-xl">
-                <img className="" src={`http://localhost:4000/${doctor.image}`} />
+                <img className="" src={`${BaseUrl}/${doctor.image}`} />
               </div>
             </div>
           </figure>

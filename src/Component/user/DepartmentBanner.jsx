@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getDepartmentData } from "../../sevices/userApi";
 import { Link } from "react-router-dom";
+import { BaseUrl } from "../../constants/constants";
 function DepartmentBanner() {
   const [department, setDepartment] = useState([]);
 
@@ -44,7 +45,7 @@ function DepartmentBanner() {
                 <figure className="h-40">
                   <img  src={
                       department.image
-                        ? `http://localhost:4000/${department.image}`
+                        ? `${BaseUrl}/${department.image}`
                         : ""
                     } className="w-full h-32 rounded-full " />
                 </figure>

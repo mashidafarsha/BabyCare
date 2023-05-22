@@ -3,6 +3,7 @@ import { getDoctorsData } from "../../sevices/userApi";
 import { setDoctorData } from "../../redux/features/doctorDetailsSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { BaseUrl } from "../../constants/constants";
 function SubBanner() {
   const [doctorImage, setDoctorImage] = useState([]);
   const dispatch=useDispatch()
@@ -47,7 +48,7 @@ function SubBanner() {
                   <img
                     src={
                       doctor.image
-                        ? `http://localhost:4000/${doctor.image}`
+                        ? `${BaseUrl}/${doctor.image}`
                         : ""
                     }
                     className="w-full"
