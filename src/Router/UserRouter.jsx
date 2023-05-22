@@ -13,6 +13,7 @@ import UserAppointment from "../Pages/User/UserAppointment";
 import Usersignup from "../Pages/User/Usersignup";
 import Userprofile from "../Pages/User/Userprofile";
 import Userchat from "../Pages/User/Userchat";
+import Error from "../Pages/Error/Error";
 function UserRouter() {
   return (
     <>
@@ -29,6 +30,7 @@ function UserRouter() {
           <Route exact path="/userSlots" element={<UserSlotBook/>} />
           <Route exact path="/myAppointment" element={<UserAppointment/>} />
           <Route exact path="/chat" element={<Userchat/>} />
+          <Route  path="/*" element={<Error/>} />
         </Route>
         </Route>
         <Route exact path="/" element={<Userlogin />} />
