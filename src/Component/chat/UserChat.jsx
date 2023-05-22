@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getDoctorsData, checkUserAnyPlan } from "../../sevices/userApi";
-import ChatContainer from "./chatContainer";
-import Conversation from "./conversation";
+import ChatContainer from "./ChatContainer";
+import Conversation from "./Conversation";
 import { io } from "socket.io-client";
 import { BaseUrl } from "../../constants/constants";
 import Welcome from "./welcome";
