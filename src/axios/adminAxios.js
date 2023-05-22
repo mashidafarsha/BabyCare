@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { adminBaseUrl } from '../constants/constants';
+// const adminBaseUrl = process.env.ADMIN_BASE_URL;
+//  
 
 
 const adminAxiosInstance=(tokenName)=>{

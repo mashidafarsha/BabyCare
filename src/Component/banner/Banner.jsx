@@ -3,6 +3,7 @@ import AddBanner from "./AddBanner";
 import EditBanner from "./EditBanner";
 import { getBanner,bannerDelete } from "../../sevices/adminApi";
 import Swal from "sweetalert2";
+import { BaseUrl } from "../../constants/constants";
 function Banner() {
   const [load, setLoad] = useState(false);
   const [banner, setBanner] = useState([]);
@@ -82,7 +83,7 @@ console.log(data.BannerData);
                       <td>{banner.bannerName}</td>
                       <td>{banner.description}</td>
                     
-                         <td><img className="h-20 w-28" src={`http://localhost:4000/${banner.image}`} alt="" /></td>
+                         <td><img className="h-20 w-28" src={`${BaseUrl}/${banner.image}`} alt="" /></td>
             
                        
                      
