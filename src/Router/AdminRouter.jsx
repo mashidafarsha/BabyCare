@@ -10,6 +10,7 @@ import PrivateRoute from "../protectedRoutes/PrivateRoute";
 import AllApprovedDoctor from "../Pages/Admin/AllApprovedDoctor";
 import AdminLayout from "../layout/AdminLayout";
 import AllbookingDetails from "../Pages/Admin/AllbookingDetails";
+import Error from "../Pages/Error/Error";
 function AdminRouter() {
   return (
     <>
@@ -23,6 +24,7 @@ function AdminRouter() {
             <Route path="/banner" element={<AdminBanner />} />
             <Route path="/plans" element={<AdminPlans />} />
             <Route path="/allBooking" element={<AllbookingDetails />} />
+            <Route  path="/*" element={<Error/>} />
           </Route>
         </Route>
         <Route path="/" element={<Adminlogin />} />

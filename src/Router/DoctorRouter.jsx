@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import DoctorNavbar from "../Component/doctor/DoctorNavbar";
+
 import DoctorInfo from "../Component/doctor/DoctorInfo";
 import Waitingapprovel from "../Pages/Doctor/Waitingapprovel";
 import DoctorLogin from "../Component/Auth/DoctorLogin";
@@ -12,6 +12,7 @@ import DoctorLayout from "../layout/DoctorLayout";
 import Doctorsignup from "../Pages/Doctor/Doctorsignup";
 import Bookinguserdetails from "../Pages/Doctor/Bookinguserdetails";
 import DoctorChatPge from "../Pages/Doctor/DoctorChatPge";
+import Error from "../Pages/Error/Error";
 function DoctorRouter() {
   return (
     <>
@@ -23,6 +24,7 @@ function DoctorRouter() {
             <Route path="/doctorSchedules" element={<DoctorselectedSlot />} />
             <Route path="/bookingDetails" element={<Bookinguserdetails/>} />
             <Route path="/doctorChat" element={<DoctorChatPge/>} />
+            <Route  path="/*" element={<Error/>} />
           </Route>
         </Route>
 

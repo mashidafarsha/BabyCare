@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { editBannerData } from "../../sevices/adminApi";
+import { BaseUrl } from "../../constants/constants";
 function EditBanner({ editBanner, handleLoad }) {
   const [image, setImage] = useState("");
   const [uploadedImage, setUploadedImage] = useState("");
@@ -97,7 +98,7 @@ function EditBanner({ editBanner, handleLoad }) {
                   className="w-16"
                   src={
                     uploadedImage
-                      ? `http://localhost:4000/${uploadedImage}`
+                      ? `${BaseUrl}/${uploadedImage}`
                       : image && URL.createObjectURL(image)
                   }
                   alt=""
