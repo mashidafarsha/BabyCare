@@ -43,6 +43,10 @@ const  categoryDoctors = (departmentNames) => {
   });
 };
 
+const getSelectedDoctorDetails=(doctorId)=>{
+  return userAxiosInstance("userToken").post(`/getSelDoctorData/${doctorId}`);
+}
+
 const RazorPayPayment = (id, amount, offerAmount) => {
   return userAxiosInstance("userToken").post("/razorPayment", {
     id,
@@ -52,17 +56,17 @@ const RazorPayPayment = (id, amount, offerAmount) => {
 };
 
 const verifyPayment = (response, id) => {
-    console.log(response,id,"kkkkkkkkk");
+   
   return userAxiosInstance("userToken").post("/verifyPayment", {
     ...response,
     id,
   });
 };
 
-const getSelectedPlan = (planId,consultationFee) => {
-  
+const getUserPlanDetails = (consultationFee) => {
+
 return userAxiosInstance("userToken").post("/getSlectedPlan", {
-planId,consultationFee
+consultationFee
 });
 };
 
@@ -95,7 +99,7 @@ const  getUserProfile = () => {
 };
 
 const editUser = (formData) => {
-  console.log(formData, "oooooo");
+
   return userAxiosInstance("userToken").post("/editUser", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -106,6 +110,24 @@ const getUserBookedSlot=(doctorId)=>{
  
   return userAxiosInstance("userToken").get(`/getUserBookedSlot/${doctorId}`);
 }
+
+const addUserMessage=({from,to,message})=>{
+ 
+  return userAxiosInstance("userToken").post("/addMessage", {
+    from,to,message
+  });
+  };
+
+  const getMessages=({from,to})=>{
+    return userAxiosInstance("userToken").post("/getAllMessage", {
+      from,to    });
+  }
+  const checkUserAnyPlan=()=>{
+    
+    return userAxiosInstance("userToken").get("/checkUserPlan")
+     
+  }
+
 export {
   authUser,
   userSignup,
@@ -116,15 +138,19 @@ export {
   getDepartmentData,
   getPlans,
   categoryDoctors,
+  getSelectedDoctorDetails,
   RazorPayPayment,
   verifyPayment,
-  getSelectedPlan,
+  getUserPlanDetails,
   SlotBookingRazorpay,
   verifySlotPayment,
   userBookingData,
   cancelUserSlot,
   getUserProfile,
   editUser,
-  getUserBookedSlot
+  getUserBookedSlot,
+  addUserMessage,
+  getMessages,
+  checkUserAnyPlan
   
 };

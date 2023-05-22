@@ -23,14 +23,14 @@ function UserSignup() {
   };
   return (
     <div>
-        <div className="flex items-center justify-center w-screen h-screen overflow-hidden bg-white">
+        <div className="flex items-center justify-center w-screen h-full overflow-hidden bg-white">
       {/* <input type="checkbox" id="user_signup" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box"> */}
           {/* <div className="min-h-screen hero bg-base-200"> */}
             
-            <div className="h-auto w-4/12 bg-blue-200">
-            <h1 className=" text-center mt-4 font-bold">PLEASE REGISTER</h1>
+            <div className="h-auto  mt-14 mb-9 w-4/12 bg-blue-200">
+            <h1 className=" text-center mt-9 font-bold">PLEASE REGISTER</h1>
               <form onSubmit={handleSubmit} className="mt-6">
                 <div className="card-body">
                   <div className="form-control">

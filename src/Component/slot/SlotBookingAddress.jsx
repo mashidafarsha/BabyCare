@@ -1,67 +1,75 @@
 import React, { useEffect, useState } from "react";
-import { getPlans,getSelectedPlan,SlotBookingRazorpay ,verifySlotPayment} from "../../sevices/userApi";
-import Swal from 'sweetalert2'
+import {
+  getPlans,
+  getUserPlanDetails,
+  SlotBookingRazorpay,
+  verifySlotPayment,
+} from "../../sevices/userApi";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 function SlotBookingAddress({ doctorData, userSelectTime }) {
-  const [doctorId,setDoctorId]=useState("")
-  const [doctorName,setDoctorName]=useState("")
-  const [doctorDep,setDoctorDep]=useState("")
+  const [doctorId, setDoctorId] = useState("");
+  const [doctorName, setDoctorName] = useState("");
+  const [doctorDep, setDoctorDep] = useState("");
   const [planData, setPlanData] = useState([]);
-  const[consultationFee,setConsultationFee]=useState("")
-  const [selectedPlan, setSelectedPlan] = useState("");
-  const [totalAmount,setTotalAmount]=useState("")
-  const [discount,setDiscount]=useState("")
+  const [consultationFee, setConsultationFee] = useState("");
+
+  const [totalAmount, setTotalAmount] = useState("");
+  const [discount, setDiscount] = useState("");
+
+  const navigate=useNavigate()
   useEffect(() => {
-    setDoctorName(doctorData.name)
-    setDoctorDep(doctorData.department)
-    setDoctorId(doctorData._id)
-    setConsultationFee(doctorData.consultationFee)
+    setDoctorName(doctorData?.name);
+    setDoctorDep(doctorData?.department);
+    setDoctorId(doctorData?._id);
+    setConsultationFee(doctorData?.consultationFee);
+    
     getAllPlans();
-  }, []);
 
+  }, [doctorData]);
 
   useEffect(() => {
-    if(selectedPlan.length>0){
-        getPlanDetails()
-    }
+    getPlanDetails();
+  }, [consultationFee]);
  
-  }, [selectedPlan])
   const getAllPlans = async () => {
     try {
       let { data } = await getPlans();
-      console.log(data, "ttttttttteeeeeeeeeeeet");
+    
       if (data.success) {
         setPlanData(data.plans);
       }
     } catch {}
   };
 
-
-  const getPlanDetails=async()=>{
-    let {data}=await getSelectedPlan(selectedPlan,consultationFee)
+  const getPlanDetails = async () => {
+  if(consultationFee){
+    let { data } = await getUserPlanDetails(consultationFee);
     console.log(data);
-    if(data.success){
-      setTotalAmount(data.totalDiscount)
-      setDiscount(data.discount)
-    }else{
-      setTotalAmount("")
-      setDiscount("")
-      Swal.fire("The user have no plans")
+    if (data.success) {
+      setTotalAmount(data.totalDiscount);
+      setDiscount(data.discount);
+    } else if(data.success==false){
+
+      setTotalAmount(data.consultationFee)
+      setDiscount("");
+     
     }
   }
+   
+  };
 
-  const checkoutHandler=async()=>{
-    let {data}=await SlotBookingRazorpay(totalAmount)
+
+  const checkoutHandler = async () => {
+    let { data } = await SlotBookingRazorpay(totalAmount);
     if (data.datas) {
-       
       paymentPage(data.datas);
     }
-  }
-
-
+  };
 
   const paymentPage = (data) => {
-    console.log(data, "wwwwwwwwwww");
    
+
     let options = {
       key: `rzp_test_LSJeDQEzbT9qcg`,
       amount: data.amount,
@@ -71,40 +79,40 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
       // image: image,
       order_id: data.id,
       handler: async (response) => {
-        console.log("dddddddddddd");
+     
         try {
-          const { data } = await verifySlotPayment(response,userSelectTime,totalAmount,doctorId,doctorName,doctorDep);
-          console.log(data,"kkk");
-          if(data.success){
+          const { data } = await verifySlotPayment(
+            response,
+            userSelectTime,
+            totalAmount,
+            doctorId,
+            doctorName,
+            doctorDep
+          );
+          
+          if (data.success) {
             Swal.fire({
               title: `${data.message}`,
               // icon: 'info',
               html:
-                'You can use <b>show the booking Details</b>, ' +
-                '<a href="//sweetalert2.github.io">Click Here</a> ' 
-                ,
+                "You can use <b>show the booking Details</b>, " +
+                '<a href="//sweetalert2.github.io">Click Here</a> ',
               // showCloseButton: true,
               // showCancelButton: true,
               focusConfirm: false,
-             
-            })
+            });
           }
-           
-       
-        
         } catch (error) {
           Swal.fire({
             title: `${data.message}`,
             // icon: 'info',
             html:
-              'You can use <b>show the booking Details</b>, ' +
-              '<a href="//sweetalert2.github.io">Click Here</a> ' 
-              ,
+              "You can use <b>show the booking Details</b>, " +
+              '<a href="//sweetalert2.github.io">Click Here</a> ',
             // showCloseButton: true,
             // showCancelButton: true,
             focusConfirm: false,
-           
-          })
+          });
         }
       },
       theme: {
@@ -116,8 +124,7 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
 
     rzp1.open();
   };
-
-
+  
   return (
     <div>
       <div>
@@ -161,38 +168,25 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
             </button>
           </div>
           <div className="m-7">
-            <h1>Do you have any plan?</h1>
+            <h1>Do you want any plan?</h1>
             {planData &&
               planData.map((plan, idex) => {
                 return (
-                  <div className="form-control">
-                    <label className="cursor-pointer label">
-                      <span className="label-text">{plan.planname}</span>
-                      <input
-                        value={plan._id}
-                        onChange={(e) => setSelectedPlan(e.target.value)}
-                        type="radio"
-                        name="radio-10"
-                        className="radio "
-                        checked={selectedPlan === plan._id}
-                      />
-                    </label>
-                  </div>
+                 
+                  <button className="m-5 w-28" onClick={()=>navigate('/plans')}>
+                    <img
+                      className="w-24 h-20 rounded-full"
+                      src={
+                        plan.image ? `http://localhost:4000/${plan.image}` : ""
+                      }
+                      alt=""
+                      
+                    />
+                    <h1>{plan.planname}</h1>
+               
+                  </button>
                 );
               })}
-            <div className="form-control">
-              <label className="cursor-pointer label">
-                <span className="label-text">None</span>
-                <input
-                  type="radio"
-                  name="radio-10"
-                  value=""
-                  onChange={(e) => setSelectedPlan(e.target.value)}
-                  className="radio "
-                  checked={selectedPlan === ""}
-                />
-              </label>
-            </div>
           </div>
           <div className="h-auto mt-9">
             <h1 className="ml-12">TOTAL CHARGES</h1>
@@ -201,28 +195,32 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
               <h1 className="float-left ml-12">Consutation Fee</h1>
               <h1 className="float-right mr-9">{doctorData.consultationFee}</h1>
             </div>
-            {selectedPlan.length > 0 ? (
+          
               <div className="w-full h-10 ">
                 <h1 className="float-left ml-12">Plan Discount</h1>
                 <h1 className="float-right mr-9">{discount}</h1>
               </div>
-            ) : null}
-            
+     
+
             <div>
               <h1 className="float-left ml-12">Total Amount</h1>
-              {selectedPlan.length > 0 ? (
-              <h1 className="float-right mr-9">{totalAmount}</h1>
-              ) : (
-                <h1 className="float-right mr-9">{consultationFee}</h1>
-              )}
-            </div>
+              {totalAmount !== null ? (
+    <h1 className="float-right mr-9">{totalAmount}</h1>
+  ) : (
+    <h1 className="float-right mr-9">Loading...</h1>
+  )}
+                
           
+                {/* <h1 className="float-right mr-9">{consultationFee}</h1> */}
+           
+            </div>
           </div>
           <div className="float-right mt-12 ">
-            <button type="submit" onClick={checkoutHandler} className="btn">Checkout</button>
-           </div>
+            <button type="submit" onClick={checkoutHandler} className="btn">
+              Checkout
+            </button>
+          </div>
         </div>
-       
       </div>
     </div>
   );

@@ -1,63 +1,91 @@
 import React, { useEffect, useState } from "react";
 import { getAllBookingData } from "../../sevices/adminApi";
 function AllBookingschedules() {
-    const [bookingData,setBookingData]=useState([])
-    useEffect(() => {
-        getAllBookingDetails()
-    }, [])
+  const [searchQuery, setSearchQuery] = useState('');
+  const [bookingData, setBookingData] = useState([]);
+  
+  useEffect(() => {
+    getAllBookingDetails();
+  }, []);
 
-    const getAllBookingDetails=async()=>{
-     let {data}=await getAllBookingData()  
-     if(data.success){
-        setBookingData(data.bookingData)
-     } 
+  const filteredData = bookingData.filter((data) => {
+    const bookingTimeMatch = data.bookingTime.toLowerCase().includes(searchQuery.toLowerCase());
+    const doctorNameMatch = data.DoctorName.toLowerCase().includes(searchQuery.toLowerCase());
+    return bookingTimeMatch || doctorNameMatch;
+  });
+
+  const getAllBookingDetails = async () => {
+    let { data } = await getAllBookingData();
+    if (data.success) {
+      setBookingData(data.bookingData);
     }
+  };
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
   return (
-    
     <div>
-        
-        {bookingData&& bookingData.map((bookingData,index)=>{
-            return(
-                <div className="h-4/6">
+      <div className="relative flex flex-wrap items-stretch w-full mb-4">
+        <input
+          type="search"
+          value={searchQuery} 
+          onChange={handleSearch} 
+          className="relative m-0 -mr-0.5 block w-[1px] min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
+          placeholder="Search by Date"
+          aria-label="Search"
+          aria-describedby="button-addon1"
+        />
+      </div>
+      <div className="h-4/6">
         <div className="flex justify-center p-2 ">
-          <div className="bg-[#fffffe] hover:shadow-xl flex flex-col justify-evenly md:flex-row hover:opacity-90  text-[#232946]  w-3/4 rounded-xl mt-5 p-5 h-fit text-center">
+          <table className="table w-full">
           
-            <div className="flex flex-col justify-center uppercase md:w-8/12 md:items-start">
-              <div className="mb-4 font-bold">
-                <p className="text-center">Time: {bookingData.bookingTime}</p>
-              </div>
-              <div>
-                {" "}
-                <p className="text-start">Dr. {bookingData.DoctorName}</p>
-              </div>
-              <div>
-                {" "}
-                <p className="text-start">{bookingData.DoctorDepartment}</p>
-              </div>
-              <div>
-                <p className="text-center">Rs:{bookingData.totalAmount}</p>
-              </div>
-            </div>
-            <div className="flex flex-col justify-center m-2 md:w-1/12">
-            {bookingData.status=="Cancel"?  <span>
-             
-             <a className="p-2 text-[#fffffe] rounded-lg  uppercase font-bold mt-5 w-full bg-red-500 hover:text-white mx-auto">
-             {bookingData.status}
-             </a>{" "}
-           </span>: <span>
-             
-             <a className=" p-2 text-[#fffffe] rounded-lg  uppercase font-bold mt-5 w-full bg-green-500 hover:text-white mx-auto">
-             {bookingData.status}
-             </a>{" "}
-           </span>}
-             
-            </div>
-          </div>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Booking Time</th>
+                <th>Doctor</th>
+                <th>department</th>
+                <th>patient</th>
+                <th>totalAmount</th>
+                <th>status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData &&
+                filteredData.map((data, index) => {
+                  return (
+                    <tr>
+                      <th>{index + 1}</th>
+                      <td>{data.bookingTime}</td>
+                      <td>Dr. {data.DoctorName}</td>
+                      <td>{data.DoctorDepartment}</td>
+                      <td>{data.UserId.name}</td>
+                      <td>{data.totalAmount}</td>
+                      <td>
+                        {" "}
+                        {data.status == "Cancel" ? (
+                          <span>
+                            <a className="p-2 text-red-700 rounded-sm  uppercase font-bold mt-5  ">
+                              Cancelled
+                            </a>{" "}
+                          </span>
+                        ) : (
+                          <span>
+                            <a className=" p-2 text-green-700 rounded-sm  uppercase font-bold mt-5 ">
+                              Active
+                            </a>{" "}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
         </div>
       </div>
-            )
-        })}
-      
     </div>
   );
 }

@@ -65,6 +65,22 @@ const getUserBookedSlot = () => {
 const getDoctorActiveBooking=()=>{
   return doctorAxiosInstance("doctorToken").get("/getActiveBooking");
 }
+
+const  getPlanChatUser=()=>{
+  return doctorAxiosInstance("doctorToken").get("/getPlanUser");
+}
+const addDoctorMessage=({from,to,message})=>{
+ 
+  return doctorAxiosInstance("doctorToken").post("/addMessage", {
+    from,to,message
+  });
+  };
+
+  const getMessages=({from,to})=>{
+   
+    return doctorAxiosInstance("doctorToken").post("/getAllMessage", {
+      from,to    });
+  }
 export {
   authDoctor,
   doctorLogin,
@@ -80,5 +96,8 @@ export {
   displayScheduledTime,
   cancelDoctorSchedule,
   getUserBookedSlot,
-  getDoctorActiveBooking
+  getDoctorActiveBooking,
+  getPlanChatUser,
+  addDoctorMessage,
+  getMessages
 };

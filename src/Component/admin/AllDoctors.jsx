@@ -22,12 +22,12 @@ function AllDoctors() {
         }
         
       }
-      const blockDoctor=(doctorId)=>{
+      const blockDoctor=(doctorId,status)=>{
         console.log("kkk");
         try {
           Swal.fire({
             title: "Are you sure?",
-            text: "Are you sure you want to Block this department?",
+            text: `Are you sure you want to ${status} this doctor?`,
             icon: "warning",
             buttons: true,
             dangerMode: true,
@@ -81,9 +81,11 @@ function AllDoctors() {
                     <div>
                      
                       <td>
+                       {doc.status=="Active" ?   <button onClick={()=>blockDoctor(doc._id,doc.status)} className="btn btn-error">Block</button>
+                       :<button onClick={()=>blockDoctor(doc._id,doc.status)} className="btn btn-success">Active</button>
+                       }
                        
-                       
-                        <button onClick={()=>blockDoctor(doc._id)} className="btn btn-error">Block</button>
+                      
                       </td>
                     </div>
                   </tr>

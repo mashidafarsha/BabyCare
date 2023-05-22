@@ -71,6 +71,10 @@ const getApprovedDoctor = () => {
   return adminAxiosInstance("adminToken").get("/getApprovedDoctor");
 };
 
+const getAllUserData = () => {
+  return adminAxiosInstance("adminToken").get("/getAllUser");
+};
+
 const bannerDelete = (Id) => {
   return adminAxiosInstance("adminToken").put(`/deleteBanner/${Id}`);
 };
@@ -115,6 +119,7 @@ export {
   addBannerData,
   editBannerData,
   getApprovedDoctor,
+  getAllUserData,
   bannerDelete,
   addOurPlan,
   getPlans,

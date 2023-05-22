@@ -26,6 +26,8 @@ function CategoryDoctor() {
       setDoctors(data.categoryDoctors);
     }
   };
+  
+ 
 
   return (
     <div>
@@ -51,13 +53,12 @@ function CategoryDoctor() {
               </div>
               <div className="justify-center card-actions">
                 <button
-                  onClick={() =>
-                    dispatch(setDoctorData({ doctorData: doctor }))
-                  }
+               
+                  // onClick={()=>getDoctorData(doctor._id)}
                   className="font-bold text-blue-800"
                 >
                   {" "}
-                  <Link to="/doctorDetails"> Consult Now</Link>
+                  <Link to={`/doctorDetails?id=${doctor._id}`}> Consult Now</Link>
                 </button>
               </div>
             </div>

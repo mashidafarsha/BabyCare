@@ -25,7 +25,7 @@ function UserOtp() {
       <label htmlFor="user_otp" className="cursor-pointer modal">
         <label
           className="relative modal-box bg-gradient-to-r from-pink-50 to-indigo-600"
-          htmlFor=""
+          htmlFor="user_otp"
         >
           <div className="h-64 w-96">
             <h1 className="mb-10 font-bold">Enter Your OTP</h1>

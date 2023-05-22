@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { RazorPayPayment, verifyPayment } from "../../sevices/userApi";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
+import moment from "moment";
 function PlanDetails({ plan }) {
-
   const [id, setId] = useState("");
   const [planname, setPlanname] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [offerAmount, setOffferAmount] = useState("");
   const [image, setImage] = useState("");
-
   const [userPlan, setUserPlan] = useState([]);
-  let {user} = useSelector((state) => state.user);
+  const [userExpPlan, setUserExpPlan] = useState();
+  let { user } = useSelector((state) => state.user);
   useEffect(() => {
     setId(plan?._id);
     setPlanname(plan?.planname);
@@ -20,25 +20,24 @@ function PlanDetails({ plan }) {
     setAmount(plan?.amount);
     setOffferAmount(plan?.offerAmount);
     setImage(plan?.image);
-    
-    setUserPlan(user.plans)
-  
-  }, [plan]);
 
- 
-  
+    setUserPlan(user.plans);
+    setUserExpPlan(moment(user.planExpDate));
+  }, [plan,user]);
+  console.log(user,"user");
+  const today = moment();
   const handleSumit = async () => {
     try {
-      if(userPlan.length>0){
-        Swal.fire("This User have already one plan")
-       
-      }else{
+      // if(userPlan.length>0){
+      //   Swal.fire("This User have already one plan")
+
+      // }else{
       let { data } = await RazorPayPayment(id, amount);
       console.log(data.datas);
       if (data.datas) {
         paymentPage(data.datas);
       }
-    }
+      // }
     } catch {}
   };
 
@@ -61,24 +60,16 @@ function PlanDetails({ plan }) {
           if (data.success) {
             Swal.fire({
               title: `${data.message}`,
-             
-             
-              
+
               focusConfirm: false,
-             
-            })
-         
-          }else{
+            });
+          } else {
             Swal.fire({
               title: `${data.message}`,
-             
-             
-              
+
               focusConfirm: false,
-             
-            })
+            });
           }
-          
         } catch (error) {
           console.log("qqqqqqqq");
           console.log(error);
@@ -94,9 +85,9 @@ function PlanDetails({ plan }) {
     rzp1.open();
   };
 
-  const alreadyPlanMessage=()=>{
-    Swal.fire("This User Have  Plan")
-  }
+  const alreadyPlanMessage = () => {
+    Swal.fire("This User Have  Plan");
+  };
   return (
     <div>
       <input type="checkbox" id="plan-modal" className="modal-toggle" />
@@ -125,20 +116,24 @@ function PlanDetails({ plan }) {
                 <p className="py-3 font-normal">
                   Save for the things that make you Happy
                 </p>
-{userPlan && userPlan.length===0 ? <button
-                  type="submit"
-                  onClick={handleSumit}
-                  className="mt-3 btn btn-primary rounded-3xl"
-                >
-                  Buy Plans
-                </button>:<button
-                  type="submit"
-                  onClick={alreadyPlanMessage}
-                  className="mt-3 btn btn-primary rounded-3xl"
-                >
+                {userPlan && userPlan.length == 1 && moment(userExpPlan).isAfter(today) ?   (
+                  <button
+                    type="submit"
+                    onClick={alreadyPlanMessage}
+                    className="mt-3 btn btn-primary rounded-3xl"
+                  >
                     Buy Plans
-                </button>}
-                
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    onClick={handleSumit}
+                    className="mt-3 btn btn-primary rounded-3xl"
+                  >
+                    Buy Plans
+                  </button>
+                )}
+
                 <h1 className="mt-3 ml-2 text-base font-semibold">
                   Pay Only Rs{amount}
                 </h1>

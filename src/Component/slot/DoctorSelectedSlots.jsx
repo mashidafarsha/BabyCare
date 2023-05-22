@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { scheduledDoctorSlot,cancelDoctorSchedule,getUserBookedSlot } from "../../sevices/doctorApi";
-import Swal from 'sweetalert2';
+import {
+  scheduledDoctorSlot,
+  cancelDoctorSchedule,
+  getUserBookedSlot,
+} from "../../sevices/doctorApi";
+import Swal from "sweetalert2";
 import moment from "moment";
 function DoctorSelectedSlots() {
   const [load, setLoad] = useState(false);
@@ -12,7 +16,7 @@ function DoctorSelectedSlots() {
 
   useEffect(() => {
     getSheduledSlot();
-    getBookedSlot()
+    getBookedSlot();
   }, [load]);
 
   const handleLoad = () => {
@@ -44,44 +48,35 @@ function DoctorSelectedSlots() {
     }
   };
 
-  const getBookedSlot=async()=>{
-    let {data}= await getUserBookedSlot()
-    if(data.success){
-      setBookedSlot(data.bookedSlots)
+  const getBookedSlot = async () => {
+    let { data } = await getUserBookedSlot();
+    if (data.success) {
+      setBookedSlot(data.bookedSlots);
     }
-  }
+  };
 
-
-  const cancelSchedule=async(startTime)=>{
+  const cancelSchedule = async (startTime) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete the time slot'
-    }).then(async(result) => {
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete the time slot",
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        let {data}=await cancelDoctorSchedule(startTime)
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
-        handleLoad()
+        let { data } = await cancelDoctorSchedule(startTime);
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        handleLoad();
       }
-    })
-   
-
-  }
-
+    });
+  };
 
   const getSheduledSlot = async () => {
     let { data } = await scheduledDoctorSlot();
-    
+
     setSlots(data.slots);
-   
   };
   return (
     <div className="h-screen bg-emerald-100">
@@ -105,14 +100,18 @@ function DoctorSelectedSlots() {
         </div>
       </div>
       <div className="flex items-start justify-center mt-4">
-    
-      <div className="avatar placeholder">
-        <h1 className="font-bold">Booked</h1>
-  <div className="w-8 ml-3 bg-blue-700 rounded-full text-neutral-content">
-    <span className="text-xs"></span>
-  </div>
-</div>
+        <div className="avatar placeholder">
+          <h1 className="font-bold">Booked</h1>
+          <div className="w-8 ml-3 bg-blue-700 rounded-full text-neutral-content">
+            <span className="text-xs"></span>
+          </div>
+        </div>
       </div>
+      <div className="w-full text-center">
+      {selectedDate && (
+           <h1 className="text-lg font-bold mt-7">{selectedDate.format("MMMM Do YYYY, dddd")}</h1> 
+      )}
+           </div>
 
       {selectedDate && (
         <div className="flex items-start justify-center ">
@@ -120,28 +119,32 @@ function DoctorSelectedSlots() {
             {getTimeSlot().map(({ startTime, endTime }) => {
               return (
                 slots.includes(startTime.format("MMMM Do YYYY, h:mm:ss a")) && (
-                  <button onClick={()=>cancelSchedule(startTime.format("MMMM Do YYYY, h:mm:ss a"))} 
-                  className={`${
-                    bookedSlot.some(
-                      (slot) =>
-                        slot.bookingTime === startTime.format("MMMM Do YYYY, h:mm:ss a")
-                    )
-                      ? "bg-blue-700 text-white"
-                      : "btn-success"
-                  } m-5 btn`}
-                >
+                  <button
+                    onClick={() =>
+                      cancelSchedule(
+                        startTime.format("MMMM Do YYYY, h:mm:ss a")
+                      )
+                    }
+                    className={`${
+                      bookedSlot.some(
+                        (slot) =>
+                          slot.bookingTime ===
+                          startTime.format("MMMM Do YYYY, h:mm:ss a")
+                      )
+                        ? "bg-blue-700 text-white"
+                        : "btn-success"
+                    } m-5 btn`}
+                  >
                     <b className="p-3">{`${startTime.format(
                       "hh:mm A"
                     )} - ${endTime.format("hh:mm A")}`}</b>
                   </button>
                 )
-              )
+              );
             })}
           </div>
         </div>
       )}
-
-      
     </div>
   );
 }

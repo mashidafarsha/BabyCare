@@ -105,15 +105,19 @@ function DoctorSlots() {
         </div>
       </div>
       <div className="w-full text-center">
-      <h1 className="text-lg font-bold mt-7">Choose multiple slots</h1>
-      </div>
+      {selectedDate && (
+           <h1 className="text-lg font-bold mt-7">Choose multiple slots on {selectedDate.format("MMMM Do YYYY, dddd")}</h1> 
+      )}
+           </div>
       
       {selectedDate && (
+        
         <div className="flex items-start justify-center ">
+          
           <div className="w-7/12 m-16 ">
             {getTimeSlot().map(({startTime,endTime}) => {
               return (
-                
+              
                 <button
                   onClick={() => handleTimeSelect(startTime.format("MMMM Do YYYY, h:mm:ss a"))}
                  

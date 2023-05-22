@@ -11,6 +11,7 @@ import DoctorselectedSlot from "../Pages/Doctor/DoctorselectedSlot";
 import DoctorLayout from "../layout/DoctorLayout";
 import Doctorsignup from "../Pages/Doctor/Doctorsignup";
 import Bookinguserdetails from "../Pages/Doctor/Bookinguserdetails";
+import DoctorChatPge from "../Pages/Doctor/DoctorChatPge";
 function DoctorRouter() {
   return (
     <>
@@ -21,6 +22,7 @@ function DoctorRouter() {
             <Route path="/doctorSlot" element={<DoctorSlotBook />} />
             <Route path="/doctorSchedules" element={<DoctorselectedSlot />} />
             <Route path="/bookingDetails" element={<Bookinguserdetails/>} />
+            <Route path="/doctorChat" element={<DoctorChatPge/>} />
           </Route>
         </Route>
 

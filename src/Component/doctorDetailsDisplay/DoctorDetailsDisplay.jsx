@@ -1,13 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useLocation } from 'react-router-dom';
+import {getSelectedDoctorDetails } from "../../sevices/userApi";
 import { Link } from "react-router-dom";
-import UserSlots from "../slot/UserSlots";
+
 function DoctorDetailsDisplay() {
-  let { doctorData } = useSelector((state) => state.doctorData);
-  console.log(doctorData);
-  useEffect(() => {}, []);
-  // const [show, setShow] = useState(false)
+
+ const[doctorData,setDoctorData]=useState("")
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const doctorId = queryParams.get('id');
+
+  useEffect(() => {
+   
+    getDoctorData()
+  }, []);
+
   
+  const getDoctorData=async()=>{
+    try{
+     let{data}=await getSelectedDoctorDetails(doctorId)
+     
+     if(data.success){
+      setDoctorData(data.doctor)
+     }
+     
+    }catch{
+      
+    }
+  }
   return (
     <div >
       <div className= 'h-auto hero bg-base-200'>
@@ -22,7 +42,8 @@ function DoctorDetailsDisplay() {
               className="rounded-lg shadow-2xl w-52 h-52"
             />
             <button className="w-auto mt-5 ml-16 bg-blue-700 btn">
-              <Link to="/userSlots">Book your Slots</Link>
+             
+              <Link to={`/userSlots?id=${doctorData._id}`}>Book your Slots</Link>
 
             </button>
           </div>

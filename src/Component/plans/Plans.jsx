@@ -15,6 +15,8 @@ function Plans() {
     getAllPlans();
   }, [load]);
 
+
+
   const getAllPlans = async () => {
     try {
       let { data } = await getPlans();
@@ -66,6 +68,7 @@ function Plans() {
                 <th>IMAGE</th>
                 <th>AMOUNT</th>
                 <th>OFFER AMOUNT (%)</th>
+                <th>number of users</th>
                 <th>ACTIONS</th>
               </tr>
             </thead>
@@ -86,7 +89,7 @@ function Plans() {
                       </td>
                       <td>{plan.amount}</td>
                       <td>{plan.offerAmount}</td>
-
+                      <td>{plan.user.length}</td>
                       <td>
                         <label
                           htmlFor="edit-plan"
