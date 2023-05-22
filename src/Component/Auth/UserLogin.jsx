@@ -13,7 +13,7 @@ const navigate=useNavigate()
 const dispatch=useDispatch()
 useEffect(() => {
   if(localStorage.getItem("userToken")){
-    navigate('/home')
+    navigate('/')
   }
 }, [])
 
@@ -30,7 +30,7 @@ useEffect(() => {
 
       )
     );
-    navigate("/home")
+    navigate("/")
    }else{
     
    }

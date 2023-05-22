@@ -104,6 +104,10 @@ const getAllBookingData = () => {
   return adminAxiosInstance("adminToken").get("/getAllBookingData");
 };
 
+const AllBookingDataForChart = () => {
+  return adminAxiosInstance("adminToken").get("/getChartBookingData");
+};
+
 
 export {
  authAdmin,
@@ -126,5 +130,6 @@ export {
   editOurPlan,
   deletePlans,
   deleteDoctor,
-  getAllBookingData
+  getAllBookingData,
+  AllBookingDataForChart
 };

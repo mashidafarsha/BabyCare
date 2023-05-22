@@ -62,9 +62,13 @@ function EditPlan({ plan,handleLoad }) {
                 Swal("Please enter all details");
             }else{
                 let {data}=await editOurPlan(formData)
-                console.log(data);
-                generateSuccess(data.message);
-                handleLoad();
+                if (data) {
+                  generatesuccess(data.message);
+                  handleLoad();
+                }else{
+                  generateError(data.message);
+                 
+                }
             }
         }catch{
             

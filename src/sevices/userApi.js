@@ -71,6 +71,7 @@ consultationFee
 };
 
 const SlotBookingRazorpay= (totalAmount) => {
+  console.log("hi");
   return userAxiosInstance("userToken").post("/slotBookingrazorPayment", {
   
     totalAmount,

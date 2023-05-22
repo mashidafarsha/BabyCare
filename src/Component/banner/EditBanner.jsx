@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import Swal from "sweetalert";
 import { editBannerData } from "../../sevices/adminApi";
 import { BaseUrl } from "../../constants/constants";
 function EditBanner({ editBanner, handleLoad }) {
@@ -33,11 +33,11 @@ function EditBanner({ editBanner, handleLoad }) {
 
 
   const generateError = (err) => {
-    Swal.fire(err);
+    Swal(err);
   };
   
   const generatesuccess = (err) => {
-    Swal.fire(err);
+    Swal(err);
   };
 
 
@@ -47,10 +47,13 @@ function EditBanner({ editBanner, handleLoad }) {
       Swal("Please enter all details");
     } else {
       let { data } = await editBannerData(id, bannerName, description, image)
-      console.log(data);
-      generatesuccess(data.message);
-      handleLoad();
-      console.log(data);
+       if (data) {
+          generatesuccess(data.message);
+          handleLoad();
+        }else{
+          generateError(data.message);
+        }
+      
     }
   };
 

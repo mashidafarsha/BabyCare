@@ -44,6 +44,8 @@ function EditCategory({ category, handleLoad }) {
         if (data) {
           generatesuccess(data.message);
           handleLoad();
+        }else{
+          generateError(data.message);
         }
       }
     } catch {}

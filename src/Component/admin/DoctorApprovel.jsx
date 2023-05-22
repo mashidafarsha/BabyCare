@@ -6,13 +6,16 @@ import RejectedReason from "./RejectedReason";
 import { getRegisterDoctor,acceptDoctor } from "../../sevices/adminApi";
 
 function DoctorApprovel() {
+  const [load, setLoad] = useState(false);
   const [docDetail,setDocDetail]=useState('')
   const [doctor, setDoctor] = useState([]);
     useEffect(() => {
       getDoctorDetails();
-    }, []);
+    }, [load]);
 
- 
+    const handleLoad = () => {
+      setLoad(!load);
+    };
 
   const getDoctorDetails =async () => {
     try{
@@ -30,23 +33,37 @@ function DoctorApprovel() {
 
   const acceptHandler = (id) => {
     try{
+
       Swal.fire({
-        title: "Are you sure?",
-        text: "Are you sure you want to accept this doctor?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then(async(willdelete) => {
-        if (willdelete) {
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Accept it!'
+      }).then(async(result) => {
+       
+        if (result.isConfirmed) {
           let {data}=await acceptDoctor(id)
-          console.log(data);
+          if(data.success){
+            Swal.fire(
+              'Accepted!',
+              'The Doctor has been Accepted.',
+              'success'
+            )
+            handleLoad()
+          }
           
-        }else{
-          Swal.fire("The item was not deleted.");
         }
-      });
+      })
+
     }catch{
-      
+      Swal.fire(
+        'not Accepted',
+        'The Doctor has been not Accepted.',
+        'fail'
+      )
     }
    
   };

@@ -22,7 +22,7 @@ function PrivateRoute({ role, route }) {
           if (response.data.status == false) {
             localStorage.removeItem("userToken");
             dispatch(setUserDetails({}))
-            navigate("/")
+            navigate("/login")
           }else{
             dispatch(setUserDetails({ user: response.data.userData }))
             setAuth(response.data?.status);

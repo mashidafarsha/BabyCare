@@ -1,6 +1,8 @@
 import React from 'react'
 import logo from "../../assets/babycare logo.jpg"
+import { useNavigate } from 'react-router-dom';
 function AdminNavbar() {
+  const navigate=useNavigate()
   return (
     <div >
       
@@ -28,7 +30,16 @@ function AdminNavbar() {
           </a>
         </li>
       
-        <li><a>Logout</a></li>
+        <li>
+                  <a
+                    onClick={() => {
+                      localStorage.removeItem("adminToken");
+                      navigate("/admin");
+                    }}
+                  >
+                    Logout
+                  </a>
+                </li>
       </ul>
     </div>
   </div>

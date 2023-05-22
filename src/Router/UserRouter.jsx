@@ -21,7 +21,7 @@ function UserRouter() {
       <Route element={<PrivateRoute role={"user"} route={"/"} />}>
         <Route element={<UserLayout />}>
       
-          <Route exact path="/home" element={<Userhome />} />
+          <Route exact path="/" element={<Userhome />} />
           <Route exact path="/profile" element={<Userprofile />} />
           <Route exact path="/department" element={<Allspecialities />} />
           <Route exact path="/departmentDoctor" element={<DepartmentDoctor />} />
@@ -33,7 +33,7 @@ function UserRouter() {
           <Route  path="/*" element={<Error/>} />
         </Route>
         </Route>
-        <Route exact path="/" element={<Userlogin />} />
+        <Route exact path="/login" element={<Userlogin />} />
         <Route exact path="/signup" element={<Usersignup />} />
       </Routes>
     </>

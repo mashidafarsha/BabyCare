@@ -100,7 +100,7 @@ function UserNavbar() {
                   <a
                     onClick={() => {
                       localStorage.removeItem("userToken");
-                      navigate("/");
+                      navigate("/login");
                     }}
                   >
                     Logout
