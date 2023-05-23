@@ -103,7 +103,7 @@ function DoctorChat() {
   };
 
   return (
-    <div className="w-full min-h-screen mx-auto overflow-x-hidden max-w-screen-2xl">
+    <div className="w-full mx-auto overflow-x-hidden max-w-screen-2xl">
       <div className="bg-green-200">
         {currentChat ? (
           <div className="flex items-center justify-start gap-1 ">
@@ -127,7 +127,7 @@ function DoctorChat() {
         )}
       </div>
       <div>
-        <div className="flex flex-col flex-grow md:h-96 md:flex-row">
+        <div className="flex flex-col flex-grow h-screen md:flex-row">
           <div className="flex flex-col p-3 overflow-y-auto bg-green-200 scrollbar-track-transparent scrollbar-thin scrollbar-thumb-slate-700">
             <p className="p-3 text-lg font-bold text-center border-b-2">
               Recent conversations
@@ -167,7 +167,7 @@ function DoctorChat() {
               <>
                 <div
                   id="chatbox top"
-                  className="flex-grow h-screen p-3 overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
+                  className="flex-grow p-3 overflow-x-hidden overflow-y-auto md:h-screen scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
                 >
                   {currentChat === "" ? (
                     <Welcome />
