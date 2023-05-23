@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BaseUrl } from "../../constants/constants";
+import { BaseUrl } from "../../Constants/constants";
 import AddCategory from "../../Component/admin/AddCategory";
 import EditCategory from "../../Component/admin/EditCategory";
 import Swal from "sweetalert2";
