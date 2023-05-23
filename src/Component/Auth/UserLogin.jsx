@@ -41,7 +41,7 @@ useEffect(() => {
         <div className="flex-col hero-content lg:flex-row-reverse">
           <div className="text-center lg:text-left">
             <h3 className="text-5xl font-bold">WELCOME</h3>
-            <h4 className="py-6 text-4xl font-medium">TO BABYCARE</h4>
+            <h4 className="py-6 text-4xl font-medium">TO TRUECARE</h4>
           </div>
           <div className="flex-shrink-0 w-full max-w-sm shadow-2xl card bg-base-100">
             <form onSubmit={handleSubmit} className="mt-6">

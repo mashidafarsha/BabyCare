@@ -155,7 +155,7 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
           </div>
         </div>
         <div className="w-full">
-          <div className="bg-green-200">
+          <div className="">
             <h1 className="ml-12">PATIENT DETAILS</h1>
             <hr className="my-3 ml-10 border-t-2 border-gray-400 " />
             <p className="ml-12">Who is the patient?</p>

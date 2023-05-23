@@ -41,9 +41,7 @@ function UserNavbar() {
               tabIndex={0}
               className="p-2 mt-3 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
             >
-              <li>
-                <a>Doctors</a>
-              </li>
+              
               <li>
               <a> <Link to={'/department'}>Department</Link></a>
               </li>
@@ -54,19 +52,20 @@ function UserNavbar() {
                
                 <a> <Link to={'/myAppointment'}>My appointments</Link></a>
               </li>
+              <li>
+              <a>
+                <Link to={"/chat"}>Chat</Link>
+              </a>
+            </li>
             </ul>
           </div>
           <a className="text-xl italic normal-case btn btn-ghost">
-            <Link to={"/home"}> PRO CARE</Link>
+            <Link to={"/"}> TRUE CARE</Link>
           </a>
         </div>
         <div className="hidden navbar-center lg:flex">
           <ul className="px-1 menu menu-horizontal">
-            <li>
-              <a>
-                <Link to={""}>Doctors</Link>
-              </a>
-            </li>
+            
             <li>
             <a> <Link to={'/department'}>Department</Link></a>
             </li>
@@ -75,6 +74,11 @@ function UserNavbar() {
             </li>
             <li>
             <a> <Link to={'/myAppointment'}>My appointments</Link></a>
+            </li>
+            <li>
+              <a>
+                <Link to={"/chat"}>Chat</Link>
+              </a>
             </li>
           </ul>
         </div>

@@ -15,9 +15,9 @@ function DoctorNavbar() {
   };
   return (
     <div>
-      <div className="bg-teal-500 navbar">
-        <div className="navbar-start">
-          <div className="dropdown">
+      <div className="bg-teal-500 navbar " >
+        <div className="navbar-start" >
+          <div className="dropdown"  >
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@ function DoctorNavbar() {
             </ul>
           </div>
           <a className="text-xl normal-case btn btn-ghost">
-            <Link to={"/doctor/doctorHome"}>BABY CARE</Link>
+            <Link to={"/doctor"}>TRUE CARE</Link>
           </a>
         </div>
         <div className="hidden navbar-center lg:flex">
@@ -65,6 +65,9 @@ function DoctorNavbar() {
             </li>
             <li>
                 <Link to={"/doctor/bookingDetails"}>Booking Users</Link>
+              </li>
+              <li>
+                <Link to={"/doctor/doctorChat"}>Chat</Link>
               </li>
           </ul>
         </div>
@@ -84,7 +87,7 @@ function DoctorNavbar() {
                 <a
                   onClick={() => {
                     localStorage.removeItem("doctorToken");
-                    navigate("/doctor");
+                    navigate("/doctor/doctorLogin");
                   }}
                 >
                   Logout

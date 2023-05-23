@@ -41,13 +41,13 @@ function DepartmentBanner() {
         <div className="w-screen p-4 space-x-4 shadow-2xl carousel carousel-center bg-slate-200 rounded-box">
           {department.map((department, index) => {
             return (
-              <div className="shadow-xl w-60 card bg-base-100">
-                <figure className="h-40">
+              <div className="w-32 shadow-xl sm:w-40 card bg-base-100">
+                <figure className="h-40 ml-2 w-36">
                   <img  src={
                       department.image
                         ? `${BaseUrl}/${department.image}`
                         : ""
-                    } className="w-full h-32 rounded-full " />
+                    } className="h-32 rounded-full " />
                 </figure>
                 <div className="h-20 mb-5 card-body">
                   <h2 className="card-title">{department.categoryName}</h2>

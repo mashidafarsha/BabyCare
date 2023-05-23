@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import Welcome from "./welcome";
+
 import { BaseUrl } from "../../constants/constants";
 import { getPlanChatUser } from "../../sevices/doctorApi";
 import { addDoctorMessage, getMessages } from "../../sevices/doctorApi";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
+import Footer from "../userFooter/Footer";
 function DoctorChat() {
   const socket = useRef();
   const [messages, setMessages] = useState([]);
@@ -101,15 +103,37 @@ function DoctorChat() {
   };
 
   return (
-    <div className="min-h-screen max-w-screen-2xl mx-auto w-full pt-16 bg-[#d4d8f0] overflow-x-hidden">
+    <div className="w-full min-h-screen mx-auto overflow-x-hidden max-w-screen-2xl">
+      <div className="bg-green-200">
+        {currentChat ? (
+          <div className="flex items-center justify-start gap-1 ">
+            <div className="flex items-center justify-end w-5/12 gap-1">
+              <div className="w-12 h-10 overflow-hidden rounded-full md:h-16 md:w-16">
+                <img
+                  src={currentChat ? `${BaseUrl}/${currentChat.image}` : ""}
+                  className="object-cover w-full h-full"
+                  alt=""
+                />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold md:text-2xl">
+                  {currentChat.name}
+                </h3>
+              </div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
       <div>
         <div className="flex flex-col flex-grow md:h-96 md:flex-row">
-          <div className="flex flex-col p-3 overflow-y-auto bg-slate-300 scrollbar-track-transparent scrollbar-thin scrollbar-thumb-slate-700 ">
+          <div className="flex flex-col p-3 overflow-y-auto bg-green-200 scrollbar-track-transparent scrollbar-thin scrollbar-thumb-slate-700">
             <p className="p-3 text-lg font-bold text-center border-b-2">
               Recent conversations
             </p>
 
-            <div>
+            <div >
               {planUser &&
                 planUser.map((user, index) => {
                   const isSelected = currentSelected === index;
@@ -132,12 +156,6 @@ function DoctorChat() {
                     </div>
                   );
                 })}
-
-              <div className="my-10">
-                <p className="font-semibold text-center text-black cursor-default">
-                  There is no conversations
-                </p>
-              </div>
             </div>
           </div>
 
@@ -149,33 +167,13 @@ function DoctorChat() {
               <>
                 <div
                   id="chatbox top"
-                  className="flex-grow p-3 overflow-x-hidden overflow-y-auto h-96 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
+                  className="flex-grow h-screen p-3 overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent"
                 >
                   {currentChat === "" ? (
                     <Welcome />
                   ) : (
                     <div>
                       <div>
-                        <div className="flex items-center justify-between p-5">
-                          <div className="flex items-center gap-1">
-                            <div className="w-12 h-10 overflow-hidden rounded-full md:h-16 md:w-16">
-                              <img
-                                src={
-                                  currentChat
-                                    ? `${BaseUrl}/${currentChat.image}`
-                                    : ""
-                                }
-                                className="object-cover w-full h-full"
-                                alt=""
-                              />
-                            </div>
-                            <div>
-                              <h3 className="text-xl font-semibold md:text-2xl">
-                                {currentChat.name}
-                              </h3>
-                            </div>
-                          </div>
-                        </div>
                         <div>
                           {messages.map((message, index) => {
                             return (
@@ -197,11 +195,7 @@ function DoctorChat() {
                                     />
                                   </div>
                                 </div>
-                                {/* <div class="chat-header">
-                                  {message?.fromSelf
-                                    ? message?.name?.toUpperCase()
-                                    : currentChat?.name?.toUpperCase()}
-                                </div> */}
+
                                 <div
                                   className={`chat-bubble ${
                                     message?.fromSelf
@@ -223,35 +217,22 @@ function DoctorChat() {
                                   <div className="chat-footer">Just Now</div>
                                 )}
                               </div>
-
-                              // <div className="flex flex-col mt-5"  ref={scrollRef}
-                              // key={uuidv4()}>
-
-                              //       <div className="flex ">
-                              //         {/* <img
-                              //           src=""
-                              //           alt=""
-                              //           className="object-cover w-8 h-8 mr-3 rounded-full "
-                              //         /> */}
-                              //         <p className="max-w-xs p-3 rounded-3xl">{message.message}</p>
-                              //       </div>
-
-                              //   <div className="mt-3 text-xs">{message.createdAt}</div>
-
-                              // </div>
                             );
                           })}
                         </div>
                       </div>
-                      <div>
+                      <div style={{ position: "sticky", bottom: 0 }}>
                         <div
                           className="flex items-center justify-center w-full mt-1"
                           id="chatboxbottom"
                         >
-                          <form onSubmit={(e) => sendChat(e)}>
+                          <form
+                            className="flex items-center input-group"
+                            onSubmit={(e) => sendChat(e)}
+                          >
                             <input
                               placeholder="Write something"
-                              className="w-10/12 h-12 p-3 scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300"
+                              className="w-full text-white bg-gray-700 rounded-full input input-sm md:input-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                               value={msg}
                               onChange={(e) => setMsg(e.target.value)}
                             />
@@ -272,6 +253,7 @@ function DoctorChat() {
           </div>
         </div>
       </div>
+    
     </div>
   );
 }

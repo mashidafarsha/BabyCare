@@ -17,7 +17,7 @@ function AdminRouter() {
       <Routes>
         <Route element={<PrivateRoute role={"admin"} route={"/admin"} />}>
           <Route element={<AdminLayout />}>
-            <Route path="/adminHome" element={<Adminhome />} />
+            <Route path="/" element={<Adminhome />} />
             <Route path="/category" element={<AdminCategory />} />
             <Route path="/doctorApprovel" element={<Doctorapprovel />} />
             <Route path="/doctor" element={<AllApprovedDoctor />} />
@@ -27,7 +27,7 @@ function AdminRouter() {
             <Route  path="/*" element={<Error/>} />
           </Route>
         </Route>
-        <Route path="/" element={<Adminlogin />} />
+        <Route path="/adminLogin" element={<Adminlogin />} />
       </Routes>
     </>
   );

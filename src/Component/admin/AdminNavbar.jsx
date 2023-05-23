@@ -12,7 +12,7 @@ function AdminNavbar() {
 
         <img  className='w-16 h-12 rounded-full' src={logo} alt="" />
       </label>
-      <h1 className='text-2xl font-bold'>PRO CARE</h1>
+      <h1 className='text-2xl font-bold'>TRUE CARE</h1>
   </div>
   <div className="flex-none gap-2">
    
@@ -34,7 +34,7 @@ function AdminNavbar() {
                   <a
                     onClick={() => {
                       localStorage.removeItem("adminToken");
-                      navigate("/admin");
+                      navigate("/admin/adminLogin");
                     }}
                   >
                     Logout

@@ -21,7 +21,7 @@ function DoctorLogin() {
     if (localStorage.getItem("doctorWaitingToken")) {
       navigate("/doctor/waiting");
     } else if (localStorage.getItem("doctorToken")) {
-      navigate("/doctor/doctorHome");
+      navigate("/doctor");
     }
   }, []);
 
@@ -47,7 +47,7 @@ function DoctorLogin() {
         console.log(data.doctor, "oooo");
         dispatch(setDoctorDetails({ doctor: data.doctor }));
         console.log("kkkk");
-        navigate("/doctor/doctorHome");
+        navigate("/doctor");
       } else {
         navigate("/doctor/Info");
       }
@@ -66,7 +66,7 @@ function DoctorLogin() {
         </div>
         <div className="bg-blue-400 w-80 h-96 ">
           <h1 className="mt-5 text-2xl font-semibold text-center text-gray-700">
-            BABY DOCTOR LOGIN
+            TRUE DOCTOR LOGIN
           </h1>
           <form onSubmit={handleSubmit} className="mt-6">
             <div className="mb-2">

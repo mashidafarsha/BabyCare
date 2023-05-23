@@ -35,14 +35,14 @@ function CategoryDoctor() {
       <div className="w-9/12 h-auto">
         {doctros.map((doctor, index) => {
           return (
-            <div className="float-left shadow-xl m-7 card bg-base-100 w-52 ">
-              <figure className="px-10 pt-10">
+            <div className="float-left h-64 shadow-2xl m-7 card bg-base-100 w-52">
+              <figure className="px-10 pt-10 h-28">
                 <img
                   src={
                     doctor.image ? `${BaseUrl}/${doctor.image}` : ""
                   }
                   alt="Shoes"
-                  className="rounded-xl"
+                  className="w-32 h-32 "
                 />
               </figure>
               <div className="items-center mb-5 text-center card-body h-28">

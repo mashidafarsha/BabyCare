@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getDoctorsData, checkUserAnyPlan } from "../../sevices/userApi";
-import ChatContainer from "./ChatContainer";
+import ChatContainer from "./chatContainer";
 import Conversation from "./Conversation";
 import { io } from "socket.io-client";
 import { BaseUrl } from "../../constants/constants";

@@ -19,7 +19,7 @@ function DoctorRouter() {
       <Routes>
         <Route element={<PrivateRoute role={"doctor"} route={"/doctor"} />}>
           <Route element={<DoctorLayout />}>
-            <Route path="/doctorHome" element={<Doctorprofile />} />
+            <Route path="/" element={<Doctorprofile />} />
             <Route path="/doctorSlot" element={<DoctorSlotBook />} />
             <Route path="/doctorSchedules" element={<DoctorselectedSlot />} />
             <Route path="/bookingDetails" element={<Bookinguserdetails/>} />
@@ -29,7 +29,7 @@ function DoctorRouter() {
         </Route>
 
 
-        <Route path="/" element={<DoctorLogin />} />
+        <Route path="/doctorLogin" element={<DoctorLogin />} />
         <Route path="/signup" element={<Doctorsignup />} />
         <Route path="/info" element={<DoctorInfo />} />
         <Route path="/waiting" element={<Waitingapprovel />} />

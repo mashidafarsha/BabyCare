@@ -42,7 +42,7 @@ function PrivateRoute({ role, route }) {
           if (response.data.status == false) {
             localStorage.removeItem("adminToken");
             dispatch(setUserDetails({}))
-            navigate("/admin");
+            navigate("/admin/adminLogin");
           }else{
             dispatch(setAdminDetails({ admin: response.data.adminData }))
             setAuth(response.data?.status);
@@ -62,7 +62,7 @@ function PrivateRoute({ role, route }) {
           if (response.data.status == false) {
             localStorage.removeItem("doctorToken");
             dispatch(setDoctorDetails({}));
-            navigate("/doctor");
+            navigate("/doctor/doctorLogin");
           } else {
             console.log("dispatch");
             dispatch(setDoctorDetails({ doctor: response.data.doctorData }))
@@ -73,7 +73,7 @@ function PrivateRoute({ role, route }) {
         .catch((response) => {
           console.log(response);
           setAuth(response.data?.status);
-          navigate("/doctor");
+          navigate("/doctor/doctorLogin");
         });
     }
   }, []);

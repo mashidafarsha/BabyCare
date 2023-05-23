@@ -3,6 +3,7 @@ import { useSelector,useDispatch } from "react-redux";
 import { editUser } from "../../sevices/userApi";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { BaseUrl } from "../../constants/constants";
 function EditUserProfile({ handleLoad}) {
   const [name, setName] = useState("");
 

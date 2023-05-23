@@ -42,9 +42,9 @@ function DoctorSignup() {
   return (
     <>
       <div className="flex items-center justify-center w-screen h-screen overflow-hidden bg-white">
-        <div className="h-auto w-4/12 bg-blue-200 ">
-          <h1 className=" text-center mt-4 font-bold">
-            PLEASE SIGNUP BABYCARE
+        <div className="w-4/12 h-auto bg-blue-200 ">
+          <h1 className="mt-4 font-bold text-center ">
+            PLEASE SIGNUP TRUECARE
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
             <div className="card-body ">
@@ -53,7 +53,7 @@ function DoctorSignup() {
                   <label htmlFor="category">Name</label>
                 </div>
                 <input
-                  className="input input-bordered w-full"
+                  className="w-full input input-bordered"
                   id="categoryName"
                   type="text"
                   required={true}
@@ -67,7 +67,7 @@ function DoctorSignup() {
                   <label htmlFor="description">Email</label>
                 </div>
                 <input
-                  className="input input-bordered w-full"
+                  className="w-full input input-bordered"
                   id="description"
                   type="text"
                   required={true}
@@ -81,7 +81,7 @@ function DoctorSignup() {
                   <label htmlFor="description">Password</label>
                 </div>
                 <input
-                  className="input input-bordered w-full"
+                  className="w-full input input-bordered"
                   id="description"
                   type="text"
                   required={true}
@@ -95,7 +95,7 @@ function DoctorSignup() {
                   <label htmlFor="description">ConfirmPassword</label>
                 </div>
                 <input
-                  className="input input-bordered  w-full"
+                  className="w-full input input-bordered"
                   id="description"
                   type="text"
                   required={true}
@@ -105,7 +105,7 @@ function DoctorSignup() {
                 />
               </div>
               <div className="">
-                <button className="mt-4 w-full btn btn-outline btn-secondary">
+                <button className="w-full mt-4 btn btn-outline btn-secondary">
                   SUBMIT
                 </button>
               </div>

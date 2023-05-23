@@ -17,7 +17,7 @@ function AdminLogin() {
 
   useEffect(() => {
     if(localStorage.getItem("adminToken")){
-      navigate('/admin/adminHome')
+      navigate('/admin')
     }
   }, []) 
 
@@ -45,7 +45,7 @@ function AdminLogin() {
       
             )
           );
-          navigate("/admin/adminHome");
+          navigate("/admin");
         }
       
       }
@@ -66,7 +66,7 @@ function AdminLogin() {
         </div>
         <div className="bg-blue-400 w-80 h-96 ">
           <h1 className="mt-5 text-2xl font-semibold text-center text-gray-700">
-            BABY CARE
+            TRUE CARE
           </h1>
           <form className="mt-6" onSubmit={handleSubmit}>
             <div className="mb-2">

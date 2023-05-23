@@ -12,7 +12,7 @@ function EditDoctorProfile({ doctorData,handleLoad }) {
   const [allDepartment, setAllDepartment] = useState([]);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  // const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [qualification, setQualification] = useState("");
   const [department, setDepartment] = useState("");
@@ -26,7 +26,7 @@ function EditDoctorProfile({ doctorData,handleLoad }) {
   useEffect(() => {
     setId(doctorData?.id);
     setName(doctorData?.name);
-    setEmail(doctorData?.email);
+    // setEmail(doctorData?.email);
     setPhone(doctorData?.phone);
     setQualification(doctorData?.qualification);
     setDepartment(doctorData?.department);
@@ -65,7 +65,7 @@ console.log(department,"iiiiii");
       formData.append("Id", id);
       formData.append("Image", uploadedImage);
       formData.append("name", name);
-      formData.append("email", email);
+      // formData.append("email", email);
       formData.append("phone", phone);
       formData.append("qualification", qualification);
       formData.append("department", department);
@@ -131,7 +131,7 @@ console.log(department,"iiiiii");
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                  <div className="form-control">
+                  {/* <div className="form-control">
                     <label className="label">
                       <span className="label-text">Email</span>
                     </label>
@@ -142,7 +142,7 @@ console.log(department,"iiiiii");
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                  </div>
+                  </div> */}
                   <div className="form-control">
                     <label className="label">
                       <span className="label-text">Phone</span>

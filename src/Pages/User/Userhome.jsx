@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Banner from '../../Component/user/Banner'
 import UserNavbar from '../../Component/user/UserNavbar'
-import SubBanner from '../../Component/user/SubBanner'
+// import SubBanner from '../../Component/user/SubBanner'
 import PlanBanner from '../../Component/heromodal/PlanBanner'
 import DepartmentBanner from '../../Component/user/DepartmentBanner'
 import Footer from '../../Component/userFooter/Footer'
@@ -18,7 +18,7 @@ function Userhome() {
         <DepartmentBanner/>
         
          <PlanBanner/>
-         <SubBanner/>
+         {/* <SubBanner/> */}
          <Footer/>
     </div>
   )

@@ -24,14 +24,14 @@ function AllPlans() {
         } catch {}
       };
   return (
-    <div>
+    <div >
         <PlanDetails plan={viewPlan}  />
       <h1 className="text-xl font-bold">SPECIAL PLANS</h1>
       <div className="w-9/12 h-auto">
       {plansData.map((plan,index) => {
           return (
-            <div className="float-left shadow-xl m-7 card bg-base-100 w-52 ">
-              <figure className="px-10 pt-10">
+            <div className="float-left shadow-xl m-7 card bg-base-100 w-52 h-96 ">
+              <figure className="px-10 pt-10 h-28">
                 <img
                   src={
                 plan.image ? `${BaseUrl}/${plan.image}`: ""
