@@ -65,14 +65,22 @@ function PlanDetails({ plan }) {
             });
           } else {
             Swal.fire({
-              title: `${data.message}`,
-
+              title: "Payment Failed",
+              text: "Payment submission failed.",
+              icon: "error", // Set the icon to display as an error
               focusConfirm: false,
             });
+            return;
           }
         } catch (error) {
-          console.log("qqqqqqqq");
-          console.log(error);
+       
+          Swal.fire({
+            title: "Payment Failed",
+            text: "Payment submission failed.",
+            icon: "error", // Set the icon to display as an error
+            focusConfirm: false,
+          });
+          return ;
         }
       },
       theme: {
@@ -83,6 +91,7 @@ function PlanDetails({ plan }) {
     const rzp1 = new Razorpay(options);
 
     rzp1.open();
+  
   };
 
   const alreadyPlanMessage = () => {

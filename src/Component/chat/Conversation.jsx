@@ -12,12 +12,12 @@ function Conversation({ contacts, changeChat,currentUser }) {
     changeChat(chat);
   };
   return (
-    <>
+    <div >
       {contact &&
         contact.map((contact,index) => {
           const isSelected = currentSelected === index;
           return (
-            <div className={`flex items-center p-3 mt-5 cursor-pointer hover:bg-gray-400 ${
+            <div className={`flex items-center p-3 mt-5 cursor-pointer hover:bg-gray-400  ${
               isSelected ? "bg-white" : ""}`} key={index} onClick={()=>changeCurrentChat(contact,index)}>
               <img
                 src={contact.image ? `${BaseUrl}/${contact.image}` : ""}
@@ -28,7 +28,7 @@ function Conversation({ contacts, changeChat,currentUser }) {
             </div>
           );
         })}
-    </>
+    </div>
   );
 }
 

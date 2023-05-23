@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getDoctorsData, checkUserAnyPlan } from "../../sevices/userApi";
-import ChatContainer from "./chatContainer";
+import ChatContainer from "./ChatContainer";
 import Conversation from "./Conversation";
 import { io } from "socket.io-client";
 import { BaseUrl } from "../../constants/constants";
@@ -53,17 +53,17 @@ function UserChat() {
 
   return (
     <>
-    <div className="min-h-screen max-w-screen-2xl mx-auto w-full pt-16 bg-[#d4d8f0] overflow-x-hidden">
+    <div className="min-h-screen max-w-screen-2xl mx-auto w-full  bg-[#d4d8f0] overflow-x-hidden">
       {plan === true ? (
         <div>
-          <div className="flex flex-col flex-grow md:h-96 md:flex-row">
+          <div className="flex flex-col flex-grow bg-green-200 md:h-96 md:flex-row">
             <div className="flex flex-col p-3 overflow-y-auto bg-slate-300 scrollbar-track-transparent scrollbar-thin scrollbar-thumb-slate-700 ">
               <p className="p-3 text-lg font-bold text-center border-b-2">
                 Recent conversations
               </p>
 
-              <div>
-                <div>
+              <div >
+                <div >
                   <Conversation
                     contacts={contacts}
                     currentUser={currentUser}
@@ -80,7 +80,7 @@ function UserChat() {
               >
                 <>
                   {currentChat ? (
-                    <div className="flex items-center justify-start gap-1 bg-blue-300">
+                    <div className="flex items-center justify-start gap-1 bg-gray-300">
                       <div className="flex items-center justify-end w-4/12 gap-1">
                         <div className="w-12 h-10 overflow-hidden rounded-full md:h-16 md:w-16">
                           <img

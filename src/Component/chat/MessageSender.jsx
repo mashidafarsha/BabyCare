@@ -38,17 +38,19 @@ if(msg.length>0){
         < BsFillEmojiSmileFill onClick={handleImogiPickerHideAndShow}/>
         {showImogiPicker && <Picker  onEmojiClick={handleEmogiClick} />}
         </div>
-      <form onSubmit={(e)=>sendChat(e)}>
+      <form onSubmit={(e)=>sendChat(e)} className="flex items-center input-group">
       <input
-         placeholder="Write something"
-         className="w-10/12 h-12 p-3 scrollbar-thin scrollbar-thumb-blue-700 scrollbar-track-blue-300"
-        value={msg}
-        onChange={(e)=> setMsg(e.target.value)}
-         
-        />
-        <button type="submit" className="w-2/12 h-12 text-white bg-teal-800 border-none cursor-pointer">
-          Send
-        </button>
+                              placeholder="Write something"
+                              className="w-full text-white bg-gray-700 rounded-full input input-sm md:input-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                              value={msg}
+                              onChange={(e) => setMsg(e.target.value)}
+                            />
+                            <button
+                              type="submit"
+                              className="w-2/12 h-12 text-white bg-teal-800 border-none cursor-pointer"
+                            >
+                              Send
+                            </button>
       </form>
         
       </div>
