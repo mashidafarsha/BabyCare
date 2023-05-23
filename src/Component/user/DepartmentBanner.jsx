@@ -37,12 +37,12 @@ function DepartmentBanner() {
           </div>
         </div>
       </div>
-      <div className="flex items-start justify-center w-10/12 mx-auto overflow-hidden border border-stone-400">
+      <div className="flex items-start justify-center w-10/12 mx-auto overflow-hidden border border-stone-400 mt-7">
         <div className="w-screen p-4 space-x-4 shadow-2xl carousel carousel-center bg-slate-200 rounded-box">
           {department.map((department, index) => {
             return (
-              <div className="w-32 shadow-xl sm:w-40 card bg-base-100">
-                <figure className="h-40 ml-2 w-36">
+              <div className="w-40 shadow-xl sm:w-44 card bg-base-100">
+                <figure className="h-40 ml-3 w-36">
                   <img  src={
                       department.image
                         ? `${BaseUrl}/${department.image}`
@@ -50,7 +50,7 @@ function DepartmentBanner() {
                     } className="h-32 rounded-full " />
                 </figure>
                 <div className="h-20 mb-5 card-body">
-                  <h2 className="card-title">{department.categoryName}</h2>
+                  <h2 className="text-sm font-bold uppercase card-title">{department.categoryName}</h2>
                 </div>
                 <div className="justify-center mb-7 card-actions">
                  
