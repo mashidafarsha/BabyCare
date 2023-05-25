@@ -19,14 +19,14 @@ function Banner() {
   };
 
   return (
-    <div className="m-6 mx-auto mt-5 shadow-2xl">
+    <div className="m-6 mx-auto mt-5 shadow-2xl ">
       <div className="carousel rounded-2xl">
         {bannerImage.map((banner, index) => {
           return (
             <div
               key={banner.id}
               id={`slide${index + 1}`}
-              className="relative w-full carousel-item h-fit"
+              className="relative w-full carousel-item md:h-fit sm:h-48 sm:object-cover"
             >
               <img
                 src={

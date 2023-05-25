@@ -29,8 +29,8 @@ function UserSignup() {
         <div className="modal-box"> */}
           {/* <div className="min-h-screen hero bg-base-200"> */}
             
-            <div className="w-4/12 h-auto bg-blue-200 mt-14 mb-9">
-            <h1 className="font-bold text-center  mt-9">PLEASE REGISTER</h1>
+            <div className="h-auto bg-blue-200 md:w-4/12 sm:w-1/2 mt-14 mb-9">
+            <h1 className="font-bold text-center mt-9">PLEASE REGISTER</h1>
               <form onSubmit={handleSubmit} className="mt-6">
                 <div className="card-body">
                   <div className="form-control">

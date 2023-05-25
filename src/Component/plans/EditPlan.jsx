@@ -63,7 +63,7 @@ function EditPlan({ plan,handleLoad }) {
             }else{
                 let {data}=await editOurPlan(formData)
                 if (data) {
-                  generatesuccess(data.message);
+                  generateSuccess(data.message);
                   handleLoad();
                 }else{
                   generateError(data.message);
