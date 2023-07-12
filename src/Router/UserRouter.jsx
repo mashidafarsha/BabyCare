@@ -18,20 +18,23 @@ function UserRouter() {
   return (
     <>
       <Routes>
-      <Route element={<PrivateRoute role={"user"} route={"/"} />}>
-        <Route element={<UserLayout />}>
-      
-          <Route exact path="/" element={<Userhome/>} />
-          <Route exact path="/profile" element={<Userprofile />} />
-          <Route exact path="/department" element={<Allspecialities />} />
-          <Route exact path="/departmentDoctor" element={<DepartmentDoctor />} />
-          <Route exact path="/plans" element={<Allplans/>} />
-          <Route exact path="/doctorDetails" element={<DoctorDetails/>} />
-          <Route exact path="/userSlots" element={<UserSlotBook/>} />
-          <Route exact path="/myAppointment" element={<UserAppointment/>} />
-          <Route exact path="/chat" element={<Userchat/>} />
-          <Route  path="/*" element={<Error/>} />
-        </Route>
+        <Route element={<PrivateRoute role={"user"} route={"/"} />}>
+          <Route element={<UserLayout />}>
+            <Route exact path="/" element={<Userhome/>} />
+            <Route exact path="/profile" element={<Userprofile />} />
+            <Route exact path="/department" element={<Allspecialities />} />
+            <Route
+              exact
+              path="/departmentDoctor"
+              element={<DepartmentDoctor />}
+            />
+            <Route exact path="/plans" element={<Allplans />} />
+            <Route exact path="/doctorDetails" element={<DoctorDetails />} />
+            <Route exact path="/userSlots" element={<UserSlotBook />} />
+            <Route exact path="/myAppointment" element={<UserAppointment />} />
+            <Route exact path="/chat" element={<Userchat />} />
+            <Route path="/*" element={<Error />} />
+          </Route>
         </Route>
         <Route exact path="/login" element={<Userlogin />} />
         <Route exact path="/signup" element={<Usersignup />} />
