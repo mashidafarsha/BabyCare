@@ -126,7 +126,7 @@ function ChatContainer({ currentChat, currentUser, socket }) {
         );
       })}
 
-      <div style={{ position: "sticky", bottom: 0 }}>
+<div  style={{ position: "sticky",bottom :0}}>
         <MessageSender handleSendMessage={handleSendMessage} />
       </div>
     </>

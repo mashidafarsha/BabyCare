@@ -20,10 +20,10 @@ function DepartmentBanner() {
   };
   return (
     <>
-      <div className="flex items-start justify-center mx-auto overflow-hidden ">
+      <div className="flex items-start justify-center mx-auto overflow-hidden  ">
         <div className="flex items-start justify-between w-8/12">
           <div>
-            <h1 className="text-4xl font-extrabold text-blue-800 ">
+            <h1 className="text-4xl font-extrabold text-black-800 mt-4">
               10+ Specialities
             </h1>
             <h1 className="font-bold">
@@ -31,8 +31,8 @@ function DepartmentBanner() {
             </h1>
           </div>
           <div>
-            <button class=" bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-             <Link to={"/department"}>  See All Specialities </Link>
+            <button class=" bg-blue-500 hover:bg-blue-400 text-white font-bold mt-4 py-4 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+              <Link to={"/department"}> See All Specialities </Link>
             </button>
           </div>
         </div>
@@ -42,19 +42,25 @@ function DepartmentBanner() {
           {department.map((department, index) => {
             return (
               <div className="w-40 shadow-xl sm:w-44 card bg-base-100">
-                <figure className="h-40 ml-3 w-36">
-                  <img  src={
-                      department.image
-                        ? `${BaseUrl}/${department.image}`
-                        : ""
-                    } className="h-32 rounded-full " />
+                <figure className="h-32 ml-3 w-32 border-4 border-blue-300 rounded-full overflow-hidden">
+                  <img
+                    src={
+                      department.image ? `${BaseUrl}/${department.image}` : ""
+                    }
+                    className="h-32 w-32 rounded-full"
+                    alt=""
+                  />
                 </figure>
                 <div className="h-20 mb-5 card-body">
-                  <h2 className="text-sm font-bold uppercase card-title">{department.categoryName}</h2>
+                  <h2 className="text-sm font-bold uppercase card-title">
+                    {department.categoryName}
+                  </h2>
                 </div>
                 <div className="justify-center mb-7 card-actions">
-                 
-                  <button className="font-bold text-blue-800"> <Link to={'/department'}>Consult Now</Link></button>
+                  <button className="font-bold text-blue-800">
+                    {" "}
+                    <Link to={"/department"}>Consult Now</Link>
+                  </button>
                 </div>
               </div>
             );

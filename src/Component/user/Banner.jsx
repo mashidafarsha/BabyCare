@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getBanner } from "../../sevices/adminApi";
+import { getBanner } from "../../sevices/userApi";
 import { BaseUrl } from "../../constants/constants";
 function Banner() {
   const [bannerImage, setBannerImage] = useState([]);
@@ -11,7 +11,7 @@ function Banner() {
   const getAllBanner = async () => {
     try {
       let { data } = await getBanner();
-      console.log(data, "llll");
+      console.log(data, "lllleeeeeeeee");
       if (data.success) {
         setBannerImage(data.BannerData);
       }

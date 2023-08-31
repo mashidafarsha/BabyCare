@@ -18,7 +18,7 @@ function UserNavbar() {
   // };
   return (
     <div className="">
-      <div className="bg-blue-300 shadow-2xl navbar ">
+      <div className="bg-blue-100 shadow-2xl navbar ">
         <div className="navbar-start">
           <div className="dropdown">
             <label tabIndex={0} className="btn btn-ghost lg:hidden ">

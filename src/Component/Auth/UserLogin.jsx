@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { setUserDetails } from "../../redux/features/userSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert";
 
 function UserLogin() {
   const [email,setEmail]=useState("")
@@ -17,23 +18,46 @@ useEffect(() => {
   }
 }, [])
 
+const generateError = (err) => {
+  Swal(err);
+};
+
+
   const handleSubmit=async(e)=>{
    e.preventDefault()
    let {data}=await userLogin(email,passord)
    console.log(data);
-   if(data.success){
-    localStorage.setItem("userToken", data.token);
-    dispatch(
-      setUserDetails(
-        {user:data.user}
+   if (data) {
+    if (data.errors) {
+      console.log(data.errors,"llll");
+      if (data.errors.email) generateError(data.errors.email);
+      else if (data.errors.password) generateError(data.errors.password);
+    } else {
+      localStorage.setItem("userToken", data.token);
+        dispatch(
+          setUserDetails(
+            {user:data.user}
+          
+    
+          )
+        );
+        navigate("/")
+    }
+  
+  }
+  //  if(data.success){
+  //   localStorage.setItem("userToken", data.token);
+  //   dispatch(
+  //     setUserDetails(
+  //       {user:data.user}
       
 
-      )
-    );
-    navigate("/")
-   }else{
+  //     )
+  //   );
+  //   navigate("/")
+  //  }else{
     
-   }
+  //  }
   }
   return (
     <div>
