@@ -2,72 +2,86 @@ import React, { useEffect, useState } from "react";
 import { getDepartmentData } from "../../sevices/userApi";
 import { Link } from "react-router-dom";
 import { BaseUrl } from "../../constants/constants";
+
 function DepartmentBanner() {
   const [department, setDepartment] = useState([]);
 
   useEffect(() => {
     getAllDepartment();
   }, []);
-  console.log(department, "ooooooooo");
+
   const getAllDepartment = async () => {
     try {
       let { data } = await getDepartmentData();
-      console.log(data, "llll");
       if (data.success) {
         setDepartment(data.departmentData);
       }
-    } catch {}
+    } catch (error) {
+      console.error("Error fetching departments", error);
+    }
   };
+
   return (
-    <>
-      <div className="flex items-start justify-center mx-auto overflow-hidden  ">
-        <div className="flex items-start justify-between w-8/12">
+    <section className="py-16 bg-white">
+      <div className="container mx-auto px-4 md:px-10">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
-            <h1 className="text-4xl font-extrabold text-black-800 mt-4">
-              10+ Specialities
-            </h1>
-            <h1 className="font-bold">
-              Consult with top doctors across specialities
-            </h1>
+            <span className="text-blue-600 font-bold tracking-widest uppercase text-sm">Our Departments</span>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-800 mt-2">
+              10+ Medical Specialities
+            </h2>
+            <p className="text-slate-500 mt-2 font-medium">
+              Consult with our world-class specialists for expert medical advice.
+            </p>
           </div>
-          <div>
-            <button class=" bg-blue-500 hover:bg-blue-400 text-white font-bold mt-4 py-4 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
-              <Link to={"/department"}> See All Specialities </Link>
-            </button>
-          </div>
+          <Link 
+            to={"/department"} 
+            className="inline-block bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-bold py-3 px-6 rounded-full transition-all duration-300 shadow-md hover:shadow-blue-200 text-center"
+          >
+            View All Specialities
+          </Link>
         </div>
-      </div>
-      <div className="flex items-start justify-center w-10/12 mx-auto overflow-hidden border border-stone-400 mt-7">
-        <div className="w-screen p-4 space-x-4 shadow-2xl carousel carousel-center bg-slate-200 rounded-box">
-          {department.map((department, index) => {
-            return (
-              <div className="w-40 shadow-xl sm:w-44 card bg-base-100">
-                <figure className="h-32 ml-3 w-32 border-4 border-blue-300 rounded-full overflow-hidden">
-                  <img
-                    src={
-                      department.image ? `${BaseUrl}/${department.image}` : ""
-                    }
-                    className="h-32 w-32 rounded-full"
-                    alt=""
-                  />
-                </figure>
-                <div className="h-20 mb-5 card-body">
-                  <h2 className="text-sm font-bold uppercase card-title">
-                    {department.categoryName}
-                  </h2>
+
+        {/* Categories Carousel/Grid */}
+        <div className="flex overflow-x-auto pb-8 gap-6 no-scrollbar snap-x">
+          {department.map((item, index) => (
+            <div 
+              key={index} 
+              className="flex-none w-64 bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-500 group snap-start"
+            >
+              <div className="flex flex-col items-center text-center">
+                {/* Circular Image with animated border */}
+                <div className="relative p-1 rounded-full border-2 border-dashed border-blue-200 group-hover:border-blue-500 transition-colors duration-500">
+                  <div className="w-28 h-28 rounded-full overflow-hidden bg-slate-50">
+                    <img
+                      src={item.image ? `${BaseUrl}/${item.image}` : "https://via.placeholder.com/150"}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                      alt={item.categoryName}
+                    />
+                  </div>
                 </div>
-                <div className="justify-center mb-7 card-actions">
-                  <button className="font-bold text-blue-800">
-                    {" "}
-                    <Link to={"/department"}>Consult Now</Link>
-                  </button>
+
+                <div className="mt-6">
+                  <h3 className="text-lg font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                    {item.categoryName}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1 uppercase tracking-tighter">Specialist Doctors</p>
                 </div>
+
+                <Link 
+                  to={"/department"} 
+                  className="mt-6 w-full py-2 bg-blue-50 text-blue-700 font-bold rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300"
+                >
+                  Consult Now
+                </Link>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
-    </>
+    </section>
   );
 }
 

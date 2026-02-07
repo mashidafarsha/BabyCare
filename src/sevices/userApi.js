@@ -70,12 +70,11 @@ consultationFee
 });
 };
 
-const SlotBookingRazorpay= (totalAmount) => {
-  console.log("hi");
+// userApi.js
+ const SlotBookingRazorpay = (totalAmount) => {
+  console.log("Sending amount to backend:", totalAmount); // Check if amount is valid
   return userAxiosInstance("userToken").post("/slotBookingrazorPayment", {
-  
-    totalAmount,
- 
+    totalAmount: totalAmount // Correctly sending as an object
   });
 };
 

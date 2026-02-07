@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import { userBookingData, cancelUserSlot } from "../../sevices/userApi";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+
 function AppointmentDetails() {
   const [bookingDatas, setBookingDatas] = useState([]);
   const [load, setLoad] = useState(false);
+
   useEffect(() => {
     getBookingDetails();
   }, [load]);
+
   const handleLoad = () => {
     setLoad(!load);
   };
+
   const getBookingDetails = async () => {
     let { data } = await userBookingData();
     if (data.success) {
@@ -21,76 +25,98 @@ function AppointmentDetails() {
   const cancelBooking = async (bookingId) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: "Do you want to cancel this appointment?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, Cancel it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         let { data } = await cancelUserSlot(bookingId);
         if (data.success) {
-          Swal.fire("Deleted!", "Your file has been deleted.", "success");
-          handleLoad()
+          Swal.fire("Cancelled!", "Your appointment has been cancelled.", "success");
+          handleLoad();
         }
       }
     });
   };
-  console.log(bookingDatas, "ggg");
+
   return (
-    <div className="flex items-start justify-center max-w-screen-xl bg-slate-200 ">
-      <div className="w-11/12 h-full my-10 bg-white shadow-2xl rounded-3xl">
-        {bookingDatas &&
-          bookingDatas.map((bookingData, index) => {
-            return (
-              <div className="h-auto shadow-2xl ">
-                <div className="h-8 ml-5 font-semibold ">
-                  <div>
-                    <h1 className="float-left ">{bookingData.status}</h1>
-                    <h1 className="float-right mr-8">
-                      {bookingData.bookingTime}
-                    </h1>
-                  </div>
+    <div className="min-h-screen bg-slate-50 py-10 px-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-10 mt-10">
+          <h1 className="text-2xl font-black text-slate-800 uppercase italic tracking-wide">
+            My Appointments
+          </h1>
+          <div className="h-1 w-20 bg-blue-600 rounded-full mt-1"></div>
+        </div>
+
+        <div className="space-y-6">
+          {bookingDatas && bookingDatas.length > 0 ? (
+            bookingDatas.map((booking, index) => (
+              <div 
+                key={index} 
+                className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+              >
+                {/* Status Bar */}
+                <div className={`px-6 py-2 flex justify-between items-center ${booking.status === 'Cancel' ? 'bg-red-50' : 'bg-blue-50'}`}>
+                  <span className={`text-[10px] font-black uppercase tracking-widest ${booking.status === 'Cancel' ? 'text-red-600' : 'text-blue-600'}`}>
+                    {booking.status}
+                  </span>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase">
+                    Slot: {booking.bookingTime}
+                  </span>
                 </div>
-                <div className="ml-5">
-                  <div>
-                    <h1 className="text-xl font-semibold text-blue-700">
-                      Hospital Consultation
-                    </h1>
-                    <h1 className="mt-3 text-xl font-bold">
-                     Dr. {bookingData.DoctorName}
-                    </h1>
-                    <h1 className="font-medium">
-                      {bookingData.DoctorDepartment}
-                    </h1>
+
+                <div className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  {/* Doctor Info */}
+                  <div className="space-y-2">
+                    <p className="text-blue-600 font-black text-[10px] uppercase tracking-tighter italic">Hospital Consultation</p>
+                    <h2 className="text-xl font-bold text-slate-800 tracking-tight">
+                      Dr. {booking.DoctorName}
+                    </h2>
+                    <p className="text-slate-500 text-sm font-medium uppercase tracking-widest text-[10px]">
+                      {booking.DoctorDepartment}
+                    </p>
                   </div>
-                </div>
-                <div className="mt-5 ml-5 h-max mb-7">
-                  <div className="flex justify-between text-lg font-semibold ">
-                    <div className="flex">
-                      <h1 className="font-light text-blue-700 ">
-                        PatientName :
-                      </h1>
-                      <h1 className="ml-3 ">MashidaFarsha</h1>
-                    </div>
-                    {bookingData.status=="Cancel"? <button
-                     
-                      className="mb-2 mr-2 btn btn-success"
-                    ><Link to={'/department'}>Book Again</Link>
-                      
-                    </button>:<button
-                      onClick={() => cancelBooking(bookingData._id)}
-                      className="mb-2 mr-2 btn btn-error "
-                    >
-                      cancel booking
-                    </button>}
-                    
+
+                  {/* Patient Info */}
+                  <div className="bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Patient Name</p>
+                    <p className="text-sm font-bold text-slate-700 uppercase tracking-tighter">
+                      Mashida Farsha
+                    </p>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center">
+                    {booking.status === "Cancel" ? (
+                      <Link 
+                        to={'/department'}
+                        className="w-full md:w-auto text-center bg-slate-900 text-white px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-95"
+                      >
+                        Book Again
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => cancelBooking(booking._id)}
+                        className="w-full md:w-auto bg-white border-2 border-red-100 text-red-500 px-8 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white hover:border-red-500 transition-all active:scale-95"
+                      >
+                        Cancel Booking
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
-            );
-          })}
+            ))
+          ) : (
+            <div className="text-center py-20 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
+              <p className="text-slate-400 font-bold uppercase tracking-widest text-sm">No appointments found</p>
+              <Link to="/department" className="text-blue-600 font-black uppercase text-xs mt-4 inline-block underline italic">Book your first slot</Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

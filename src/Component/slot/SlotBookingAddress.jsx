@@ -7,79 +7,77 @@ import {
 } from "../../sevices/userApi";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { BaseUrl } from "../../constants/constants";
+
 function SlotBookingAddress({ doctorData, userSelectTime }) {
   const [doctorId, setDoctorId] = useState("");
   const [doctorName, setDoctorName] = useState("");
   const [doctorDep, setDoctorDep] = useState("");
   const [planData, setPlanData] = useState([]);
   const [consultationFee, setConsultationFee] = useState("");
-
   const [totalAmount, setTotalAmount] = useState("");
   const [discount, setDiscount] = useState("");
 
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+
   useEffect(() => {
     setDoctorName(doctorData?.name);
     setDoctorDep(doctorData?.department);
     setDoctorId(doctorData?._id);
     setConsultationFee(doctorData?.consultationFee);
-    
     getAllPlans();
-
   }, [doctorData]);
 
   useEffect(() => {
     getPlanDetails();
   }, [consultationFee]);
- 
+
   const getAllPlans = async () => {
     try {
       let { data } = await getPlans();
-    
-      if (data.success) {
-        setPlanData(data.plans);
-      }
-    } catch {}
+      if (data.success) setPlanData(data.plans);
+    } catch (err) {}
   };
 
   const getPlanDetails = async () => {
-  if(consultationFee){
-    let { data } = await getUserPlanDetails(consultationFee);
-    console.log(data);
-    if (data.success) {
-      setTotalAmount(data.totalDiscount);
-      setDiscount(data.discount);
-    } else if(data.success==false){
-
-      setTotalAmount(data.consultationFee)
-      setDiscount("");
-     
+    if (consultationFee) {
+      let { data } = await getUserPlanDetails(consultationFee);
+      if (data.success) {
+        setTotalAmount(data.totalDiscount);
+        setDiscount(data.discount);
+      } else {
+        setTotalAmount(consultationFee);
+        setDiscount(0);
+      }
     }
-  }
-   
   };
-
-
   const checkoutHandler = async () => {
-    let { data } = await SlotBookingRazorpay(totalAmount);
-    if (data.datas) {
-      paymentPage(data.datas);
+    try {
+      console.log("Checkout started...");
+      
+      // API call - await cheyyan marakkalle
+      const response = await SlotBookingRazorpay(totalAmount); 
+      console.log("Backend Response:", response.data);
+  
+      if (response.data.success && response.data.datas) {
+        paymentPage(response.data.datas);
+      } else {
+        Swal.fire("Error", "Could not initiate payment. Try again.", "error");
+      }
+    } catch (error) {
+      console.error("Axios Error:", error);
+      Swal.fire("Error", "Server connection failed", "error");
     }
   };
 
   const paymentPage = (data) => {
-   
-
     let options = {
-      key: `rzp_test_LSJeDQEzbT9qcg`,
+      key: `rzp_test_SBnlzMmVLtySb7`,
       amount: data.amount,
       currency: data.currency,
-      name: "Buy your Slot",
-      // description: description,
-      // image: image,
+      name: "MediCare Slot Booking",
       order_id: data.id,
       handler: async (response) => {
-     
         try {
           const { data } = await verifySlotPayment(
             response,
@@ -89,137 +87,134 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
             doctorName,
             doctorDep
           );
-          
           if (data.success) {
             Swal.fire({
-              title: `${data.message}`,
-              // icon: 'info',
-              html:
-                "You can use <b>show the booking Details</b>, " +
-                '<a href="//sweetalert2.github.io">Click Here</a> ',
-              // showCloseButton: true,
-              // showCancelButton: true,
-              focusConfirm: false,
-            });
+              icon: "success",
+              title: "Booking Successful!",
+              text: "Your appointment has been confirmed.",
+              confirmButtonColor: "#2563eb",
+            }).then(() => navigate("/userProfile"));
           }
         } catch (error) {
-          Swal.fire({
-            title: `${data.message}`,
-            // icon: 'info',
-            html:
-              "You can use <b>show the booking Details</b>, " +
-              '<a href="//sweetalert2.github.io">Click Here</a> ',
-            // showCloseButton: true,
-            // showCancelButton: true,
-            focusConfirm: false,
-          });
+          Swal.fire({ icon: "error", title: "Payment Failed" });
         }
       },
-      theme: {
-        color: "#3399cc",
-      },
+      theme: { color: "#2563eb" },
     };
-
-    const rzp1 = new Razorpay(options);
-
+    const rzp1 = new window.Razorpay(options);
     rzp1.open();
   };
-  
-  return (
-    <div>
-      <div>
-        <h1 className="text-bold font-xl">CHECKOUT</h1>
-        <hr className="my-3 border-t-2 border-gray-400 " />
-      </div>
-      <div className="flex flex-col md:flex-row">
-        <div className="h-auto text-center sm:w-full bg-slate-300">
-          <img
-            src={
-              doctorData.image
-                ? `http://localhost:4000/${doctorData.image}`
-                : ""
-            }
-            className="rounded-lg shadow-2xl w-52 h-52"
-          />
-          <h1 className="text-2xl font-bold">Dr: {doctorData.name}</h1>
-          <hr className="my-3 border-t-2 border-gray-400 " />
-          <h1 className="font-medium text-indigo-900">
-            {doctorData.department} | {doctorData.experience}
-          </h1>
 
-          <div className="m-12">
-            <h1>Appointment Details</h1>
-            <hr className="my-3 border-t-2 border-gray-400 " />
-            <h1>Hospital consultation</h1>
-            <h1>{userSelectTime}</h1>
+  return (
+    <div className="max-w-6xl mx-auto p-4 lg:p-10">
+      <div className="mb-8">
+        <h1 className="text-3xl font-black text-slate-800 uppercase italic">Checkout</h1>
+        <div className="h-1.5 w-16 bg-blue-600 rounded-full mt-2"></div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Left Column: Doctor & Appointment Info */}
+        <div className="lg:col-span-1 space-y-6">
+          <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col items-center text-center">
+            <div className="w-32 h-32 rounded-3xl overflow-hidden shadow-lg border-4 border-slate-50 mb-4">
+              <img
+                src={doctorData.image ? `${BaseUrl}/${doctorData.image}` : ""}
+                className="w-full h-full object-cover"
+                alt="Doctor"
+              />
+            </div>
+            <h2 className="text-xl font-bold text-slate-800 uppercase">Dr. {doctorData.name}</h2>
+            <p className="text-blue-600 font-bold text-xs uppercase tracking-widest">{doctorData.department}</p>
+            
+            <div className="w-full mt-6 pt-6 border-t border-slate-50">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Appointment Slot</p>
+              <div className="bg-blue-50 p-4 rounded-2xl">
+                 <p className="text-sm font-bold text-blue-700">{userSelectTime}</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="w-full">
-          <div className="">
-            <h1 className="ml-12">PATIENT DETAILS</h1>
-            <hr className="my-3 ml-10 border-t-2 border-gray-400 " />
-            <p className="ml-12">Who is the patient?</p>
-            <p className="ml-12">
-              Make sure to add valid patient details, it will be reflected on
-              Prescription and Invoice
-            </p>
-            <button className="mt-5 ml-12 btn bg-success">
-              Add Patient Details
-            </button>
-          </div>
-          <div className="m-7">
-            <h1>Do you want any plan?</h1>
-            {planData &&
-              planData.map((plan, idex) => {
-                return (
-                 
-                  <button className="m-5 w-28" onClick={()=>navigate('/plans')}>
-                    <img
-                      className="w-24 h-20 rounded-full"
-                      src={
-                        plan.image ? `http://localhost:4000/${plan.image}` : ""
-                      }
-                      alt=""
-                      
-                    />
-                    <h1>{plan.planname}</h1>
-               
-                  </button>
-                );
-              })}
-          </div>
-          <div className="h-auto mt-9">
-            <h1 className="ml-12">TOTAL CHARGES</h1>
-            <hr className="my-3 ml-10 border-t-2 border-gray-400 " />
-            <div className="w-full h-10 ">
-              <h1 className="float-left ml-12">Consutation Fee</h1>
-              <h1 className="float-right mr-9">{doctorData.consultationFee}</h1>
-            </div>
-          
-              <div className="w-full h-10 ">
-                <h1 className="float-left ml-12">Plan Discount</h1>
-                <h1 className="float-right mr-9">{discount}</h1>
-              </div>
-     
 
-            <div>
-              <h1 className="float-left ml-12">Total Amount</h1>
-              {totalAmount !== null ? (
-    <h1 className="float-right mr-9">{totalAmount}</h1>
-  ) : (
-    <h1 className="float-right mr-9">Loading...</h1>
-  )}
-                
+        {/* Right Column: Patient & Payment Details */}
+        <div className="lg:col-span-2 space-y-6">
           
-                {/* <h1 className="float-right mr-9">{consultationFee}</h1> */}
-           
+          {/* Patient Section */}
+          <div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-black text-slate-800 uppercase italic">Patient Details</h2>
+              <button className="text-xs bg-blue-600 text-white px-4 py-2 rounded-full font-bold hover:bg-slate-900 transition-all">
+                + Add Patient
+              </button>
             </div>
+            <p className="text-slate-500 text-sm leading-relaxed">
+              Make sure to add valid patient details. These will reflect on your prescription and invoice.
+            </p>
           </div>
-          <div className="float-right mt-12 ">
-            <button type="submit" onClick={checkoutHandler} className="btn">
-              Checkout
+
+          {/* Plans Section */}
+       {/* Plans Section */}
+<div className="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+  <h2 className="text-lg font-black text-slate-800 uppercase italic mb-6">
+    {discount > 0 ? "Your Active Plan" : "Available Health Plans"}
+  </h2>
+  
+  <div className="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+    {discount > 0 ? (
+   
+      <div className="flex items-center gap-4 bg-blue-50 p-4 rounded-2xl w-full">
+        <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-blue-200 p-1 bg-white">
+        
+          <img 
+            src={planData[0]?.image ? `${BaseUrl}/${planData[0].image}` : ""} 
+            className="w-full h-full object-cover rounded-full" 
+          />
+        </div>
+        <div>
+          <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Active Plan Applied</p>
+          <h3 className="text-sm font-bold text-slate-800 uppercase">You saved ₹{discount} on this booking!</h3>
+        </div>
+      </div>
+    ) : (
+
+      planData.map((plan, idx) => (
+        <div key={idx} onClick={() => navigate('/plans')} className="flex-shrink-0 cursor-pointer group text-center w-24">
+          <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-slate-100 group-hover:border-blue-500 transition-all p-1">
+            <img src={plan.image ? `${BaseUrl}/${plan.image}` : ""} className="w-full h-full object-cover rounded-full" />
+          </div>
+          <p className="text-[10px] font-bold text-slate-600 mt-2 truncate uppercase">{plan.planname}</p>
+        </div>
+      ))
+    )}
+  </div>
+</div>
+
+          {/* Bill Summary */}
+          <div className="bg-slate-900 text-white p-8 rounded-[2rem] shadow-xl">
+            <h2 className="text-lg font-black uppercase italic mb-6">Charge Breakdown</h2>
+            <div className="space-y-4">
+              <div className="flex justify-between text-slate-400 font-medium">
+                <span>Consultation Fee</span>
+                <span className="text-white">₹{consultationFee}</span>
+              </div>
+              <div className="flex justify-between text-slate-400 font-medium">
+                <span>Plan Discount</span>
+                <span className="text-green-400">- ₹{discount || 0}</span>
+              </div>
+              <div className="h-px bg-slate-800 my-4"></div>
+              <div className="flex justify-between items-center">
+                <span className="text-xl font-bold uppercase italic">Total Amount</span>
+                <span className="text-3xl font-black text-blue-400">₹{totalAmount}</span>
+              </div>
+            </div>
+            <button 
+              onClick={checkoutHandler} 
+              className="w-full mt-8 bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black uppercase tracking-widest transition-all transform active:scale-95 shadow-lg shadow-blue-900/20"
+            >
+              Confirm & Pay Now
             </button>
           </div>
+
         </div>
       </div>
     </div>

@@ -3,14 +3,17 @@ import CategoryDoctor from '../../Component/user/CategoryDoctor'
 import UserNavbar from '../../Component/user/UserNavbar'
 import Search from '../../Component/search/Search'
 import Footer from '../../Component/userFooter/Footer'
+
 function DepartmentDoctor() {
   return (
-    <div>
+    <div className="min-h-screen bg-slate-50">
          <UserNavbar/>
-        <Search/>
-        <CategoryDoctor/>
-        <Footer/>
-        </div>
+         <main className="pt-28"> {/* Navbar gap fix */}
+            <Search/>
+            <CategoryDoctor/>
+         </main>
+         <Footer/>
+    </div>
   )
 }
 

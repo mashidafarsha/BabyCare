@@ -3,186 +3,135 @@ import { RazorPayPayment, verifyPayment } from "../../sevices/userApi";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { BaseUrl } from "../../constants/constants";
+
 function PlanDetails({ plan }) {
-  const [id, setId] = useState("");
-  const [planname, setPlanname] = useState("");
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [offerAmount, setOffferAmount] = useState("");
-  const [image, setImage] = useState("");
   const [userPlan, setUserPlan] = useState([]);
   const [userExpPlan, setUserExpPlan] = useState();
   let { user } = useSelector((state) => state.user);
-  useEffect(() => {
-    setId(plan?._id);
-    setPlanname(plan?.planname);
-    setDescription(plan?.description);
-    setAmount(plan?.amount);
-    setOffferAmount(plan?.offerAmount);
-    setImage(plan?.image);
 
-    setUserPlan(user.plans);
-    setUserExpPlan(moment(user.planExpDate));
-  }, [plan,user]);
-  console.log(user,"user");
+  useEffect(() => {
+    if (user) {
+      setUserPlan(user.plans || []);
+      setUserExpPlan(moment(user.planExpDate));
+    }
+  }, [plan, user]);
+
   const today = moment();
+
   const handleSumit = async () => {
     try {
-      // if(userPlan.length>0){
-      //   Swal.fire("This User have already one plan")
-
-      // }else{
-      let { data } = await RazorPayPayment(id, amount);
-      console.log(data.datas);
+      let { data } = await RazorPayPayment(plan._id, plan.amount);
       if (data.datas) {
         paymentPage(data.datas);
       }
-      // }
-    } catch {}
+    } catch (error) {
+      console.error("Payment initiation failed", error);
+    }
   };
 
   const paymentPage = (data) => {
-    console.log(data, "wwwwwwwwwww");
-    console.log(planname, "hhhh");
     let options = {
-      key: `rzp_test_LSJeDQEzbT9qcg`,
+      key: "rzp_test_SBnlzMmVLtySb7", // നിങ്ങളുടെ പുതിയ കീ ഇവിടെ നൽകുക
       amount: data.amount,
       currency: data.currency,
-      name: planname,
-      description: description,
-      // image: image,
+      name: "TrueCare Premium",
+      description: plan.planname,
       order_id: data.id,
       handler: async (response) => {
-        console.log("dddddddddddd");
         try {
-          const { data } = await verifyPayment(response, id);
-          console.log(data);
-          if (data.success) {
+          const { data: verifyData } = await verifyPayment(response, plan._id);
+          if (verifyData.success) {
             Swal.fire({
-              title: `${data.message}`,
-
-              focusConfirm: false,
-            });
-          } else {
-            Swal.fire({
-              title: "Payment Failed",
-              text: "Payment submission failed.",
-              icon: "error", // Set the icon to display as an error
-              focusConfirm: false,
-            });
-            return;
+              icon: 'success',
+              title: 'Welcome to Premium!',
+              text: verifyData.message,
+              confirmButtonColor: '#2563eb'
+            }).then(() => window.location.reload());
           }
         } catch (error) {
-       
-          Swal.fire({
-            title: "Payment Failed",
-            text: "Payment submission failed.",
-            icon: "error", // Set the icon to display as an error
-            focusConfirm: false,
-          });
-          return ;
+          Swal.fire("Error", "Verification failed", "error");
         }
       },
-      theme: {
-        color: "#3399cc",
-      },
+      theme: { color: "#2563eb" },
     };
 
-    const rzp1 = new Razorpay(options);
-
+    const rzp1 = new window.Razorpay(options);
     rzp1.open();
-  
   };
 
-  const alreadyPlanMessage = () => {
-    Swal.fire("This User Have  Plan");
-  };
   return (
     <div>
       <input type="checkbox" id="plan-modal" className="modal-toggle" />
-      <div className="modal">
-        <div className="w-11/12 h-screen max-w-5xl modal-box">
-          <label
-            htmlFor="plan-modal"
-            className="absolute btn btn-sm btn-circle right-2 top-2"
-          >
-            ✕
-          </label>
-
-          <div className=" hero bg-base-200">
-            <div className="flex-col hero-content lg:flex-row-reverse">
-              <img
-                src={plan.image ? `http://localhost:4000/${image}` : ""}
-                className="w-56 rounded-lg shadow-2xl "
-              />
-              <div>
-                <h1 className="font-bold bg-red-400 border-none btn cursor-text">
-                  {planname}
-                </h1>
-                <h1 className="text-2xl font-bold ">
-                  Reduces Your Medical Expenses And Chat With Your Doctor
-                </h1>
-                <p className="py-3 font-normal">
-                  Save for the things that make you Happy
+      <div className="modal backdrop-blur-md bg-slate-900/60">
+        <div className="modal-box w-11/12 max-w-4xl p-0 overflow-hidden rounded-[2.5rem] bg-white border-none shadow-2xl">
+          
+          {/* Header Section */}
+          <div className="relative bg-blue-600 p-8 md:p-12 text-white">
+            <label htmlFor="plan-modal" className="absolute btn btn-sm btn-circle right-4 top-4 bg-white/20 border-none text-white hover:bg-white/40">✕</label>
+            
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="w-48 h-48 bg-white rounded-[2rem] overflow-hidden shadow-2xl shrink-0">
+                <img 
+                  src={plan.image ? `${BaseUrl}/${plan.image}` : ""} 
+                  className="w-full h-full object-cover" 
+                  alt="Plan"
+                />
+              </div>
+              <div className="text-center md:text-left">
+                <span className="bg-blue-400/30 text-white text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest">Premium Membership</span>
+                <h1 className="text-4xl font-black mt-2 italic uppercase tracking-tighter leading-none">{plan.planname}</h1>
+                <p className="mt-4 text-blue-100 font-medium max-w-md">
+                  Reduces your medical expenses and get unlimited chat access with our expert doctors.
                 </p>
-                {userPlan && userPlan.length == 1 && moment(userExpPlan).isAfter(today) ?   (
-                  <button
-                    type="submit"
-                    onClick={alreadyPlanMessage}
-                    className="mt-3 btn btn-primary rounded-3xl"
-                  >
-                    Buy Plans
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    onClick={handleSumit}
-                    className="mt-3 btn btn-primary rounded-3xl"
-                  >
-                    Buy Plans
-                  </button>
-                )}
-
-                <h1 className="mt-3 ml-2 text-base font-semibold">
-                  Pay Only Rs{amount}
-                </h1>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="mt-3 text-center">
-              <h1 className="text-3xl font-semibold">Benifits</h1>
-            </div>
-          </div>
-          <div className="inline-flex">
-            <div className="w-4/6 h-auto bg-slate-300 m-14 ">
-              <img src="" alt="" />
-              <div>
-                <h1 className="font-bold">Get Extra {description}</h1>
-
-                <h1>
-                  Guaranteed savings over &amp; above promotional offers.
-                  <br /> Extra {description}.
-                </h1>
-              </div>
-            </div>
-            <div className="w-4/6 h-auto bg-slate-300 m-14 ">
-              <img src="" alt="" />
-              <div>
-                <h1 className="font-bold">Get Extra {description}</h1>
-
-                <h1>
-                  Guaranteed savings over &amp; above promotional offers.
-                  <br /> Extra {description}.
-                </h1>
+                <div className="mt-6 flex items-center justify-center md:justify-start gap-4">
+                   <h2 className="text-3xl font-black">₹{plan.amount}</h2>
+                   <span className="text-blue-200 line-through text-sm">₹{plan.offerAmount}</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="modal-action">
-            <label htmlFor="plan-modal" className="btn">
-              Yay!
-            </label>
+          {/* Benefits Section */}
+          <div className="p-8 md:p-12 bg-slate-50">
+            <h3 className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8">Exclusive Benefits</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Benefit 1 */}
+              <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex gap-4">
+                <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shrink-0 font-bold italic">%</div>
+                <div>
+                  <h4 className="font-bold text-slate-800">Extra Savings</h4>
+                  <p className="text-xs text-slate-500 mt-1">Get an extra {plan.description} discount on all medical consultations.</p>
+                </div>
+              </div>
+
+              {/* Benefit 2 */}
+              <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex gap-4">
+                <div className="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center text-teal-600 shrink-0 italic font-bold">Chat</div>
+                <div>
+                  <h4 className="font-bold text-slate-800">Doctor Chat</h4>
+                  <p className="text-xs text-slate-500 mt-1">Unlimited real-time chat support with our specialized doctors.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Button */}
+            <div className="mt-10 flex flex-col items-center">
+              {userPlan && userPlan.length === 1 && moment(userExpPlan).isAfter(today) ? (
+                <button className="w-full md:w-64 py-4 bg-slate-200 text-slate-500 font-black text-xs uppercase tracking-widest rounded-2xl cursor-not-allowed">
+                  Plan Already Active
+                </button>
+              ) : (
+                <button 
+                  onClick={handleSumit}
+                  className="w-full md:w-64 py-4 bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-blue-600 transition-all active:scale-95 shadow-xl"
+                >
+                  Activate Now
+                </button>
+              )}
+              <p className="mt-4 text-[9px] text-slate-400 font-bold uppercase tracking-widest">Secure Payment Powered by Razorpay</p>
+            </div>
           </div>
         </div>
       </div>

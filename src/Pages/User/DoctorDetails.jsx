@@ -2,12 +2,15 @@ import React from 'react'
 import UserNavbar from '../../Component/user/UserNavbar'
 import DoctorDetailsDisplay from '../../Component/doctorDetailsDisplay/DoctorDetailsDisplay'
 import Footer from '../../Component/userFooter/Footer'
+
 function DoctorDetails() {
   return (
-    <div>
-           <UserNavbar/>
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+        <UserNavbar/>
+        <main className="flex-grow pt-28 pb-12"> {/* Spacing for fixed navbar */}
            <DoctorDetailsDisplay/>
-           <Footer/>
+        </main>
+        <Footer/>
     </div>
   )
 }

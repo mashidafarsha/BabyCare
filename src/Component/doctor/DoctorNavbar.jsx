@@ -1,100 +1,69 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getNavProfile } from "../../sevices/doctorApi";
-import { useNavigate } from "react-router-dom";
+import { BaseUrl } from "../../constants/constants";
+
 function DoctorNavbar() {
   const [doctorImage, setDoctorImage] = useState("");
+  const navigate = useNavigate();
+
   useEffect(() => {
     getDoctorData();
   }, []);
-  const navigate = useNavigate();
+
   const getDoctorData = async () => {
-    let { data } = await getNavProfile();
-    console.log(data);
-    setDoctorImage(data.doctorProfile.image);
+    try {
+      let { data } = await getNavProfile();
+      setDoctorImage(data.doctorProfile.image);
+    } catch (err) {
+      console.error(err);
+    }
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("doctorToken");
+    navigate("/doctor/doctorLogin");
+  };
+
   return (
-    <div>
-      <div className="bg-teal-500 navbar " >
-        <div className="navbar-start" >
-          <div className="dropdown"  >
-            <label tabIndex={0} className="btn btn-ghost lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
-            </label>
-            <ul
-              tabIndex={0}
-              className="p-2 mt-3 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <Link to={"/doctor/doctorSlot"}>All Slots</Link>{" "}
-              </li>
-
-              <li>
-                <Link to={"/doctor/doctorSchedules"}>My Slots</Link>
-              </li>
-              <li>
-                <Link to={"/doctor/bookingDetails"}>Booking Users</Link>
-              </li>
-            </ul>
+    <div className="sticky top-0 z-50 shadow-sm bg-white/80 backdrop-blur-md border-b border-slate-100">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          
+          {/* Logo */}
+          <div className="flex items-center">
+            <Link to="/doctor" className="group">
+              <h1 className="text-2xl font-black text-slate-800 tracking-tighter italic uppercase">
+                True <span className="text-blue-600">Care</span>
+              </h1>
+              <div className="h-1 w-0 group-hover:w-full bg-blue-600 transition-all duration-300 rounded-full"></div>
+            </Link>
           </div>
-          <a className="text-xl normal-case btn btn-ghost">
-            <Link to={"/doctor"}>TRUE CARE</Link>
-          </a>
-        </div>
-        <div className="hidden navbar-center lg:flex">
-          <ul className="px-1 menu menu-horizontal">
-            <li>
-              <Link to={"/doctor/doctorSlot"}>All Slots</Link>
-            </li>
 
-            <li>
-              <Link to={"/doctor/doctorSchedules"}>My Slots</Link>
-            </li>
-            <li>
-                <Link to={"/doctor/bookingDetails"}>Booking Users</Link>
-              </li>
-              <li>
-                <Link to={"/doctor/doctorChat"}>Chat</Link>
-              </li>
-          </ul>
-        </div>
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center space-x-8">
+            <Link to="/doctor/doctorSlot" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors uppercase tracking-widest">All Slots</Link>
+            <Link to="/doctor/doctorSchedules" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors uppercase tracking-widest">My Slots</Link>
+            <Link to="/doctor/bookingDetails" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors uppercase tracking-widest text-[11px]">Booking Users</Link>
+            <Link to="/doctor/doctorChat" className="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all">Chat</Link>
+          </div>
 
-        <div className="navbar-end">
+          {/* Profile Dropdown */}
           <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+            <label tabIndex={0} className="btn btn-ghost btn-circle avatar border-2 border-blue-100 hover:border-blue-500 transition-all">
               <div className="w-10 rounded-full">
-                <img src={`http://localhost:4000/${doctorImage}`} />
+                <img src={`${BaseUrl}/${doctorImage}`} alt="profile" />
               </div>
             </label>
-            <ul
-              tabIndex={0}
-              className="p-2 mt-3 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <a
-                  onClick={() => {
-                    localStorage.removeItem("doctorToken");
-                    navigate("/doctor/doctorLogin");
-                  }}
-                >
-                  Logout
-                </a>
+            <ul tabIndex={0} className="mt-4 p-2 shadow-2xl menu menu-compact dropdown-content bg-white rounded-2xl w-52 border border-slate-100">
+              <li className="menu-title font-black text-[10px] uppercase text-slate-400 p-2">Settings</li>
+              <li><Link to="/doctor/profile" className="font-bold">My Profile</Link></li>
+              <li className="mt-2 border-t pt-2">
+                <button onClick={handleLogout} className="text-red-600 font-bold hover:bg-red-50">Logout</button>
               </li>
             </ul>
           </div>
+
         </div>
       </div>
     </div>

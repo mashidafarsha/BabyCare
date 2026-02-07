@@ -12,14 +12,21 @@ function Userhome() {
   //   }
   // }, [])
   return (
-    <div>
-        <UserNavbar/>
-        <Banner/>
-        <DepartmentBanner/>
-        
-         <PlanBanner/>
-         {/* <SubBanner/> */}
-         <Footer/>
+    <div className="w-full flex flex-col min-h-screen">
+       <UserNavbar />
+       
+       {/* Content Blocks */}
+       <div className="flex-grow">
+          <Banner />
+          
+          {/* attractive aakan thazhe ulla section-u mathram cheriya padding nalkaam */}
+          <div className="max-w-screen-2xl mx-auto px-4 md:px-10 space-y-10">
+             <DepartmentBanner />
+             <PlanBanner />
+          </div>
+       </div>
+       
+       <Footer />
     </div>
   )
 }

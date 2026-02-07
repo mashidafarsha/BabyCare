@@ -5,10 +5,13 @@ import UserNavbar from '../../Component/user/UserNavbar'
 import Footer from '../../Component/userFooter/Footer'
 function Allspecialities() {
   return (
-    <div>
+    <div className="min-h-screen bg-slate-50">
         <UserNavbar/>
-        <Search/>
-        <AllSpecialiteisUser/>
+        {/* Navbar screen-il space edukkathaathukondu ivide pt-20 or pt-24 nalkanam */}
+        <div className="pt-20"> 
+            <Search/>
+            <AllSpecialiteisUser/>
+        </div>
         <Footer/>
     </div>
   )

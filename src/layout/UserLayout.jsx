@@ -1,13 +1,11 @@
 import React from 'react'
+import { Outlet } from "react-router-dom"
 
-import {Outlet} from "react-router-dom"
 function UserLayout() {
   return (
-    <div>
-        <div className="max-w-screen-xl mx-auto rounded-2xl">
-      
-        <Outlet/>
-      </div>
+    // "max-w-screen-xl" and "mx-auto" ivide ninnu maatti
+    <div className="w-full min-h-screen bg-white">
+      <Outlet />
     </div>
   )
 }
