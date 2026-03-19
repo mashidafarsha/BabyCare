@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { userSignup } from "../../sevices/userApi";
 import UserOtp from "./UserOtp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 function UserSignup() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -34,7 +35,9 @@ function UserSignup() {
           userOtpCheckbox.checked = true; // മോഡൽ ഓപ്പൺ ചെയ്യുന്നു
         }
       } else if (result && result.success) {
-         Swal.fire('Success', 'Registration successful', 'success');
+         Swal.fire('Success', 'Registration successful', 'success').then(() => {
+           navigate("/login");
+         });
       } else {
          Swal.fire('Error', result.message || 'Signup failed', 'error');
       }

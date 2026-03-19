@@ -81,6 +81,17 @@ const addDoctorMessage=({from,to,message})=>{
     return doctorAxiosInstance("doctorToken").post("/getAllMessage", {
       from,to    });
   }
+
+// --- EHR Endpoints ---
+const generatePrescription = (userId, medicines, notes) => {
+  return doctorAxiosInstance("doctorToken").post("/generatePrescription", {
+    userId, medicines, notes
+  });
+}
+
+const updateCompleteBooking = (bookingId) => {
+  return doctorAxiosInstance("doctorToken").put(`/completeBooking/${bookingId}`);
+}
 export {
   authDoctor,
   doctorLogin,
@@ -99,5 +110,7 @@ export {
   getDoctorActiveBooking,
   getPlanChatUser,
   addDoctorMessage,
-  getMessages
+  getMessages,
+  generatePrescription,
+  updateCompleteBooking
 };

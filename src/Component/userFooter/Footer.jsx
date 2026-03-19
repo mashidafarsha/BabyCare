@@ -1,83 +1,100 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { HeartPulse, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-300">
-      {/* Main Footer Content */}
-      <div className="container mx-auto px-6 pt-16 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+    <footer className="bg-slate-50 border-t border-slate-200 pt-20 pb-10">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
-          {/* Column 1: Brand & About */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="bg-blue-600 p-1.5 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
-              <span className="text-2xl font-bold text-white tracking-tight">TRUE CARE</span>
-            </div>
-            <p className="text-sm leading-relaxed text-slate-400">
-              Leading the way in medical excellence since 1992. Providing trusted care and advanced technology for your family's health.
+          {/* Brand and Intro */}
+          <div className="space-y-6">
+            <Link to="/" className="flex items-center gap-2">
+              <HeartPulse size={24} className="text-blue-600" />
+              <span className="text-xl font-bold text-slate-800 tracking-tight">TrueCare</span>
+            </Link>
+            <p className="text-slate-500 text-sm leading-relaxed">
+              Leading the way in medical excellence. We provide trusted healthcare solutions and specialized medical services to ensure your well-being.
             </p>
-            <div className="flex gap-4 pt-2">
-              {/* Social Icons with Hover Effects */}
-              <a href="#" className="hover:text-blue-500 transition-colors"><i className="fab fa-facebook text-xl"></i></a>
-              <a href="#" className="hover:text-blue-400 transition-colors"><i className="fab fa-twitter text-xl"></i></a>
-              <a href="#" className="hover:text-pink-500 transition-colors"><i className="fab fa-instagram text-xl"></i></a>
+            <div className="flex gap-4">
+              {[Facebook, Twitter, Instagram, Linkedin].map((Icon, idx) => (
+                <a 
+                  key={idx} 
+                  href="#" 
+                  className="w-10 h-10 bg-white border border-slate-200 text-slate-400 hover:text-blue-600 hover:border-blue-600 rounded-lg flex items-center justify-center transition-all duration-300 shadow-sm"
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Column 2: Quick Links */}
+          {/* Quick Links */}
           <div>
-            <h3 className="text-white font-bold text-lg mb-6">Quick Links</h3>
-            <ul className="space-y-4 text-sm">
-              <li><Link to="/department" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">Our Specialities</Link></li>
-              <li><Link to="/plans" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">Health Plans</Link></li>
-              <li><Link to="/doctors" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">Find a Doctor</Link></li>
-              <li><Link to="/about" className="hover:text-blue-400 transition-all hover:translate-x-1 inline-block">About Us</Link></li>
+            <h3 className="text-slate-900 font-bold text-sm uppercase tracking-wider mb-6">Quick Links</h3>
+            <ul className="space-y-4">
+              {[
+                { name: "Specialities", path: "/department" },
+                { name: "Health Plans", path: "/plans" },
+                { name: "Our Doctors", path: "/doctors" },
+                { name: "About Us", path: "/about" },
+              ].map((link, idx) => (
+                <li key={idx}>
+                  <Link to={link.path} className="text-sm text-slate-500 hover:text-blue-600 transition-colors">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Column 3: Services */}
+          {/* Services */}
           <div>
-            <h3 className="text-white font-bold text-lg mb-6">Services</h3>
-            <ul className="space-y-4 text-sm">
-              <li className="hover:text-blue-400 cursor-pointer">Emergency Care 24/7</li>
-              <li className="hover:text-blue-400 cursor-pointer">Online Consultation</li>
-              <li className="hover:text-blue-400 cursor-pointer">Diagnostic Center</li>
-              <li className="hover:text-blue-400 cursor-pointer">Pharmacy Services</li>
+            <h3 className="text-slate-900 font-bold text-sm uppercase tracking-wider mb-6">Services</h3>
+            <ul className="space-y-4">
+              {[
+                "24/7 Emergency Care",
+                "Online Consultations",
+                "Laboratory Tests",
+                "Health Checkups",
+              ].map((service, idx) => (
+                <li key={idx} className="text-sm text-slate-500">
+                  {service}
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Column 4: Contact Info */}
+          {/* Contact Info */}
           <div>
-            <h3 className="text-white font-bold text-lg mb-6">Contact Us</h3>
-            <ul className="space-y-4 text-sm">
+            <h3 className="text-slate-900 font-bold text-sm uppercase tracking-wider mb-6">Contact Us</h3>
+            <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <span className="text-blue-500">📍</span>
-                <span>123 Health Ave, Medical City, <br />Kerala, India</span>
+                <MapPin size={18} className="text-blue-600 mt-0.5 shrink-0" />
+                <span className="text-sm text-slate-500">123 Clinical Drive, Kochi, Kerala, India</span>
               </li>
               <li className="flex items-center gap-3">
-                <span className="text-blue-500">📞</span>
-                <span>+91 98765 43210</span>
+                <Phone size={18} className="text-blue-600 shrink-0" />
+                <span className="text-sm text-slate-500">+91 484 123 4567</span>
               </li>
               <li className="flex items-center gap-3">
-                <span className="text-blue-500">✉️</span>
-                <span>support@truecare.com</span>
+                <Mail size={18} className="text-blue-600 shrink-0" />
+                <span className="text-sm text-slate-500">hello@truecare.com</span>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-          <p>© 2026 True Care Hospital. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-white">Privacy Policy</a>
-            <a href="#" className="hover:text-white">Terms of Service</a>
-            <a href="#" className="hover:text-white">Cookie Policy</a>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+          <p className="text-xs text-slate-400">
+            © 2026 TrueCare Medical Group. All rights reserved.
+          </p>
+          <div className="flex gap-8">
+            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((item, idx) => (
+              <a key={idx} href="#" className="text-xs text-slate-400 hover:text-blue-600 transition-colors">{item}</a>
+            ))}
           </div>
         </div>
       </div>
@@ -86,3 +103,4 @@ function Footer() {
 }
 
 export default Footer;
+;

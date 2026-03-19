@@ -1,121 +1,281 @@
 import React, { useState, useEffect } from "react";
 import AddBanner from "./AddBanner";
 import EditBanner from "./EditBanner";
-import { getBanner,bannerDelete } from "../../sevices/adminApi";
+import { getBanner, bannerDelete } from "../../sevices/adminApi";
 import Swal from "sweetalert2";
 import { BaseUrl } from "../../constants/constants";
+import { Plus, Edit3, Trash2, Image as ImageIcon, Search, Layout, MessageSquare, Terminal, Activity, Monitor, MoreHorizontal, ArrowUpRight } from "lucide-react";
+
 function Banner() {
   const [load, setLoad] = useState(false);
   const [banner, setBanner] = useState([]);
   const [editBanner, setEditBanner] = useState();
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSyncing, setIsSyncing] = useState(false);
 
   const handleLoad = () => {
     setLoad(!load);
   };
+  
   useEffect(() => {
-    console.log("llll");
     getAllBanner();
   }, [load]);
 
   const getAllBanner = async () => {
+    setLoading(true);
+    setIsSyncing(true);
     try {
-      let { data } = await getBanner()
-    
-console.log(data.BannerData);
-      setBanner(data.BannerData);
-    } catch {}
+      let { data } = await getBanner();
+      if (data.BannerData) {
+        setBanner(data.BannerData);
+      }
+    } catch (error) {
+      console.error("Visual asset synchronization failed:", error);
+    } finally {
+      setLoading(false);
+      setTimeout(() => setIsSyncing(false), 500);
+    }
   };
 
-  const deleteBanner=(id)=>{
+  const deleteBanner = (id) => {
     try {
       Swal.fire({
-        title: "Are you sure?",
-        text: "Are you sure you want to delete this department?",
+        title: "Retire Visual Artifact?",
+        text: "This billboard asset will be immediately purged from the clinical rotational matrix.",
         icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then(async(willdelete) => {
-        if (willdelete) {
-
-          let{data}=await bannerDelete(id) 
-          console.log(data);
+        background: "#0f172a",
+        color: "#f8fafc",
+        showCancelButton: true,
+        confirmButtonColor: "#EF4444",
+        cancelButtonColor: "#334155",
+        confirmButtonText: "Confirm Retirement",
+        customClass: {
+          popup: 'rounded-[3rem] border border-white/5 shadow-2xl',
+          title: 'font-black uppercase tracking-tighter italic text-3xl',
+          confirmButton: 'rounded-2xl font-black uppercase tracking-widest text-[10px] px-10 py-5',
+          cancelButton: 'rounded-2xl font-black uppercase tracking-widest text-[10px] px-10 py-5'
+        }
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let { data } = await bannerDelete(id);
           if (data.success) {
+            Swal.fire({
+              icon: "success",
+              title: "Artifact Purged",
+              text: "The visual sequence has been successfully decommissioned.",
+              background: "#0f172a",
+              color: "#f8fafc",
+              timer: 2000,
+              showConfirmButton: false,
+              borderRadius: "2rem"
+            });
             getAllBanner();
-              } else {
-                Swal.fire("The department was not deleted.");
-              }
-         
-        } else {
-          Swal.fire("The item was not deleted.");
+          }
         }
       });
-    } catch {}
-  }
+    } catch (error) {
+       console.error("Purge sequence interrupted:", error);
+    }
+  };
+
+  const filteredBanners = banner?.filter(b => 
+    b.bannerName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <>
-      <div className="">
-        <AddBanner handleLoad={handleLoad} load={load} />
-        <div className="inline-block w-full ">
-        <label htmlFor="add-banner" className="float-right ml-10 btn bg-sky-700">
-          Add Banner
-        </label>
-          
-        </div>
+    <div className="space-y-12 animate-in fade-in duration-1000 pb-20">
+      
+      {/* Cinematic Identity Header */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 border-b border-slate-200/60 pb-12 relative">
+        <div className="absolute -top-10 -left-10 w-64 h-64 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
         
+        <div className="space-y-6 relative z-10">
+          <div className="inline-flex items-center gap-2 bg-slate-900 px-4 py-1.5 rounded-full border border-white/5 shadow-2xl">
+             <Terminal size={12} className="text-blue-500 animate-pulse" />
+             <span className="text-[9px] font-black text-white uppercase tracking-[0.4em] italic leading-none">Visual Communication Management</span>
+          </div>
+          <div>
+            <h1 className="text-5xl lg:text-7xl font-black text-slate-900 uppercase tracking-tighter italic leading-none">
+              Promotional <span className="text-blue-600">Assets</span>
+            </h1>
+            <p className="text-slate-400 font-bold text-xs uppercase tracking-[0.2em] italic mt-6 border-l-4 border-blue-600 pl-8 max-w-xl">
+              Strategic billboard deployment and announcement matrices currently rotating within the TRUE CARE public infrastructure.
+            </p>
+          </div>
+        </div>
 
-        <div className="m-12 overflow-x-auto">
-          <table className="table w-full table-zebra">
-            <thead>
-              <tr>
-                <th className="pl-8">NO</th>
-                <th>BANNER NAME</th>
-                <th>DESCRIPTION</th>
-                <th>IMAGE</th>
-                <th>ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {banner &&
-                banner.map((banner, index) => {
-                  return (
-                    <tr>
-                      <th className="pl-8">{index+1}</th>
-                      <td>{banner.bannerName}</td>
-                      <td>{banner.description}</td>
-                    
-                         <td><img className="h-20 w-28" src={`${BaseUrl}/${banner.image}`} alt="" /></td>
-            
-                       
-                     
-
-                   
-                        <td>
-                          <label
-                            htmlFor="editBanner"
-                              onClick={() => setEditBanner(banner)}
-                            className="btn btn-outline btn-primary"
-                          >
-                            Edit
-                          </label>
-                        </td>
-                        <td>
-                          <button
-                            onClick={() => deleteBanner(banner._id)}
-                            className="btn btn-outline btn-secondary"
-                          >
-                            DELETE
-                          </button>
-                        </td>
-                   
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-          <EditBanner editBanner={editBanner} handleLoad={handleLoad} />
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto relative z-10">
+           <div className="relative w-full sm:w-80 group">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors" size={18} />
+              <input 
+                type="text" 
+                placeholder="Scan Asset Registry..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-16 pr-8 py-5 bg-white border border-slate-100 rounded-[2.5rem] focus:outline-none focus:ring-8 focus:ring-blue-600/5 focus:border-blue-400 transition-all text-sm font-black text-slate-800 shadow-sm placeholder:text-slate-300 italic uppercase tracking-widest"
+              />
+           </div>
+           <div className="flex items-center gap-3">
+              <button 
+                onClick={getAllBanner}
+                className={`p-5 rounded-full bg-slate-900 text-white hover:bg-blue-600 transition-all shadow-2xl shadow-slate-200 active:scale-95 group relative overflow-hidden`}
+              >
+                 <div className="absolute inset-0 bg-blue-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                 <Activity size={20} className={`relative z-10 ${isSyncing ? "animate-spin" : "group-hover:rotate-12 transition-transform"}`} />
+              </button>
+              <label
+                htmlFor="add-banner"
+                className="bg-blue-600 hover:bg-slate-900 text-white px-10 py-5 rounded-[2.5rem] font-black text-[10px] uppercase tracking-[0.3em] shadow-2xl shadow-blue-100 transition-all active:scale-95 flex items-center gap-3 cursor-pointer italic group/deploy relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-slate-900 translate-y-full group-hover/deploy:translate-y-0 transition-transform duration-500"></div>
+                <div className="relative z-10 flex items-center gap-3">
+                   <Plus size={18} />
+                   Deploy Artifact
+                </div>
+              </label>
+           </div>
         </div>
       </div>
-    </>
+
+      {/* Main Operational Ledger */}
+      <div className="bg-white rounded-[4rem] border border-slate-100 shadow-sm overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-slate-50 rounded-full blur-3xl opacity-50 -mr-48 -mt-48"></div>
+        
+        {loading ? (
+          <div className="p-20 space-y-8">
+             {[1,2].map(i => (
+               <div key={i} className="flex gap-10 items-center animate-pulse">
+                  <div className="w-48 h-32 bg-slate-50 rounded-[2rem]"></div>
+                  <div className="flex-1 space-y-3">
+                     <div className="h-10 bg-slate-50 rounded-xl w-64"></div>
+                     <div className="h-16 bg-slate-50 rounded-xl w-full"></div>
+                  </div>
+                  <div className="w-32 h-12 bg-slate-50 rounded-2xl"></div>
+               </div>
+             ))}
+          </div>
+        ) : filteredBanners?.length > 0 ? (
+          <div className="overflow-x-auto relative z-10">
+            <table className="w-full text-left border-collapse min-w-[1000px]">
+              <thead>
+                <tr className="bg-slate-50/50 border-b border-slate-100">
+                  <th className="px-12 py-8 text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] italic">Billboard Artifact</th>
+                  <th className="px-12 py-8 text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] italic">Strategic Narrative</th>
+                  <th className="px-12 py-8 text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] italic">Visual Identity</th>
+                  <th className="px-12 py-8 text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] italic text-right">Sequence Control</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50">
+                {filteredBanners.map((b, index) => (
+                  <tr key={b._id} className="hover:bg-slate-50/80 transition-all group">
+                    <td className="px-12 py-8">
+                      <div className="flex items-center gap-6">
+                        <div className="bg-slate-900 p-4 rounded-[1.5rem] text-blue-500 shadow-xl group-hover:rotate-12 transition-transform duration-500 relative overflow-hidden">
+                           <div className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                           <Monitor size={24} className="relative z-10" />
+                        </div>
+                        <div>
+                          <p className="font-black text-slate-900 text-lg uppercase tracking-tight italic">{b.bannerName}</p>
+                          <div className="flex items-center gap-2 mt-1.5">
+                             <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                             <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest whitespace-nowrap italic">Sequence Ref: #{b._id.slice(-8).toUpperCase()}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-12 py-8 max-w-sm">
+                       <div className="relative p-6 bg-slate-50/50 rounded-[2rem] border border-slate-100 group-hover:bg-white transition-colors">
+                          <MessageSquare size={12} className="absolute top-4 left-4 text-blue-300 opacity-50" />
+                          <p className="text-xs font-bold text-slate-600 line-clamp-3 leading-relaxed italic pl-6 pr-4">
+                            {b.description}
+                          </p>
+                       </div>
+                    </td>
+                    <td className="px-12 py-8">
+                       <div className="relative group/asset cursor-pointer">
+                          <div className="absolute -inset-2 bg-blue-600/20 rounded-[2.5rem] blur opacity-0 group-hover/asset:opacity-100 transition-opacity"></div>
+                          <div className="w-48 h-28 rounded-[2rem] border-4 border-white shadow-2xl overflow-hidden bg-slate-100 group-hover/asset:scale-105 transition-transform duration-700 relative z-10">
+                             <div className="absolute inset-0 bg-blue-600/0 group-hover/asset:bg-blue-600/20 transition-colors flex items-center justify-center text-white opacity-0 group-hover/asset:opacity-100 text-[9px] font-black uppercase tracking-widest italic z-20 backdrop-blur-sm">View Full Aspect</div>
+                             <img
+                               className="w-full h-full object-cover group-hover/asset:scale-110 transition-transform duration-1000"
+                               src={`${BaseUrl}/${b.image}`}
+                               alt={b.bannerName}
+                             />
+                          </div>
+                       </div>
+                    </td>
+                    <td className="px-12 py-8">
+                      <div className="flex items-center justify-end gap-3">
+                        <label
+                          htmlFor="editBanner"
+                          onClick={() => setEditBanner(b)}
+                          className="p-5 rounded-[1.8rem] bg-white border border-slate-100 text-slate-400 hover:text-blue-600 hover:border-blue-100 hover:bg-blue-50 transition-all cursor-pointer shadow-sm active:scale-95 group/edit"
+                        >
+                          <Edit3 size={20} className="group-hover/edit:rotate-12 transition-transform" />
+                        </label>
+                        <button
+                          onClick={() => deleteBanner(b._id)}
+                          className="p-5 rounded-[1.8rem] bg-white border border-slate-100 text-slate-400 hover:text-red-600 hover:border-red-100 hover:bg-red-50 transition-all shadow-sm active:scale-95 group/del"
+                        >
+                          <Trash2 size={20} className="group-hover/del:-translate-y-1 transition-transform" />
+                        </button>
+                        <button className="p-5 bg-white text-slate-300 border border-slate-100 rounded-[1.8rem] hover:text-slate-900 hover:border-slate-300 transition-all shadow-sm">
+                           <MoreHorizontal size={20} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="p-32 flex flex-col items-center justify-center text-center relative overflow-hidden group">
+             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.03)_0%,transparent_70%)]"></div>
+             <div className="relative z-10">
+               <div className="bg-slate-50 p-12 rounded-[4rem] text-slate-200 mb-10 border border-slate-100 shadow-inner group-hover:scale-110 group-hover:rotate-12 transition-all duration-1000">
+                  <ImageIcon size={80} />
+               </div>
+               <h3 className="font-black text-slate-900 uppercase tracking-tighter text-4xl italic">Visual Void Detected</h3>
+               <p className="text-slate-400 font-bold text-xs uppercase tracking-[0.3em] mt-6 max-w-sm mx-auto italic">No billboard artifacts are currently integrated into the promotional matrix.</p>
+               <label htmlFor="add-banner" className="mt-12 flex items-center gap-3 mx-auto px-10 py-5 bg-slate-900 text-white rounded-full text-[10px] font-black uppercase tracking-[0.3em] hover:bg-blue-600 transition-all italic cursor-pointer">
+                  <Plus size={16} /> Deploy First Artifact
+               </label>
+             </div>
+          </div>
+        )}
+      </div>
+
+      {/* Deployment Statistics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+         <div className="bg-slate-900 rounded-[3rem] p-10 text-white relative overflow-hidden h-48 flex flex-col justify-between shadow-2xl shadow-blue-900/10 group">
+            <ImageIcon size={64} className="absolute right-0 bottom-0 -mb-4 -mr-4 text-white opacity-5 group-hover:scale-125 transition-transform" />
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 italic">Active Billboard Rotation</p>
+            <h4 className="text-5xl font-black italic tracking-tighter tabular-nums">{banner.length}</h4>
+         </div>
+         <div className="bg-white rounded-[3rem] p-10 border border-slate-100 flex flex-col justify-between h-48 group shadow-sm">
+            <Layout size={48} className="text-blue-500 opacity-20 group-hover:scale-110 transition-transform" />
+            <div>
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] italic leading-none mb-2">Interface Adherence</p>
+               <div className="flex items-center gap-2">
+                  <span className="text-4xl font-black text-slate-900 italic tracking-tighter">Premium</span>
+                  <div className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-[9px] font-black uppercase tracking-widest border border-green-100">Optimized</div>
+               </div>
+            </div>
+         </div>
+         <div className="bg-white rounded-[3rem] p-10 border border-slate-100 flex flex-col items-center justify-center text-center h-48 group shadow-sm">
+            <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] italic mb-4">Engagement Index</h5>
+            <div className="flex items-center gap-2">
+               {[1,2,3,4,5,6].map(i => <div key={i} className="w-1.5 h-6 bg-blue-600 rounded-full group-hover:scale-y-125 transition-transform" style={{ transitionDelay: `${i*100}ms` }}></div>)}
+            </div>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-4">High Fidelity</p>
+         </div>
+      </div>
+
+      <AddBanner handleLoad={handleLoad} load={load} />
+      <EditBanner editBanner={editBanner} handleLoad={handleLoad} />
+    </div>
   );
 }
 

@@ -123,10 +123,43 @@ const addUserMessage=({from,to,message})=>{
       from,to    });
   }
   const checkUserAnyPlan=()=>{
-    
     return userAxiosInstance("userToken").get("/checkUserPlan")
-     
   }
+
+// --- EHR Endpoints ---
+const uploadMedicalRecord = (formData) => {
+  return userAxiosInstance("userToken").post("/uploadMedicalRecord", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+const getMedicalRecords = () => {
+  return userAxiosInstance("userToken").get("/getMedicalRecords");
+};
+
+const getUserPrescriptions = () => {
+  return userAxiosInstance("userToken").get("/getPrescriptions");
+};
+
+const getQueueStatus = (bookingId) => {
+  return userAxiosInstance("userToken").get(`/getQueueStatus/${bookingId}`);
+};
+
+const submitReview = (reviewData) => {
+  return userAxiosInstance("userToken").post("/addReview", reviewData);
+};
+
+const getDoctorReviews = (doctorId) => {
+  return userAxiosInstance("userToken").get(`/getDoctorReviews/${doctorId}`);
+};
+
+const triggerSOS = (sosData) => {
+  return userAxiosInstance("userToken").post("/triggerSOS", sosData);
+};
+
+
 
 export {
   authUser,
@@ -151,6 +184,12 @@ export {
   getUserBookedSlot,
   addUserMessage,
   getMessages,
-  checkUserAnyPlan
-  
+  checkUserAnyPlan,
+  uploadMedicalRecord,
+  getMedicalRecords,
+  getUserPrescriptions,
+  getQueueStatus,
+  submitReview,
+  getDoctorReviews,
+  triggerSOS
 };

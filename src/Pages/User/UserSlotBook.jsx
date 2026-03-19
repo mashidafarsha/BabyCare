@@ -7,8 +7,10 @@ function UserSlotBook() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
         <UserNavbar/>
-        <main className="flex-grow pt-28 pb-12">
-            <UserSlots/>
+        <main className="flex-grow pt-28 pb-12 animate-fade-in">
+            <div className="animate-slide-up">
+                <UserSlots/>
+            </div>
         </main>
         <Footer/>
     </div>

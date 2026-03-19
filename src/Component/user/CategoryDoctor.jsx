@@ -28,17 +28,17 @@ function CategoryDoctor() {
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Heading Section */}
-      <div className="mb-10 text-center md:text-left">
-        <h1 className="text-3xl font-black text-slate-800 uppercase italic tracking-tight">
+      <div className="mb-10 text-center md:text-left animate-slide-up">
+        <h1 className="text-3xl font-bold text-slate-800 tracking-tight">
           Specialists in {department?.categoryName || "Department"}
         </h1>
-        <div className="h-1 w-20 bg-blue-600 mt-2 mx-auto md:mx-0 rounded-full"></div>
+        <div className="h-1 w-20 bg-blue-600 mt-3 mx-auto md:mx-0 rounded-full"></div>
       </div>
 
       {/* Grid Layout: Responsive columns */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {doctors.map((doctor, index) => (
-          <div key={index} className="bg-white rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 group overflow-hidden">
+          <div key={index} className={`bg-white rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 group overflow-hidden animate-slide-up delay-${(index % 5 + 1) * 100}`}>
             
             {/* Doctor Image Section */}
             <div className="relative pt-8 flex justify-center">
@@ -63,7 +63,7 @@ function CategoryDoctor() {
               
               {/* Doctor Stats Tags */}
               <div className="flex justify-center gap-2 mt-4">
-                <span className="bg-slate-100 text-slate-600 text-[10px] font-bold px-3 py-1 rounded-full italic">
+                <span className="bg-slate-100 text-slate-600 text-[10px] font-bold px-3 py-1 rounded-full">
                   {doctor.experience} Exp
                 </span>
                 <span className="bg-green-50 text-green-600 text-[10px] font-bold px-3 py-1 rounded-full">

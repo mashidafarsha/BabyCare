@@ -16,13 +16,16 @@ function Userhome() {
        <UserNavbar />
        
        {/* Content Blocks */}
-       <div className="flex-grow">
+       <div className="flex-grow animate-fade-in">
           <Banner />
           
-          {/* attractive aakan thazhe ulla section-u mathram cheriya padding nalkaam */}
-          <div className="max-w-screen-2xl mx-auto px-4 md:px-10 space-y-10">
-             <DepartmentBanner />
-             <PlanBanner />
+          <div className="max-w-screen-2xl mx-auto px-4 md:px-10 space-y-12 pb-20">
+             <div className="animate-slide-up delay-200">
+                <DepartmentBanner />
+             </div>
+             <div className="animate-slide-up delay-500">
+                <PlanBanner />
+             </div>
           </div>
        </div>
        

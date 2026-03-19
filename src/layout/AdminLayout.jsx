@@ -4,16 +4,15 @@ import AdminNavbar from '../Component/admin/AdminNavbar'
 import AdminSidebar from '../Component/admin/AdminSidebar'
 function AdminLayout() {
   return (
-    <div className="max-w-screen-xl mx-auto rounded-2xl">
+    <div className="min-h-screen bg-slate-50">
       <AdminNavbar />
-      <div className="drawer drawer-mobile">
-        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content border p-2 bg-slate-200">
-          <div className="mx-auto">
+      <div className="flex">
+        <AdminSidebar />
+        <main className="flex-grow p-8 overflow-x-hidden">
+          <div className="max-w-screen-2xl mx-auto">
             <Outlet />
           </div>
-        </div>
-        <AdminSidebar />
+        </main>
       </div>
     </div>
   );

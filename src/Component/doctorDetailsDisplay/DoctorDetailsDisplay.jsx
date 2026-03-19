@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, Link } from 'react-router-dom';
 import { getSelectedDoctorDetails } from "../../sevices/userApi";
 import { BaseUrl } from "../../constants/constants";
+import { GraduationCap, Award, Calendar, Heart, Star, CheckCircle, User, Briefcase, MapPin } from "lucide-react";
 
 function DoctorDetailsDisplay() {
   const [doctorData, setDoctorData] = useState(null);
@@ -24,78 +25,119 @@ function DoctorDetailsDisplay() {
     }
   };
 
-  if (!doctorData) return <div className="text-center py-20 font-bold">Loading Doctor Profile...</div>;
+  if (!doctorData) return (
+     <div className="flex flex-col items-center justify-center py-40 gap-4">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-sm font-medium text-slate-500">Loading doctor profile...</p>
+     </div>
+  );
 
   return (
-    <div className="container mx-auto px-4 lg:px-20">
-      <div className="bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100">
-        <div className="flex flex-col md:flex-row">
+    <div className="w-full max-w-6xl mx-auto px-6 py-12">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="flex flex-col lg:flex-row">
           
-          {/* Left Side: Image & Action */}
-          <div className="w-full md:w-2/5 lg:w-1/3 bg-slate-50 p-8 flex flex-col items-center border-b md:border-b-0 md:border-r border-slate-100">
-            <div className="relative">
-              <div className="absolute inset-0 bg-blue-500 rounded-3xl rotate-6 scale-105 opacity-20 group-hover:rotate-12 transition-transform"></div>
-              <img
-                src={doctorData.image ? `${BaseUrl}/${doctorData.image}` : "https://via.placeholder.com/300"}
-                className="relative z-10 rounded-3xl shadow-lg w-64 h-64 object-cover border-4 border-white"
-                alt={doctorData.name}
-              />
-            </div>
-            
-            <Link 
-              to={`/userSlots?id=${doctorData._id}`}
-              className="mt-8 w-full bg-blue-600 text-white text-center py-4 rounded-2xl font-bold shadow-lg shadow-blue-200 hover:bg-slate-900 transition-all transform active:scale-95"
-            >
-              Book Appointment Slot
-            </Link>
+          {/* Left: Profile Image & Key Info */}
+          <div className="w-full lg:w-1/3 bg-slate-50 p-10 flex flex-col items-center border-r border-slate-200">
+             <div className="relative mb-8">
+                <div className="w-48 h-48 lg:w-56 lg:h-56 rounded-2xl overflow-hidden border-4 border-white shadow-lg">
+                   <img
+                     src={doctorData.image ? `${BaseUrl}/${doctorData.image}` : "https://via.placeholder.com/600"}
+                     className="w-full h-full object-cover"
+                     alt={doctorData.name}
+                   />
+                </div>
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full border-2 border-white shadow-md">
+                   Available
+                </div>
+             </div>
+
+             <div className="text-center space-y-2 mb-10 text-slate-100">
+                <h2 className="text-2xl font-bold text-slate-100">Dr. {doctorData.name}</h2>
+                <p className="text-blue-600 font-semibold text-sm">{doctorData.department}</p>
+                <div className="flex items-center justify-center gap-2 text-slate-500 text-sm">
+                   <Star size={16} className="text-orange-400 fill-orange-400" />
+                   <span className="font-bold text-slate-700">4.9</span>
+                   <span>(120+ Reviews)</span>
+                </div>
+             </div>
+
+             <Link 
+               to={`/userSlots?id=${doctorData._id}`}
+               className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-100 active:scale-95"
+             >
+               <Calendar size={18} />
+               Book Appointment
+             </Link>
+             
+             <p className="mt-6 text-[10px] text-slate-400 uppercase font-bold tracking-wider">Verified Professional Profile</p>
           </div>
 
-          {/* Right Side: Information */}
-          <div className="w-full md:w-3/5 lg:w-2/3 p-8 md:p-12 lg:p-16">
-            <div className="mb-6">
-              <span className="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">
-                Verified Specialist
-              </span>
-              <h1 className="text-4xl font-black text-slate-800 mt-4 leading-tight">
-                Dr. {doctorData.name}
-              </h1>
+          {/* Right: Detailed Credentials */}
+          <div className="w-full lg:w-2/3 p-10 lg:p-16 space-y-12">
+            
+            <section className="space-y-6">
+               <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                 <User size={20} className="text-blue-600" />
+                 Professional Summary
+               </h3>
+               <p className="text-slate-600 leading-relaxed text-sm">
+                 {doctorData.description || "Highly experienced medical professional dedicated to providing the best healthcare services and personalized treatment plans for every patient."}
+               </p>
+            </section>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex items-start gap-4">
+                  <div className="w-10 h-10 bg-white text-blue-600 rounded-xl flex items-center justify-center shadow-sm shrink-0 border border-slate-100">
+                     <Briefcase size={20} />
+                  </div>
+                  <div>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Experience</p>
+                     <p className="text-lg font-bold text-slate-800">{doctorData.experience}</p>
+                  </div>
+               </div>
+
+               <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex items-start gap-4">
+                  <div className="w-10 h-10 bg-white text-blue-600 rounded-xl flex items-center justify-center shadow-sm shrink-0 border border-slate-100">
+                     <GraduationCap size={20} />
+                  </div>
+                  <div>
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Education</p>
+                     <p className="text-lg font-bold text-slate-800">{doctorData.qualification}</p>
+                  </div>
+               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
-              <div className="bg-slate-50 p-4 rounded-2xl">
-                <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Department</p>
-                <p className="text-lg font-bold text-slate-700 uppercase">{doctorData.department}</p>
-              </div>
-              <div className="bg-slate-50 p-4 rounded-2xl">
-                <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Experience</p>
-                <p className="text-lg font-bold text-slate-700">{doctorData.experience}</p>
-              </div>
-            </div>
+            <section className="space-y-6">
+               <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                 <CheckCircle size={20} className="text-blue-600" />
+                 Specialties & Expertise
+               </h3>
+               <div className="flex flex-wrap gap-3">
+                  {[doctorData.department, "General Medicine", "Patient Care", "Diagnosis"].map((skill, i) => (
+                    <span key={i} className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold border border-blue-100">
+                       {skill}
+                    </span>
+                  ))}
+               </div>
+            </section>
 
-            <hr className="border-slate-100 my-8" />
-
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-sm font-black text-blue-600 uppercase tracking-widest mb-2 italic underline decoration-2 underline-offset-4">
-                  Educational Background
-                </h3>
-                <p className="text-slate-600 text-lg font-medium leading-relaxed">
-                  {doctorData.qualification}
-                </p>
-              </div>
-              
-              {/* Optional: About section if you have doctorData.description */}
-              {doctorData.description && (
-                <div>
-                  <h3 className="text-sm font-black text-blue-600 uppercase tracking-widest mb-2 italic">
-                    About Doctor
-                  </h3>
-                  <p className="text-slate-500 leading-relaxed italic">
-                    {doctorData.description}
-                  </p>
-                </div>
-              )}
-            </div>
+            <section className="pt-8 border-t border-slate-100 flex flex-wrap gap-8 items-center justify-between">
+               <div className="flex items-center gap-3">
+                  <Heart size={20} className="text-red-500" />
+                  <div>
+                     <p className="text-sm font-bold text-slate-800">100% Patient Focus</p>
+                     <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Compassionate Care</p>
+                  </div>
+               </div>
+               <div className="flex items-center gap-3">
+                  <MapPin size={20} className="text-blue-600" />
+                  <div>
+                     <p className="text-sm font-bold text-slate-800">TrueCare Kochi</p>
+                     <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Hospital Hub</p>
+                  </div>
+               </div>
+            </section>
           </div>
 
         </div>

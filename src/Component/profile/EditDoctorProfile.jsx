@@ -1,210 +1,225 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { editDoctor, getCategory } from "../../sevices/doctorApi";
 import { BaseUrl } from "../../constants/constants";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
-
 import Swal from "sweetalert2";
+import { X, Upload, User, Phone, Briefcase, GraduationCap, Save, CheckCircle } from "lucide-react";
 
-function EditDoctorProfile({ doctorData,handleLoad }) {
+function EditDoctorProfile({ doctorData, handleLoad }) {
   const [allDepartment, setAllDepartment] = useState([]);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [qualification, setQualification] = useState("");
   const [department, setDepartment] = useState("");
   const [image, setImage] = useState("");
-  const [uploadedImage, setUploadedImage] = useState("");
+  const [uploadedImage, setUploadedImage] = useState(null);
   const [message, setMessage] = useState("");
-
-
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    setId(doctorData?.id);
-    setName(doctorData?.name);
-    // setEmail(doctorData?.email);
-    setPhone(doctorData?.phone);
-    setQualification(doctorData?.qualification);
-    setDepartment(doctorData?.department);
-    setImage(doctorData?.image);
-
+    if (doctorData) {
+      setId(doctorData.id || doctorData._id);
+      setName(doctorData.name);
+      setPhone(doctorData.phone);
+      setQualification(doctorData.qualification);
+      setDepartment(doctorData.department);
+      setImage(doctorData.image);
+    }
     getAllDepartment();
   }, [doctorData]);
 
   const handleFileChange = (event) => {
-    setImage(null);
     const selectedFile = event.target.files[0];
-    console.log(selectedFile);
-    const allowedTypes = ["image/jpeg", "image/png"];
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
     if (selectedFile && allowedTypes.includes(selectedFile.type)) {
       setUploadedImage(selectedFile);
       setMessage(null);
     } else {
       setUploadedImage(null);
-      setMessage("Please select a JPEG or PNG image.");
+      setMessage("Please select a JPEG, PNG or WebP image.");
     }
   };
+
   const getAllDepartment = async () => {
     try {
       let { data } = await getCategory();
-      console.log(data);
-      if (data) {
+      if (data?.departmentData) {
         setAllDepartment(data.departmentData);
       }
-    } catch {}
+    } catch (err) {
+      console.error("Failed to fetch departments", err);
+    }
   };
-console.log(department,"iiiiii");
+
   const handleEdit = async (e) => {
     e.preventDefault();
+    if (!name || !phone || !qualification || !department) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Incomplete Credentials",
+        text: "Please provide all required clinical information.",
+        borderRadius: "2rem"
+      });
+    }
+
+    setIsSubmitting(true);
     try {
       const formData = new FormData();
       formData.append("Id", id);
-      formData.append("Image", uploadedImage);
+      if (uploadedImage) formData.append("Image", uploadedImage);
       formData.append("name", name);
-      // formData.append("email", email);
       formData.append("phone", phone);
       formData.append("qualification", qualification);
       formData.append("department", department);
 
       let { data } = await editDoctor(formData);
-      console.log(data)
       if (data.success) {
-        console.log("suuuccc");
-        Swal.fire("Successfuly Updated User Profile")
-        handleLoad()
-       
-       
-      }else{
-        Swal("Not Updated Your Profile")
+        Swal.fire({
+          icon: "success",
+          title: "Profile Synchronized",
+          text: "Your professional registry has been updated.",
+          timer: 2000,
+          showConfirmButton: false,
+          borderRadius: "2rem"
+        });
+        document.getElementById("doctor_profile").checked = false;
+        handleLoad();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Sync Failed",
+          text: data.message || "Failed to update practitioner profile.",
+          borderRadius: "2rem"
+        });
       }
-    } catch {}
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-  return (
-    <div>
-      <input type="checkbox" id="doctor_profile" className="modal-toggle" />
-      <label htmlFor="doctor_profile" className="cursor-pointer modal ">
-        <label className="relative overflow-y-auto modal-box w-96 scrollbar-none scrollbar-thumb-gray-400 scrollbar-track-transparent " htmlFor="doctor_profile">
-        <div className="w-full">
-            <div className="flex-shrink-0 w-full card bg-base-100 ">
-             
-              <h1 className="font-bold text-center uppercase ">
-              EDIT {doctorData?.name} 
-              
-            </h1>
-             
-            
-              <form onSubmit={handleEdit} className="">
-             
-                <div className="card-body">
-                  <div className="avatar">
-                    <div className="w-24 rounded-xl">
-                      <img
-                        src={
-                          image
-                            ? `${BaseUrl}/${image}`
-                            : uploadedImage &&
-                              URL.createObjectURL(uploadedImage)
-                        }
-                      />
-                    </div>
-                  </div>
-                  <input
-                    type="file"
-                    className="w-full max-w-xs file-input file-input-bordered file-input-success"
-                    onChange={handleFileChange}
-                  />
 
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text">Name</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="Name"
-                      placeholder="Name"
-                      className="input input-bordered"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-                  {/* <div className="form-control">
-                    <label className="label">
-                      <span className="label-text">Email</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="email"
-                      className="input input-bordered"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div> */}
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text">Phone</span>
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="Phone"
-                      className="input input-bordered"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                    />
-                  </div>
-                  <div className="form-control">
-                  <label className="label">
-                      <span className="label-text">Department</span>
-                    </label>
+  return (
+    <>
+      <input type="checkbox" id="doctor_profile" className="modal-toggle" />
+      <div className="modal modal-bottom sm:modal-middle backdrop-blur-sm">
+        <div className="modal-box p-0 overflow-hidden rounded-[2.5rem] border border-slate-100 shadow-2xl bg-white max-w-2xl">
+          {/* Header */}
+          <div className="bg-slate-900 px-8 py-6 flex justify-between items-center text-white">
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-900/20">
+                <User size={20} />
+              </div>
+              <div>
+                <h3 className="text-xl font-black uppercase tracking-tighter italic">Refine Identity</h3>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Practitioner Registry Update</p>
+              </div>
+            </div>
+            <label htmlFor="doctor_profile" className="p-2 hover:bg-white/10 rounded-xl transition-colors cursor-pointer">
+              <X size={20} />
+            </label>
+          </div>
+
+          <form onSubmit={handleEdit} className="p-8 space-y-6">
+            <div className="flex flex-col md:flex-row gap-10">
+              {/* Visual Asset Section */}
+              <div className="md:w-1/3 flex flex-col items-center space-y-4">
+                 <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-tr from-blue-600 to-teal-400 rounded-3xl blur opacity-10 group-hover:opacity-30 transition duration-700"></div>
+                    <div className="w-40 h-40 rounded-3xl overflow-hidden border-4 border-white shadow-xl relative z-10 bg-slate-50 flex items-center justify-center">
+                       <img 
+                         src={uploadedImage ? URL.createObjectURL(uploadedImage) : (image ? `${BaseUrl}/${image}` : "https://cdn-icons-png.flaticon.com/512/3774/3774299.png")} 
+                         alt="Preview" 
+                         className="w-full h-full object-cover"
+                       />
+                       <label htmlFor="profile-upload" className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity cursor-pointer text-white">
+                          <Upload size={24} className="mb-1" />
+                          <span className="text-[8px] font-black uppercase tracking-widest">Update Photo</span>
+                       </label>
+                    </div>
+                    {uploadedImage && <div className="absolute -top-2 -right-2 bg-green-500 text-white p-1.5 rounded-full border-2 border-white z-20 animate-bounce"><CheckCircle size={14} /></div>}
+                 </div>
+                 <input id="profile-upload" type="file" className="hidden" onChange={handleFileChange} />
+                 {message && <p className="text-[9px] text-red-500 font-bold uppercase tracking-widest text-center">{message}</p>}
+              </div>
+
+              {/* Data Inputs Section */}
+              <div className="md:w-2/3 space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                   <div className="space-y-2">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Legal Name</label>
+                      <div className="relative">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all"
+                        />
+                      </div>
+                   </div>
+                   <div className="space-y-2">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Contact Phone</label>
+                      <div className="relative">
+                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
+                        <input
+                          type="text"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all"
+                        />
+                      </div>
+                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Clinical Specialization</label>
+                  <div className="relative">
+                    <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                     <select
-                      value={department
-                      }
-                        onChange={(e) => setDepartment(e.target.value)}
-                  
-                      className="w-full max-w-xs select"
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all appearance-none"
                     >
-                     
-                      {allDepartment.map((department, index) => {
-                        return (
-                          <option>
-                            {department.categoryName}
-                          </option>
-                        );
-                      })}
+                      <option value="">Select Department</option>
+                      {allDepartment.map((dep) => (
+                        <option key={dep._id} value={dep.categoryName}>{dep.categoryName}</option>
+                      ))}
                     </select>
                   </div>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text">Qualification</span>
-                    </label>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Educational Qualification</label>
+                  <div className="relative">
+                    <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                     <input
                       type="text"
-                      placeholder="password"
-                      className="input input-bordered"
                       value={qualification}
                       onChange={(e) => setQualification(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all"
                     />
                   </div>
-
-                  <div className="bg-black form-control modal-action">
-                    <button
-                      type="submit"
-                      className="btn btn-outline btn-secondary "
-                      htmlFor="doctor_profile"
-                    >
-                      SUBMIT
-                    </button>
-                  </div>
                 </div>
-              </form>
+              </div>
             </div>
-          </div>
-        </label>
-      </label>
-    </div>
+
+            <div className="flex gap-4 pt-4">
+               <label htmlFor="doctor_profile" className="flex-1 text-center py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest text-slate-400 hover:bg-slate-50 transition-colors cursor-pointer">
+                  Dismiss
+               </label>
+               <button
+                 type="submit"
+                 disabled={isSubmitting}
+                 className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-100 transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+               >
+                 {isSubmitting ? "Sychronizing..." : <><Save size={16} /> Save Credentials</>}
+               </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
   );
 }
 

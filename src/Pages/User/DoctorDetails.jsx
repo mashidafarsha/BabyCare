@@ -7,8 +7,10 @@ function DoctorDetails() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
         <UserNavbar/>
-        <main className="flex-grow pt-28 pb-12"> {/* Spacing for fixed navbar */}
-           <DoctorDetailsDisplay/>
+        <main className="flex-grow pt-28 pb-12 animate-fade-in"> {/* Spacing for fixed navbar */}
+           <div className="animate-slide-up">
+              <DoctorDetailsDisplay/>
+           </div>
         </main>
         <Footer/>
     </div>

@@ -1,3 +1,1 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind directives moved to theme.css to resolve layer conflicts */

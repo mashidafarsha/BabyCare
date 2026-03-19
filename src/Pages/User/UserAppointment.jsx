@@ -11,8 +11,8 @@ function UserAppointment() {
       <UserNavbar />
 
      
-      <main className="flex-grow flex flex-col items-center justify-start py-8">
-        <div className="w-full">
+      <main className="flex-grow flex flex-col items-center justify-start py-8 animate-fade-in">
+        <div className="w-full animate-slide-up">
           <AppointmentDetails />
         </div>
       </main>

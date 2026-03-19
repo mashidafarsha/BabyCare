@@ -8,6 +8,7 @@ import DoctorOtp from "../../Component/Auth/DoctorOtp";
 
 function DoctorSignup() {
   const [load, setLoad] = useState(false);
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
     email: "",
@@ -32,8 +33,11 @@ function DoctorSignup() {
       console.log(data, "oooo");
       if (data.otpSend) {
         const otpModal = document.getElementById("sent_otp");
-
-        otpModal.checked = true;
+        if(otpModal) otpModal.checked = true;
+      } else if (data.created || data.success) {
+        Swal("Success", "Registration successful", "success").then(() => {
+          navigate("/login");  
+        });
       } else {
         generateError(data.message);
       }

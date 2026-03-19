@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Picker from 'emoji-picker-react';
 import { BsEmojiSmile, BsSendFill } from "react-icons/bs";
+import { Video } from "lucide-react";
 
-function MessageSender({ handleSendMessage }) {
+function MessageSender({ handleSendMessage, onVideoCall }) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -42,6 +43,18 @@ function MessageSender({ handleSendMessage }) {
       >
         <BsEmojiSmile size={24} />
       </button>
+
+      {/* Video Call Button (Extra shortcut) */}
+      {onVideoCall && (
+        <button
+          type="button"
+          onClick={onVideoCall}
+          className="p-2 transition-colors rounded-full text-blue-500 hover:bg-blue-50"
+          title="Start Video Call"
+        >
+          <Video size={22} />
+        </button>
+      )}
 
       {/* Message Form */}
       <form onSubmit={sendChat} className="flex flex-grow items-center gap-2">

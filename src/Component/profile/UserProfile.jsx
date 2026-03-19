@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { BaseUrl } from "../../constants/constants";
 import { getUserProfile } from "../../sevices/userApi";
 import EditUserProfile from "./EditUserProfile";
+import { User, Mail, Shield, Activity, Settings, Phone, Calendar, MapPin } from "lucide-react";
+import MedicalHistory from "./MedicalHistory";
 
 function UserProfile() {
   const [load, setLoad] = useState(false);
@@ -23,59 +25,97 @@ function UserProfile() {
   };
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center px-4 py-12">
-      <div className="relative w-full max-w-md">
-        {/* Background Decor */}
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-teal-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-        <div className="absolute -bottom-8 -right-4 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+    <div className="min-h-screen bg-slate-50 py-12 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Left Column: Profile Card */}
+          <div className="lg:col-span-4">
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="bg-blue-600 h-24"></div>
+              <div className="px-8 pb-8 -mt-12">
+                <div className="relative inline-block mb-6">
+                  <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white shadow-md bg-white">
+                    <img 
+                      className="w-full h-full object-cover" 
+                      src={user.image ? `${BaseUrl}/${user.image}` : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"} 
+                      alt="User Profile"
+                    />
+                  </div>
+                  <div className="absolute -bottom-2 -right-2 bg-green-500 w-5 h-5 rounded-full border-2 border-white"></div>
+                </div>
 
-        <div className="relative bg-white/80 backdrop-blur-lg border border-white shadow-2xl rounded-[3rem] overflow-hidden">
-          <div className="p-8 md:p-12 text-center">
-            {/* Avatar Section */}
-            <div className="relative inline-block">
-              <div className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-3xl overflow-hidden ring-4 ring-teal-50 shadow-inner">
-                <img 
-                  className="w-full h-full object-cover" 
-                  src={user.image ? `${BaseUrl}/${user.image}` : "https://via.placeholder.com/150"} 
-                  alt="Profile"
-                />
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-slate-900">{user.name || "Guest User"}</h2>
+                  <p className="text-sm font-medium text-slate-500">Patient ID: TRU-{user._id?.slice(-6).toUpperCase()}</p>
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-center gap-3 text-slate-600">
+                    <Mail size={18} className="text-blue-600" />
+                    <span className="text-sm truncate">{user.email || "No email provided"}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-slate-600">
+                    <Shield size={18} className="text-blue-600" />
+                    <span className="text-sm font-bold text-blue-600">Premium Member</span>
+                  </div>
+                </div>
+
+                <label 
+                  htmlFor="user_profile" 
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl cursor-pointer transition-all active:scale-95"
+                >
+                  <Settings size={18} /> Edit Profile
+                </label>
               </div>
-              <div className="absolute -bottom-2 -right-2 bg-teal-500 w-8 h-8 rounded-full border-4 border-white flex items-center justify-center">
-                <div className="w-2 h-2 bg-white rounded-full animate-ping"></div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="mt-8 grid grid-cols-2 gap-4">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Visits</p>
+                <p className="text-2xl font-bold text-blue-600">12</p>
+              </div>
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Healthy</p>
+                <p className="text-2xl font-bold text-green-500">Stable</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Health Overview & History */}
+          <div className="lg:col-span-8 space-y-8">
+            <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+                  <Activity size={20} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">Health Overview</h3>
+                  <p className="text-sm text-slate-500 font-medium">Your latest clinical data and activity</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { label: "Blood Pressure", val: "120/80", unit: "mmHg", color: "text-blue-600" },
+                  { label: "Heart Rate", val: "72", unit: "bpm", color: "text-red-500" },
+                  { label: "Blood Sugar", val: "90", unit: "mg/dL", color: "text-green-500" }
+                ].map((stat, i) => (
+                  <div key={i} className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                    <p className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-tight">{stat.label}</p>
+                    <div className="flex items-baseline gap-1">
+                      <span className={`text-2xl font-bold ${stat.color}`}>{stat.val}</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">{stat.unit}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Info Section */}
-            <div className="mt-8 space-y-2">
-              <h2 className="text-3xl font-black text-slate-800 tracking-tight capitalize">
-                {user.name || "User Name"}
-              </h2>
-              <p className="text-slate-500 font-medium text-sm tracking-wide">
-                {user.email || "email@example.com"}
-              </p>
-            </div>
-
-            {/* Quick Stats (Optional but looks good) */}
-            <div className="flex justify-around mt-8 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-               <div className="text-center">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Account</p>
-                  <p className="text-sm font-bold text-teal-600">Active</p>
-               </div>
-               <div className="w-[1px] bg-slate-200"></div>
-               <div className="text-center">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Role</p>
-                  <p className="text-sm font-bold text-blue-600">Patient</p>
-               </div>
-            </div>
-
-            {/* Action Button */}
-            <div className="mt-10">
-              <label 
-                htmlFor="user_profile" 
-                className="inline-block w-full py-4 bg-slate-900 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl cursor-pointer hover:bg-teal-600 hover:shadow-lg transition-all active:scale-95"
-              >
-                Edit Profile
-              </label>
+            {/* Medical History Section */}
+            <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+               <MedicalHistory />
             </div>
           </div>
         </div>
