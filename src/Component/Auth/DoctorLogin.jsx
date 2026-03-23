@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setDoctorDetails } from "../../redux/features/doctorSlice";
-import { Mail, Lock, ShieldCheck, ArrowRight, Zap, Activity } from "lucide-react";
+import { Mail, Lock, ShieldCheck, ArrowRight, Zap, Activity, User } from "lucide-react";
 
 function DoctorLogin() {
   const [values, setValues] = useState({ email: "", password: "" });
