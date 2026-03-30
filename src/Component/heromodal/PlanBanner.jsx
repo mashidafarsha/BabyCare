@@ -62,7 +62,7 @@ function PlanBanner() {
                   {plan.description}
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-slate-900 tracking-tight">₹{plan.price || "999"}</span>
+                  <span className="text-4xl font-bold text-slate-900 tracking-tight">₹{plan.amount || "999"}</span>
                   <span className="text-slate-500 text-sm font-medium">/ year</span>
                 </div>
               </div>

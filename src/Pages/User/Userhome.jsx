@@ -6,32 +6,32 @@ import PlanBanner from '../../Component/heromodal/PlanBanner'
 import DepartmentBanner from '../../Component/user/DepartmentBanner'
 import Footer from '../../Component/userFooter/Footer'
 function Userhome() {
-  // useEffect(() => {
-  //   if(!localStorage.getItem("userToken")){
-  //     navigate('/login')
-  //   }
-  // }, [])
-  return (
-    <div className="w-full flex flex-col min-h-screen">
-       <UserNavbar />
-       
-       {/* Content Blocks */}
-       <div className="flex-grow animate-fade-in">
-          <Banner />
-          
-          <div className="max-w-screen-2xl mx-auto px-4 md:px-10 space-y-12 pb-20">
-             <div className="animate-slide-up delay-200">
-                <DepartmentBanner />
-             </div>
-             <div className="animate-slide-up delay-500">
-                <PlanBanner />
-             </div>
-          </div>
-       </div>
-       
-       <Footer />
-    </div>
-  )
+   // useEffect(() => {
+   //   if(!localStorage.getItem("userToken")){
+   //     navigate('/login')
+   //   }
+   // }, [])
+   return (
+      <div className="w-full flex flex-col min-h-screen">
+         <UserNavbar />
+
+         {/* Content Blocks */}
+         <div className="flex-grow animate-fade-in">
+            <Banner />
+
+            <div className="max-w-screen-2xl mx-auto px-4 md:px-10 space-y-12 pb-20">
+               <div className="animate-slide-up delay-200">
+                  <DepartmentBanner />
+               </div>
+               <div className="animate-slide-up delay-500">
+                  <PlanBanner />
+               </div>
+            </div>
+         </div>
+
+         <Footer />
+      </div>
+   )
 }
 
 export default Userhome
