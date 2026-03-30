@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { getPlans } from "../../sevices/userApi";
+import { getPlans, getUserProfile } from "../../sevices/userApi";
 import { BaseUrl } from "../../constants/constants";
 import { Link } from "react-router-dom";
 import { Check, ArrowRight, Shield } from "lucide-react";
 
 function PlanBanner() {
   const [plansData, setPlansData] = useState([]);
+  const [userPlans, setUserPlans] = useState([]);
 
   useEffect(() => {
     getAllPlans();
+    fetchUserProfile();
   }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const { data } = await getUserProfile();
+      if (data.success && data.user?.plans) {
+        setUserPlans(data.user.plans);
+      }
+    } catch (error) {
+      console.error("Error fetching user profile", error);
+    }
+  };
 
   const getAllPlans = async () => {
     try {
@@ -83,12 +96,18 @@ function PlanBanner() {
                 ))}
               </div>
 
-              <Link 
-                to={"/plans"} 
-                className={`w-full py-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 active:scale-95 ${index === 1 ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
-              >
-                Choose Plan <ArrowRight size={18} />
-              </Link>
+              {userPlans.includes(plan._id) ? (
+                <div className="w-full py-4 rounded-xl font-bold text-sm bg-green-50 text-green-600 border border-green-100 flex items-center justify-center gap-2 cursor-not-allowed">
+                  Active Plan <Check size={18} />
+                </div>
+              ) : (
+                <Link 
+                  to={"/plans"} 
+                  className={`w-full py-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 active:scale-95 ${index === 1 ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
+                >
+                  Choose Plan <ArrowRight size={18} />
+                </Link>
+              )}
             </div>
           ))}
         </div>

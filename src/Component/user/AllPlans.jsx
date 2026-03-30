@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getPlans, RazorPayPayment, verifyPayment } from "../../sevices/userApi";
+import { getPlans, RazorPayPayment, verifyPayment, getUserProfile } from "../../sevices/userApi";
 import { BaseUrl } from "../../constants/constants";
 import { Link, useNavigate } from "react-router-dom";
 import { Check, ArrowRight, Shield } from "lucide-react";
@@ -7,11 +7,24 @@ import Swal from "sweetalert2";
 
 function AllPlans() {
   const [plans, setPlans] = useState([]);
+  const [userPlans, setUserPlans] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     getAllPlans();
+    fetchUserProfile();
   }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const { data } = await getUserProfile();
+      if (data.success && data.user?.plans) {
+        setUserPlans(data.user.plans);
+      }
+    } catch (error) {
+      console.error("Error fetching user profile", error);
+    }
+  };
 
   const getAllPlans = async () => {
     try {
@@ -160,12 +173,21 @@ function AllPlans() {
                   ))}
                 </div>
 
-                <button 
-                  onClick={() => checkoutHandler(plan)} 
-                  className={`w-full py-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 active:scale-95 ${index === 1 ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
-                >
-                  Enroll Now <ArrowRight size={18} />
-                </button>
+                {userPlans.includes(plan._id) ? (
+                  <button 
+                    disabled
+                    className="w-full py-4 rounded-xl font-bold text-sm bg-green-50 text-green-600 border border-green-100 flex items-center justify-center gap-2 cursor-not-allowed"
+                  >
+                    Active Plan <Check size={18} />
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => checkoutHandler(plan)} 
+                    className={`w-full py-4 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 active:scale-95 ${index === 1 ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
+                  >
+                    Enroll Now <ArrowRight size={18} />
+                  </button>
+                )}
               </div>
             </div>
           ))}
