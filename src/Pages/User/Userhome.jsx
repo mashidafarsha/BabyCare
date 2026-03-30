@@ -4,6 +4,7 @@ import UserNavbar from '../../Component/user/UserNavbar'
 // import SubBanner from '../../Component/user/SubBanner'
 import PlanBanner from '../../Component/heromodal/PlanBanner'
 import DepartmentBanner from '../../Component/user/DepartmentBanner'
+import TrustStats from '../../Component/user/TrustStats';
 import Footer from '../../Component/userFooter/Footer'
 function Userhome() {
    // useEffect(() => {
@@ -18,11 +19,16 @@ function Userhome() {
          {/* Content Blocks */}
          <div className="flex-grow animate-fade-in">
             <Banner />
+            
+            <div className="-mt-20 relative z-20">
+               <TrustStats />
+            </div>
 
-            <div className="max-w-screen-2xl mx-auto px-4 md:px-10 space-y-12 pb-20">
+            <div className="space-y-12 pb-20">
                <div className="animate-slide-up delay-200">
                   <DepartmentBanner />
                </div>
+               
                <div className="animate-slide-up delay-500">
                   <PlanBanner />
                </div>

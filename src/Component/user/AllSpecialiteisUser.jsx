@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { BaseUrl } from "../../constants/constants";
 import { ArrowRight, Stethoscope, Heart, Brain, Eye, Baby, Syringe, Microscope, ShieldCheck, Dna, Pill } from "lucide-react";
 
-function AllSpecialiteisUser() {
+function AllSpecialiteisUser({ searchTerm = "" }) {
   const [department, setDepartment] = useState([]);
 
   useEffect(() => {
@@ -21,6 +21,10 @@ function AllSpecialiteisUser() {
       console.error("Error fetching departments", error);
     }
   };
+
+  const filteredDepartments = department.filter(item => 
+    item.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getDepartmentIcon = (name) => {
     const n = name.toLowerCase();
@@ -51,33 +55,39 @@ function AllSpecialiteisUser() {
 
         {/* Clean Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {department.map((item, index) => (
-            <Link
-              key={index}
-              to={"/departmentDoctor"}
-              state={{ categoryId: item._id }}
-              className={`group bg-white p-10 rounded-3xl border border-slate-100 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 flex flex-col items-center text-center animate-slide-up delay-${(index % 5 + 1) * 100}`}
-            >
-              <div className="w-20 h-20 rounded-2xl bg-slate-50 text-blue-600 flex items-center justify-center mb-8 border border-slate-100 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                {getDepartmentIcon(item.categoryName)}
-              </div>
+          {filteredDepartments.length > 0 ? (
+            filteredDepartments.map((item, index) => (
+              <Link
+                key={index}
+                to={"/departmentDoctor"}
+                state={{ categoryId: item._id }}
+                className={`group bg-white p-10 rounded-3xl border border-slate-100 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 flex flex-col items-center text-center animate-slide-up delay-${(index % 5 + 1) * 100}`}
+              >
+                <div className="w-20 h-20 rounded-2xl bg-slate-50 text-blue-600 flex items-center justify-center mb-8 border border-slate-100 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                  {getDepartmentIcon(item.categoryName)}
+                </div>
 
-              <h3 className="text-xl font-bold text-slate-800 mb-4 group-hover:text-blue-600 transition-colors">
-                {item.categoryName}
-              </h3>
-              <p className="text-slate-500 text-sm leading-relaxed mb-8">
-                Specialized care with modern diagnostic protocols and expert attention.
-              </p>
+                <h3 className="text-xl font-bold text-slate-800 mb-4 group-hover:text-blue-600 transition-colors">
+                  {item.categoryName}
+                </h3>
+                <p className="text-slate-500 text-sm leading-relaxed mb-8">
+                  Specialized care with modern diagnostic protocols and expert attention.
+                </p>
 
-              <div className="mt-auto flex items-center gap-2 text-sm font-bold text-blue-600 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
-                Explore <ArrowRight size={18} />
-              </div>
-            </Link>
-          ))}
+                <div className="mt-auto flex items-center gap-2 text-sm font-bold text-blue-600 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                  Explore <ArrowRight size={18} />
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-20">
+              <p className="text-slate-400 text-lg italic">No specialities match your search.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export default AllSpecialiteisUser;
+export default AllSpecialiteisUser;

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getBanner } from "../../sevices/userApi";
 import { BaseUrl } from "../../constants/constants";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ChevronLeft, ChevronRight, ArrowRight, Shield } from "lucide-react";
 
 function Banner() {
   const [bannerImage, setBannerImage] = useState([]);
@@ -60,26 +61,32 @@ function Banner() {
               alt="Healthcare Banner"
             />
             
-            {/* Soft Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/40 to-transparent"></div>
+            {/* High-End Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-transparent"></div>
 
             {/* Content Area */}
             <div className="absolute inset-0 flex items-center">
-              <div className="max-w-6xl mx-auto px-6 w-full">
-                <div className={`max-w-xl transition-all duration-1000 delay-300 ${currentSlide === index ? "translate-x-0 opacity-100" : "-translate-x-12 opacity-0"}`}>
-                  <h2 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6 animate-slide-up">
+              <div className="section-container w-full">
+                <div className={`max-w-2xl transition-all duration-1000 delay-300 ${currentSlide === index ? "translate-x-0 opacity-100" : "-translate-x-12 opacity-0"}`}>
+                  <div className="mb-6 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-bold uppercase tracking-widest animate-fade-in">
+                    <Shield size={14} /> World-Class Healthcare
+                  </div>
+                  
+                  <h2 className="premium-heading mb-8 animate-slide-up">
                     {banner.bannerName || "Exceptional Care for Your Family"}
                   </h2>
-                  <p className="text-lg text-slate-600 mb-10 leading-relaxed font-medium animate-slide-up delay-200">
-                    Experience world-class healthcare with specialized professionals and modern medical infrastructure designed for your well-being.
+                  
+                  <p className="text-xl text-slate-600 mb-12 leading-relaxed font-medium animate-slide-up delay-200">
+                    Experience the future of healthcare with TRUE CARE. Our specialized professionals and state-of-the-art facilities are dedicated to your well-being.
                   </p>
-                  <div className="flex flex-wrap gap-4 animate-slide-up delay-400">
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-sm transition-all shadow-lg hover:shadow-blue-200 active:scale-95 flex items-center gap-2">
-                      Book Appointment <ArrowRight size={18} />
-                    </button>
-                    <button className="bg-white hover:bg-slate-50 text-slate-700 px-8 py-4 rounded-xl font-bold text-sm transition-all border border-slate-200 shadow-sm active:scale-95">
-                      Explore Services
-                    </button>
+                  
+                  <div className="flex flex-wrap gap-5 animate-slide-up delay-400">
+                    <Link to="/department" className="btn-primary">
+                      Book Appointment <ArrowRight size={20} />
+                    </Link>
+                    <Link to="/department" className="btn-secondary">
+                      Explore Our Services
+                    </Link>
                   </div>
                 </div>
               </div>

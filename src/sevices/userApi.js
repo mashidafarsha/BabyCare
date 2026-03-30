@@ -106,6 +106,11 @@ const editUser = (formData) => {
     },
   });
 };
+
+const updateHealthStats = (healthData) => {
+  return userAxiosInstance("userToken").post("/updateHealthStats", healthData);
+};
+
 const getUserBookedSlot=(doctorId)=>{
  
   return userAxiosInstance("userToken").get(`/getUserBookedSlot/${doctorId}`);
@@ -181,6 +186,7 @@ export {
   cancelUserSlot,
   getUserProfile,
   editUser,
+  updateHealthStats,
   getUserBookedSlot,
   addUserMessage,
   getMessages,
