@@ -107,7 +107,7 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
               color: "#f8fafc",
               confirmButtonColor: "#2563eb",
               customClass: { popup: 'rounded-[2rem]' }
-            }).then(() => navigate("/userProfile"));
+            }).then(() => navigate("/myAppointment"));
           }
         } catch (error) {
           Swal.fire({ 
@@ -152,9 +152,9 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
              <div className="relative z-10 flex flex-col items-center">
                 <div className="w-40 h-40 rounded-[2.8rem] overflow-hidden border-4 border-white/10 shadow-2xl relative mb-10 group-hover:scale-105 transition-all duration-700">
                   <img
-                    src={doctorData.image ? `${BaseUrl}/${doctorData.image}` : ""}
+                    src={doctorData?.image || doctorData?.imageUrl || "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"}
                     className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700"
-                    alt="Specialist"
+                    alt={`Dr. ${doctorData?.name || "Specialist"}`}
                   />
                   <div className="absolute inset-0 bg-blue-600/10"></div>
                 </div>
@@ -227,7 +227,8 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
                     <div className="flex items-center gap-6 bg-white p-8 rounded-[2.5rem] border border-blue-100 w-full shadow-inner hover:shadow-2xl transition-all group/active">
                       <div className="w-20 h-20 rounded-[1.8rem] overflow-hidden border-2 border-blue-200 p-1.5 bg-blue-50 shrink-0 group-hover/active:rotate-12 transition-transform">
                         <img 
-                          src={planData[0]?.image ? `${BaseUrl}/${planData[0].image}` : ""} 
+                          src={planData[0]?.image || "https://cdn-icons-png.flaticon.com/512/2966/2966427.png"} 
+                          alt="Applied Institutional Plan"
                           className="w-full h-full object-cover rounded-[1.2rem] grayscale group-hover/active:grayscale-0 transition-all" 
                         />
                       </div>
@@ -240,7 +241,7 @@ function SlotBookingAddress({ doctorData, userSelectTime }) {
                     planData.map((plan, idx) => (
                       <div key={idx} onClick={() => navigate('/plans')} className="flex-shrink-0 cursor-pointer group/node text-center w-28 space-y-4">
                         <div className="w-24 h-24 mx-auto rounded-[2.2rem] overflow-hidden border-2 border-slate-200 bg-white group-hover/node:border-blue-600 transition-all p-1.5 transform group-hover/node:scale-105 shadow-sm">
-                          <img src={plan.image ? `${BaseUrl}/${plan.image}` : ""} className="w-full h-full object-cover rounded-[1.8rem] grayscale group-hover/node:grayscale-0 transition-all duration-700" />
+                          <img src={plan.image || "https://cdn-icons-png.flaticon.com/512/2966/2966427.png"} alt={`${plan.planname} Diagnostic Plan`} className="w-full h-full object-cover rounded-[1.8rem] grayscale group-hover/node:grayscale-0 transition-all duration-700" />
                         </div>
                         <p className="text-[9px] font-black text-slate-400 group-hover/node:text-blue-600 transition-colors truncate uppercase tracking-widest">{plan.planname}</p>
                       </div>

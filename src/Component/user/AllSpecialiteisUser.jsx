@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCategoryDetails } from "../../redux/features/categorySlice";
 import { getDepartmentData } from "../../sevices/userApi";
 import { Link } from "react-router-dom";
 import { BaseUrl } from "../../constants/constants";
@@ -6,6 +8,7 @@ import { ArrowRight, Stethoscope, Heart, Brain, Eye, Baby, Syringe, Microscope, 
 
 function AllSpecialiteisUser({ searchTerm = "" }) {
   const [department, setDepartment] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getAllDepartment();
@@ -59,12 +62,17 @@ function AllSpecialiteisUser({ searchTerm = "" }) {
             filteredDepartments.map((item, index) => (
               <Link
                 key={index}
-                to={"/departmentDoctor"}
+                to={`/departmentDoctor?name=${item.categoryName}`}
                 state={{ categoryId: item._id }}
+                onClick={() => dispatch(setCategoryDetails({ department: item }))}
                 className={`group bg-white p-10 rounded-3xl border border-slate-100 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 flex flex-col items-center text-center animate-slide-up delay-${(index % 5 + 1) * 100}`}
               >
-                <div className="w-20 h-20 rounded-2xl bg-slate-50 text-blue-600 flex items-center justify-center mb-8 border border-slate-100 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                  {getDepartmentIcon(item.categoryName)}
+                <div className="w-20 h-20 rounded-2xl bg-slate-50 text-blue-600 flex items-center justify-center mb-8 border border-slate-100 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 overflow-hidden">
+                  <img 
+                    src={item.image || item.imageUrl || "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"}
+                    alt={item.categoryName}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                  />
                 </div>
 
                 <h3 className="text-xl font-bold text-slate-800 mb-4 group-hover:text-blue-600 transition-colors">

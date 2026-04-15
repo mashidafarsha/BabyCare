@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCategoryDetails } from "../../redux/features/categorySlice";
 import { getDepartmentData } from "../../sevices/userApi";
 import { Link } from "react-router-dom";
 import { BaseUrl } from "../../constants/constants";
@@ -6,6 +8,7 @@ import { ArrowRight, Stethoscope, Heart, Brain, Eye, Baby, Syringe, Microscope, 
 
 function DepartmentBanner() {
   const [department, setDepartment] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getAllDepartment();
@@ -66,16 +69,21 @@ function DepartmentBanner() {
           {department.slice(0, 8).map((item, index) => (
             <Link 
               key={index}
-              to={"/departmentDoctor"} 
+              to={`/departmentDoctor?name=${item.categoryName}`} 
               state={{ categoryId: item._id }}
+              onClick={() => dispatch(setCategoryDetails({ department: item }))}
               className={`group relative p-10 rounded-[2rem] border border-slate-100 bg-white hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 animate-slide-up overflow-hidden delay-${(index + 1) * 100}`}
             >
               {/* Subtle Bg Accent */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50/50 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-blue-100/50 transition-colors"></div>
 
               <div className="relative z-10">
-                <div className="w-16 h-16 rounded-2xl bg-slate-50 text-blue-600 flex items-center justify-center mb-8 shadow-sm border border-slate-100 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 transition-all duration-500">
-                  {getDepartmentIcon(item.categoryName)}
+                <div className="w-16 h-16 rounded-2xl bg-slate-50 text-blue-600 flex items-center justify-center mb-8 shadow-sm border border-slate-100 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 transition-all duration-500 overflow-hidden">
+                  <img 
+                    src={item.image || item.imageUrl || "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"}
+                    alt={item.categoryName}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
                 </div>
 
                 <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">

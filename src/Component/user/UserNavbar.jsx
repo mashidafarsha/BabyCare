@@ -73,7 +73,7 @@ function UserNavbar() {
               <label tabIndex={0} className="flex items-center gap-3 p-1.5 pr-4 rounded-full hover:bg-slate-50 transition-all cursor-pointer border border-transparent hover:border-slate-100">
                 <div className="w-10 h-10 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
                   {image ? (
-                    <img className="w-full h-full object-cover" src={`${BaseUrl}/${image}`} alt="profile" />
+                    <img className="w-full h-full object-cover" src={image.startsWith('http') ? image : `${BaseUrl}/${image}`} alt="profile" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-blue-600 text-white font-bold">
                       {user?.name?.charAt(0) || "U"}

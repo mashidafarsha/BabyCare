@@ -4,6 +4,7 @@ import { getMedicalRecords, getUserPrescriptions, uploadMedicalRecord } from "..
 import { toast } from "react-toastify";
 import moment from "moment";
 import { FileText, ClipboardList, Upload, Download, Calendar, Activity, Database, CheckCircle, FlaskConical, Stethoscope, ChevronRight, File } from "lucide-react";
+import PrescriptionModal from "./PrescriptionModal";
 
 function MedicalHistory() {
   const [activeTab, setActiveTab] = useState("prescriptions");
@@ -13,6 +14,8 @@ function MedicalHistory() {
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [selectedPrescription, setSelectedPrescription] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -24,9 +27,10 @@ function MedicalHistory() {
       setRecords(recData);
 
       const { data: prepData } = await getUserPrescriptions();
+      console.log("Raw Prescription DB Fetch:", prepData);
       setPrescriptions(prepData);
     } catch (error) {
-      console.error(error);
+      console.error("Fetch Data Error:", error);
     }
   };
 
@@ -79,65 +83,55 @@ function MedicalHistory() {
             {prescriptions.length === 0 ? (
               <div className="py-20 text-center">
                  <ClipboardList size={40} className="mx-auto text-slate-200 mb-4" />
-                 <p className="text-sm font-medium text-slate-400">No prescriptions found.</p>
+                 <p className="text-sm font-medium text-slate-400">No medical records found yet.</p>
               </div>
             ) : (
-               prescriptions.map((p) => (
-                  <div key={p._id} className="bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:shadow-blue-500/5 transition-all">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                      <div className="flex items-center gap-3">
-                         <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
-                            <Stethoscope size={20} />
-                         </div>
-                         <div>
-                            <h3 className="font-bold text-slate-800">Dr. {p.doctorId?.name}</h3>
-                            <p className="text-xs text-slate-500 font-medium">{p.doctorId?.department}</p>
-                         </div>
-                      </div>
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-100">
-                        <Calendar size={14} className="text-slate-400" />
-                        <span className="text-xs font-bold text-slate-600">{moment(p.date).format("DD MMM YYYY")}</span>
-                      </div>
-                    </div>
-
-                    {p.notes && (
-                      <div className="mb-6 p-4 bg-blue-50/50 rounded-xl border-l-4 border-blue-600">
-                        <p className="text-sm text-slate-600 italic">"{p.notes}"</p>
-                      </div>
-                    )}
-                    
-                    <div className="overflow-x-auto rounded-xl border border-slate-100">
-                      <table className="min-w-full text-left">
-                        <thead className="bg-slate-50 text-slate-500 text-[10px] font-bold uppercase tracking-wider">
-                          <tr>
-                            <th className="px-6 py-4">Medicine</th>
-                            <th className="px-6 py-4 text-center">Dosage</th>
-                            <th className="px-6 py-4 text-center">Frequency</th>
-                            <th className="px-6 py-4 text-right">Duration</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-50">
-                          {p.medicines.map((med, idx) => (
-                            <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                              <td className="px-6 py-4">
-                                 <span className="text-sm font-bold text-slate-800">{med.name}</span>
-                              </td>
-                              <td className="px-6 py-4 text-center">
-                                 <span className="text-xs font-medium text-slate-600">{med.dosage}</span>
-                              </td>
-                              <td className="px-6 py-4 text-center">
-                                 <span className="text-xs font-medium text-slate-600">{med.frequency}</span>
-                              </td>
-                              <td className="px-6 py-4 text-right">
-                                 <span className="text-xs font-bold text-blue-600">{med.duration}</span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-               ))
+                <div className="overflow-x-auto rounded-xl border border-slate-100">
+                  <table className="min-w-full text-left">
+                    <thead className="bg-slate-50 text-slate-500 text-[10px] font-bold uppercase tracking-wider">
+                      <tr>
+                        <th className="px-6 py-4">Date</th>
+                        <th className="px-6 py-4">Doctor Name</th>
+                        <th className="px-6 py-4">Specialization</th>
+                        <th className="px-6 py-4 text-right">Prescription</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                      {prescriptions.map((p) => (
+                        <tr key={p._id} className="hover:bg-slate-50/50 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              <Calendar size={14} className="text-slate-400" />
+                              <span className="text-xs font-bold text-slate-600">{moment(p.date).format("MMM Do YY, h:mm a")}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                             <div className="flex items-center gap-3">
+                               <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">
+                                  <Stethoscope size={16} />
+                               </div>
+                               <span className="text-sm font-bold text-slate-800">Dr. {p.doctorId?.name}</span>
+                             </div>
+                          </td>
+                          <td className="px-6 py-4">
+                             <span className="text-xs font-medium text-slate-600">{p.doctorId?.department}</span>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                             <button 
+                                onClick={() => {
+                                  setSelectedPrescription(p);
+                                  setIsModalOpen(true);
+                                }}
+                                className="px-4 py-2 bg-white text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-2 ml-auto"
+                             >
+                                <FileText size={14} /> View
+                             </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
             )}
           </div>
         )}
@@ -212,6 +206,12 @@ function MedicalHistory() {
           </div>
         )}
       </div>
+
+      <PrescriptionModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        selectedPrescription={selectedPrescription} 
+      />
     </div>
   );
 }

@@ -90,7 +90,7 @@ function DoctorNavbar() {
             <div className="dropdown dropdown-end group/drop">
               <label tabIndex={0} className="flex items-center gap-3 p-1.5 pr-4 rounded-[1.5rem] hover:bg-slate-50 transition-all cursor-pointer border border-transparent hover:border-slate-100">
                 <div className="w-11 h-11 rounded-2xl border-2 border-white shadow-md overflow-hidden bg-slate-100">
-                  <img src={doctorImage ? `${BaseUrl}/${doctorImage}` : "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"} alt="Practitioner" className="w-full h-full object-cover" />
+                  <img src={doctorImage || "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"} alt="Practitioner" className="w-full h-full object-cover" />
                 </div>
                 <div className="hidden lg:block">
                   <p className="text-[11px] font-black text-slate-800 uppercase tracking-tight italic">Dr. {doctorName?.split(" ")[0] || "Practitioner"}</p>

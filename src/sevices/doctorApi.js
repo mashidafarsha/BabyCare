@@ -16,22 +16,14 @@ const sendOtp = (otp) => {
 };
 
 const doctorInfo = (formData) => {
-  return doctorAxiosInstance().post("/doctorInfo", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return doctorAxiosInstance().post("/doctorInfo", formData);
 };
 const getApprovelreason = () => {
   return doctorAxiosInstance("doctorWaitingToken").get("/getReason");
 };
 const editDoctor = (formData) => {
   console.log(formData, "oooooo");
-  return doctorAxiosInstance("doctorToken").post("/editDoctor", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return doctorAxiosInstance("doctorToken").post("/editDoctor", formData);
 };
 const getCategory = () => {
   return doctorAxiosInstance().get("/getDepartment");
@@ -92,6 +84,12 @@ const generatePrescription = (userId, medicines, notes) => {
 const updateCompleteBooking = (bookingId) => {
   return doctorAxiosInstance("doctorToken").put(`/completeBooking/${bookingId}`);
 }
+
+const addPrescription = (bookingId, prescription) => {
+  return doctorAxiosInstance("doctorToken").put("/add-prescription", {
+    bookingId, prescription
+  });
+}
 export {
   authDoctor,
   doctorLogin,
@@ -112,5 +110,6 @@ export {
   addDoctorMessage,
   getMessages,
   generatePrescription,
-  updateCompleteBooking
+  updateCompleteBooking,
+  addPrescription
 };

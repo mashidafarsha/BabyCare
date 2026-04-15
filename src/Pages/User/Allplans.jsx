@@ -9,7 +9,6 @@ function Allplans() {
     <div className="min-h-screen bg-slate-50 flex flex-col">
         <UserNavbar/>
         <main className="flex-grow pt-28"> {/* Fixed navbar space padding */}
-            <Search/>
             <AllPlans/>  
         </main>
         <Footer/>

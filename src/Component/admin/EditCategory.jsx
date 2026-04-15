@@ -166,7 +166,7 @@ function EditCategory({ category, handleLoad }) {
                             src={
                               image
                                 ? URL.createObjectURL(image)
-                                : `${BaseUrl}/${uploadedImage}`
+                                : (uploadedImage.startsWith('http') ? uploadedImage : `${BaseUrl}/${uploadedImage}`)
                             }
                             alt="preview"
                           />

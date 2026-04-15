@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { getDoctorActiveBooking, updateCompleteBooking } from "../../sevices/doctorApi";
+import { getDoctorActiveBooking, updateCompleteBooking, addPrescription } from "../../sevices/doctorApi";
 import { Calendar, Clock, UserCheck, ArrowRight, Search, CheckCircle2, ShieldCheck, Activity, Users, MoreHorizontal, Zap, MessageSquare, Monitor, Play, FileText, Timer } from "lucide-react";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function BookingUserDetails() {
   const [bookedData, setBookedData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSyncing, setIsSyncing] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getActiveBookings();
@@ -67,6 +69,48 @@ function BookingUserDetails() {
       }
     } catch (error) {
       console.error("Encounter Finalization Error:", error);
+    }
+  };
+
+  const handleAddPrescription = async (bookingId) => {
+    const { value: text } = await Swal.fire({
+      input: 'textarea',
+      inputLabel: 'Medical Advice & Prescription',
+      inputPlaceholder: 'Type medicines, dosage, and instructions here...',
+      inputAttributes: {
+        'aria-label': 'Type your message here'
+      },
+      showCancelButton: true,
+      confirmButtonColor: '#2563eb',
+      cancelButtonColor: '#64748b',
+      confirmButtonText: 'Save Prescription',
+      background: '#ffffff',
+      color: '#0f172a',
+      customClass: {
+        popup: 'rounded-[2rem]',
+        input: 'min-h-[150px] p-4 text-sm font-medium border-slate-200 rounded-xl focus:ring-blue-500',
+        confirmButton: 'rounded-xl font-black uppercase tracking-widest text-[10px] px-8 py-4',
+        cancelButton: 'rounded-xl font-black uppercase tracking-widest text-[10px] px-8 py-4'
+      }
+    });
+
+    if (text) {
+      try {
+        const { data } = await addPrescription(bookingId, text);
+        if (data.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Prescription Saved',
+            text: 'The medical advice has been recorded successfully.',
+            timer: 2000,
+            showConfirmButton: false,
+            borderRadius: '2rem'
+          });
+          getActiveBookings();
+        }
+      } catch (error) {
+        console.error("Prescription Error:", error);
+      }
     }
   };
 
@@ -238,35 +282,40 @@ function BookingUserDetails() {
                     <div className="space-y-1.5 pl-4 flex flex-col items-end">
                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest italic mb-1">Operational Stage</p>
                       <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-pulse"></div>
-                        <p className="text-[11px] font-black text-blue-600 italic uppercase">Triage Phase</p>
+                        <div className={`w-1.5 h-1.5 rounded-full ${data.status === 'Completed' ? 'bg-emerald-500' : 'bg-blue-600 animate-pulse'}`}></div>
+                        <p className={`text-[11px] font-black italic uppercase ${data.status === 'Completed' ? 'text-emerald-600' : 'text-blue-600'}`}>
+                          {data.status === 'Completed' ? 'Prescription Issued' : 'Triage Phase'}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Operational Interaction Terminal */}
-                <div className="flex flex-col gap-4 mt-10">
-                  <button className="w-full flex items-center justify-center gap-4 py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.3em] text-[10px] hover:bg-blue-600 transition-all shadow-2xl shadow-slate-200 active:scale-95 group/btn overflow-hidden relative italic">
-                    <div className="absolute inset-0 bg-blue-500 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"></div>
-                    <span className="relative z-10 flex items-center gap-4">
-                       <Play size={14} className="fill-current group-hover/btn:scale-125 transition-transform" />
-                       Initiate Session Cycle
-                    </span>
+                <div className="flex items-center gap-4 mt-8 relative z-20 w-full overflow-hidden">
+                  <button 
+                    onClick={() => handleAddPrescription(data._id)}
+                    className="flex-1 min-w-0 flex items-center justify-center gap-2 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-[9px] sm:text-[10px] hover:bg-blue-700 transition-all shadow-lg active:scale-95 group/btn"
+                  >
+                    <FileText size={16} className="shrink-0" />
+                    <span className="truncate">Add Prescription</span>
                   </button>
-                  <div className="flex items-center gap-4">
-                     <button 
-                       onClick={() => handleComplete(data._id)}
-                       className="flex-1 flex items-center justify-center gap-3 py-5 bg-white text-slate-400 rounded-[2rem] border-2 border-slate-100 hover:border-green-500 hover:text-green-600 hover:bg-green-50/30 transition-all shadow-sm group/complete active:scale-95 italic"
-                       title="Finalize Clinical Sequence"
-                     >
-                       <CheckCircle2 size={18} className="group-hover/complete:scale-110 transition-transform" />
-                       <span className="text-[9px] font-black uppercase tracking-widest">Seal Encounter</span>
-                     </button>
-                     <button className="p-5 bg-white text-slate-400 rounded-full border-2 border-slate-100 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm active:scale-95">
-                       <MessageSquare size={20} />
-                     </button>
-                  </div>
+                  
+                  <button 
+                    onClick={() => handleComplete(data._id)}
+                    className="flex-1 min-w-0 flex items-center justify-center gap-2 py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[9px] sm:text-[10px] hover:bg-slate-800 transition-all shadow-lg active:scale-95 group/comp"
+                  >
+                    <CheckCircle2 size={16} className="shrink-0" />
+                    <span className="truncate">Seal Encounter</span>
+                  </button>
+
+                  <button 
+                    onClick={() => navigate(`/doctor/doctorChat`)}
+                    className="shrink-0 w-14 h-14 bg-white text-slate-500 rounded-2xl border-2 border-slate-100 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm active:scale-95 flex items-center justify-center"
+                    title="Communicate with Patient"
+                  >
+                    <MessageSquare size={20} />
+                  </button>
                 </div>
 
                 {/* Background Sequence Index */}

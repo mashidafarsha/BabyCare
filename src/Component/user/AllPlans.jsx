@@ -149,7 +149,7 @@ function AllPlans() {
                 {/* Plan Header / Image */}
                 <div className="h-48 overflow-hidden relative">
                   <img
-                    src={plan.image ? `${BaseUrl}/${plan.image}` : "https://via.placeholder.com/600"}
+                    src={plan.image || plan.imageUrl || "https://cdn-icons-png.flaticon.com/512/2373/2373446.png"}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     alt={plan.planname}
                   />

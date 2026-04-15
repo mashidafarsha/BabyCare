@@ -65,8 +65,16 @@ function PlanBanner() {
               )}
 
               <div className="mb-8">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-sm border ${index === 1 ? 'bg-blue-600 text-white' : 'bg-slate-50 text-blue-600 border-slate-100'}`}>
-                  <Shield size={28} />
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-sm border overflow-hidden ${index === 1 ? 'bg-blue-600 text-white' : 'bg-slate-50 text-blue-600 border-slate-100'}`}>
+                  {plan.image ? (
+                    <img 
+                      src={plan.image.startsWith('http') ? plan.image : `${BaseUrl}/${plan.image}`}
+                      alt={plan.planname}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Shield size={28} />
+                  )}
                 </div>
                 <h3 className="text-2xl font-bold text-slate-800 mb-2">
                   {plan.planname}

@@ -122,9 +122,9 @@ function EditPlan({ plan, handleLoad }) {
                   <img
                     className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-500"
                     src={
-                      uploadedImage
-                        ? `${BaseUrl}/${uploadedImage}`
-                        : image && URL.createObjectURL(image)
+                      image
+                        ? URL.createObjectURL(image)
+                        : (uploadedImage || "https://cdn-icons-png.flaticon.com/512/2373/2373446.png")
                     }
                     alt=""
                   />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getNavProfile, getDoctorActiveBooking, scheduledDoctorSlot } from "../../sevices/doctorApi";
 import EditDoctorProfile from "../profile/EditDoctorProfile";
 import { BaseUrl } from "../../constants/constants";
-import { User, Activity, Calendar, DollarSign, Award, ChevronRight, Settings, Star, ShieldCheck, Stethoscope, HeartPulse } from "lucide-react";
+import { User, Activity, Calendar, DollarSign, Award, ChevronRight, Settings, Star, ShieldCheck, Stethoscope, HeartPulse, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function DoctorProfile() {
@@ -73,7 +73,7 @@ function DoctorProfile() {
                   <div className="w-36 h-36 rounded-[2.2rem] overflow-hidden border-4 border-white shadow-xl relative z-10">
                     <img 
                       className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" 
-                      src={doctor.image ? `${BaseUrl}/${doctor.image}` : "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"}
+                      src={doctor.image || doctor.imageUrl || "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"}
                       alt={doctor.name} 
                     />
                   </div>
@@ -117,21 +117,21 @@ function DoctorProfile() {
             <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm space-y-6">
               <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 pb-4">Credentials & Certifications</h3>
               <div className="space-y-4">
-                 {[
-                   { icon: <Award className="text-blue-500" />, label: "Qualification", value: doctor.qualification },
-                   { icon: <Stethoscope className="text-teal-500" />, label: "Experience", value: "8+ Years Post-MD" },
-                   { icon: <User className="text-indigo-500" />, label: "Account ID", value: doctor._id?.slice(-8).toUpperCase() }
-                 ].map((item, idx) => (
-                   <div key={idx} className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
-                         {item.icon}
-                      </div>
-                      <div>
-                         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tight">{item.label}</p>
-                         <p className="text-xs font-black text-slate-700 mt-0.5">{item.value || "Verifying..."}</p>
-                      </div>
-                   </div>
-                 ))}
+                  {[
+                    { icon: <Award className="text-blue-500" />, label: "Qualification", value: doctor.qualification || "Degrees not listed" },
+                    { icon: <Stethoscope className="text-teal-500" />, label: "Experience", value: doctor.experience || "Not Disclosed" },
+                    { icon: <MapPin className="text-indigo-500" />, label: "Location", value: doctor.address || "Main Hub" }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-4">
+                       <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                          {item.icon}
+                       </div>
+                       <div>
+                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tight">{item.label}</p>
+                          <p className="text-xs font-black text-slate-700 mt-0.5">{item.value}</p>
+                       </div>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>

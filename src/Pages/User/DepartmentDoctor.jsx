@@ -9,9 +9,6 @@ function DepartmentDoctor() {
     <div className="min-h-screen bg-slate-50">
          <UserNavbar/>
           <main className="pt-28 animate-fade-in"> {/* Navbar gap fix */}
-            <div className="animate-slide-up">
-                <Search/>
-            </div>
             <div className="animate-slide-up delay-200">
                 <CategoryDoctor/>
             </div>

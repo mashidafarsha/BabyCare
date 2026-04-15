@@ -199,7 +199,7 @@ function Banner() {
                              <div className="absolute inset-0 bg-blue-600/0 group-hover/asset:bg-blue-600/20 transition-colors flex items-center justify-center text-white opacity-0 group-hover/asset:opacity-100 text-[9px] font-black uppercase tracking-widest italic z-20 backdrop-blur-sm">View Full Aspect</div>
                              <img
                                className="w-full h-full object-cover group-hover/asset:scale-110 transition-transform duration-1000"
-                               src={`${BaseUrl}/${b.image}`}
+                               src={b.image.startsWith('http') ? b.image : `${BaseUrl}/${b.image}`}
                                alt={b.bannerName}
                              />
                           </div>

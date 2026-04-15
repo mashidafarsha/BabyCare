@@ -35,6 +35,7 @@ function Plans() {
       setLoading(false);
     }
   };
+  const deletePlan = (id) => {
     try {
       Swal.fire({
         title: "Delete Subscription Plan?",
@@ -76,8 +77,9 @@ function Plans() {
         }
       });
     } catch (error) {
-       console.error(error);
+      console.error(error);
     }
+  };
 
   const filteredPlans = plansData?.filter(plan => 
     plan.planname.toLowerCase().includes(searchTerm.toLowerCase())
@@ -137,7 +139,7 @@ function Plans() {
                         <div className="w-16 h-12 rounded-xl border-2 border-white shadow-md overflow-hidden bg-slate-100 flex-shrink-0">
                            <img
                              className="w-full h-full object-cover"
-                             src={`${BaseUrl}/${plan.image}`}
+                             src={plan.image || plan.imageUrl || "https://cdn-icons-png.flaticon.com/512/2373/2373446.png"}
                              alt={plan.planname}
                            />
                         </div>

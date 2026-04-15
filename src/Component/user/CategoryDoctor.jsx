@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { categoryDoctors } from "../../sevices/userApi";
 import { BaseUrl } from "../../constants/constants";
 import { Link } from "react-router-dom";
@@ -9,13 +10,19 @@ import Search from "../search/Search";
 function CategoryDoctor() {
   const [doctors, setDoctors] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  
+  // Get category name from URL first, then Redux as fallback
+  const urlCategoryName = searchParams.get("name");
   const { department } = useSelector((state) => state.department);
+  const activeCategoryName = urlCategoryName || department?.categoryName;
 
   useEffect(() => {
-    if (department?.categoryName) {
-      getCategoryDoctors(department.categoryName);
+    if (activeCategoryName) {
+      getCategoryDoctors(activeCategoryName);
     }
-  }, [department]);
+  }, [activeCategoryName]);
 
   const getCategoryDoctors = async (deptName) => {
     try {
@@ -37,7 +44,7 @@ function CategoryDoctor() {
       {/* Heading Section */}
       <div className="mb-10 text-center md:text-left animate-slide-up">
         <h1 className="text-3xl font-bold text-slate-800 tracking-tight">
-          Specialists in {department?.categoryName || "Department"}
+          Specialists in {activeCategoryName || "Department"}
         </h1>
         <div className="h-1 w-20 bg-blue-600 mt-3 mx-auto md:mx-0 rounded-full"></div>
       </div>
@@ -47,7 +54,7 @@ function CategoryDoctor() {
         <Search 
           value={searchTerm} 
           onChange={setSearchTerm} 
-          placeholder={`Search for doctors in ${department?.categoryName || 'this department'}...`} 
+          placeholder={`Search for doctors in ${activeCategoryName || 'this department'}...`} 
         />
       </div>
 
@@ -62,7 +69,7 @@ function CategoryDoctor() {
                 <div className="absolute top-0 w-full h-24 bg-blue-50 group-hover:bg-blue-100 transition-colors"></div>
                 <div className="relative z-10 w-32 h-32 rounded-2xl overflow-hidden border-4 border-white shadow-md">
                   <img
-                    src={doctor.image ? `${BaseUrl}/${doctor.image}` : "https://via.placeholder.com/150"}
+                    src={doctor.image || doctor.imageUrl || "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"}
                     alt={doctor.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -110,4 +117,5 @@ function CategoryDoctor() {
   );
 }
 
-export default CategoryDoctor;
+export default CategoryDoctor;
+;

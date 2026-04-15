@@ -194,7 +194,7 @@ function Category() {
                           <div className="w-full h-full rounded-[1.4rem] border-2 border-white shadow-xl overflow-hidden bg-slate-100 group-hover/asset:scale-110 transition-transform duration-700 relative z-10">
                              <img
                                className="w-full h-full object-cover"
-                               src={`${BaseUrl}/${dep.image}`}
+                               src={dep.image.startsWith('http') ? dep.image : `${BaseUrl}/${dep.image}`}
                                alt={dep.categoryName}
                              />
                           </div>

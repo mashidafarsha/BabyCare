@@ -11,6 +11,10 @@ function EditDoctorProfile({ doctorData, handleLoad }) {
   const [phone, setPhone] = useState("");
   const [qualification, setQualification] = useState("");
   const [department, setDepartment] = useState("");
+  const [experience, setExperience] = useState("");
+  const [about, setAbout] = useState("");
+  const [address, setAddress] = useState("");
+  const [consultationFee, setConsultationFee] = useState("");
   const [image, setImage] = useState("");
   const [uploadedImage, setUploadedImage] = useState(null);
   const [message, setMessage] = useState("");
@@ -23,6 +27,10 @@ function EditDoctorProfile({ doctorData, handleLoad }) {
       setPhone(doctorData.phone);
       setQualification(doctorData.qualification);
       setDepartment(doctorData.department);
+      setExperience(doctorData.experience || "");
+      setAbout(doctorData.about || "");
+      setAddress(doctorData.address || "");
+      setConsultationFee(doctorData.consultationFee || "");
       setImage(doctorData.image);
     }
     getAllDepartment();
@@ -53,11 +61,19 @@ function EditDoctorProfile({ doctorData, handleLoad }) {
 
   const handleEdit = async (e) => {
     e.preventDefault();
-    if (!name || !phone || !qualification || !department) {
+    const validationFields = { name, phone, qualification, department, experience, about, address, consultationFee };
+    console.log("Validation State:", validationFields);
+
+    const missingFields = Object.entries(validationFields)
+      .filter(([_, value]) => !value && value !== 0) // Allow 0 for fee
+      .map(([key]) => key);
+
+    if (missingFields.length > 0) {
+      console.warn("Validation Failed. Missing fields:", missingFields);
       return Swal.fire({
         icon: "warning",
         title: "Incomplete Credentials",
-        text: "Please provide all required clinical information.",
+        text: `Please provide all required information. Missing: ${missingFields.join(", ")}`,
         borderRadius: "2rem"
       });
     }
@@ -66,11 +82,15 @@ function EditDoctorProfile({ doctorData, handleLoad }) {
     try {
       const formData = new FormData();
       formData.append("Id", id);
-      if (uploadedImage) formData.append("Image", uploadedImage);
+      if (uploadedImage) formData.append("image", uploadedImage);
       formData.append("name", name);
       formData.append("phone", phone);
       formData.append("qualification", qualification);
       formData.append("department", department);
+      formData.append("experience", experience);
+      formData.append("about", about);
+      formData.append("address", address);
+      formData.append("consultationFee", consultationFee);
 
       let { data } = await editDoctor(formData);
       if (data.success) {
@@ -128,7 +148,7 @@ function EditDoctorProfile({ doctorData, handleLoad }) {
                     <div className="absolute -inset-1 bg-gradient-to-tr from-blue-600 to-teal-400 rounded-3xl blur opacity-10 group-hover:opacity-30 transition duration-700"></div>
                     <div className="w-40 h-40 rounded-3xl overflow-hidden border-4 border-white shadow-xl relative z-10 bg-slate-50 flex items-center justify-center">
                        <img 
-                         src={uploadedImage ? URL.createObjectURL(uploadedImage) : (image ? `${BaseUrl}/${image}` : "https://cdn-icons-png.flaticon.com/512/3774/3774299.png")} 
+                         src={uploadedImage ? URL.createObjectURL(uploadedImage) : (image || "https://cdn-icons-png.flaticon.com/512/3774/3774299.png")} 
                          alt="Preview" 
                          className="w-full h-full object-cover"
                        />
@@ -189,15 +209,72 @@ function EditDoctorProfile({ doctorData, handleLoad }) {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                   <div className="space-y-2">
+                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Education (Qualification)</label>
+                     <div className="relative">
+                       <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
+                       <input
+                         type="text"
+                         value={qualification}
+                         onChange={(e) => setQualification(e.target.value)}
+                         className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all"
+                       />
+                     </div>
+                   </div>
+                   <div className="space-y-2">
+                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Experience (Years)</label>
+                     <div className="relative">
+                       <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
+                       <input
+                         type="text"
+                         value={experience}
+                         onChange={(e) => setExperience(e.target.value)}
+                         className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all"
+                         placeholder="e.g. 10+ Years"
+                       />
+                     </div>
+                   </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                   <div className="space-y-2">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Consultation Fee (₹)</label>
+                      <div className="relative">
+                        <Save className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
+                        <input
+                          type="number"
+                          value={consultationFee}
+                          onChange={(e) => setConsultationFee(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all"
+                          placeholder="e.g. 500"
+                        />
+                      </div>
+                   </div>
+                   <div className="space-y-2">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Clinic Address</label>
+                      <div className="relative">
+                        <Save className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
+                        <input
+                          type="text"
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all"
+                          placeholder="e.g. Medical City, Kochi"
+                        />
+                      </div>
+                   </div>
+                </div>
+
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Educational Qualification</label>
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Professional Bio (About)</label>
                   <div className="relative">
-                    <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
-                    <input
-                      type="text"
-                      value={qualification}
-                      onChange={(e) => setQualification(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-100 rounded-2xl pl-12 pr-6 py-3.5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all"
+                    <textarea
+                      value={about}
+                      onChange={(e) => setAbout(e.target.value)}
+                      rows={3}
+                      className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-6 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-50/50 focus:border-blue-400 transition-all resize-none"
+                      placeholder="Share your expertise, achievements, and professional summary..."
                     />
                   </div>
                 </div>

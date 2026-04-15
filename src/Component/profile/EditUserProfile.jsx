@@ -73,7 +73,7 @@ useEffect(() => {
                       <img
                         src={
                           image
-                            ? `${BaseUrl}/${image}`
+                            ? image.startsWith('http') ? image : `${BaseUrl}/${image}`
                             : uploadedImage &&
                               URL.createObjectURL(uploadedImage)
                         }

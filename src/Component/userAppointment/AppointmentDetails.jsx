@@ -200,6 +200,20 @@ function AppointmentDetails() {
                   </div>
 
                   <QueueStatus bookingId={booking._id} status={booking.status} />
+
+                  {booking.prescription && (
+                    <div className="mt-6 bg-blue-50/30 border border-blue-100 p-6 rounded-2xl animate-in fade-in duration-500">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                          <CheckCircle size={14} />
+                        </div>
+                        <h4 className="text-sm font-bold text-slate-800 uppercase tracking-widest">Medical Prescription</h4>
+                      </div>
+                      <p className="text-sm font-medium text-slate-600 leading-relaxed bg-white p-4 rounded-xl border border-slate-100 italic">
+                        {booking.prescription}
+                      </p>
+                    </div>
+                  )}
                 </div>
               );
             })

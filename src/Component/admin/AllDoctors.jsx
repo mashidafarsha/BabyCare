@@ -154,8 +154,12 @@ function AllDoctors() {
                       <div className="flex items-center gap-6">
                         <div className="relative">
                           <div className="absolute -inset-2 bg-blue-600/10 rounded-[1.8rem] blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                          <div className="w-16 h-16 rounded-[1.8rem] bg-slate-900 border-4 border-white shadow-xl flex items-center justify-center text-white font-black overflow-hidden bg-cover bg-center group-hover:scale-105 transition-transform relative z-10" style={{ backgroundImage: doc.image ? `url(${BaseUrl}/${doc.image})` : 'none' }}>
-                             {!doc.image && doc.name.charAt(0)}
+                          <div className="w-16 h-16 rounded-[1.8rem] bg-slate-900 border-4 border-white shadow-xl flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform relative z-10">
+                             <img 
+                               src={doc.image || doc.imageUrl || "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"} 
+                               alt={doc.name} 
+                               className="w-full h-full object-cover"
+                             />
                           </div>
                           <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-white z-20 shadow-lg group-hover:scale-110 transition-transform"></div>
                         </div>

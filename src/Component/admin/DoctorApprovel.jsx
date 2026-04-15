@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, FileText, CheckCircle, XCircle, UserPlus, Info, ExternalLink, Terminal, Activity, ShieldCheck, ClipboardCheck, ArrowUpRight } from "lucide-react";
+import { Search, FileText, CheckCircle, XCircle, UserPlus, Info, ExternalLink, Terminal, Activity, ShieldCheck, ClipboardCheck, ArrowUpRight, Mail } from "lucide-react";
 import { getRegisterDoctor, acceptDoctor } from "../../sevices/adminApi";
 import { BaseUrl } from "../../constants/constants";
 import Swal from "sweetalert2";
@@ -156,8 +156,12 @@ function DoctorApprovel() {
                   <tr key={doc._id} className="hover:bg-slate-50/80 transition-all group">
                     <td className="px-12 py-8">
                       <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-[1.8rem] bg-blue-600/5 text-blue-600 flex items-center justify-center font-black text-xl shadow-inner border border-blue-100 group-hover:scale-110 group-hover:rotate-6 transition-all">
-                           {doc.name.charAt(0)}
+                        <div className="w-16 h-16 rounded-[1.8rem] bg-slate-900 border-4 border-white shadow-xl flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform relative z-10">
+                           <img 
+                             src={doc.image || doc.imageUrl || "https://cdn-icons-png.flaticon.com/512/3774/3774299.png"} 
+                             alt={doc.name} 
+                             className="w-full h-full object-cover"
+                           />
                         </div>
                         <div>
                           <p className="font-black text-slate-900 text-lg uppercase tracking-tight italic">Dr. {doc.name}</p>
